@@ -1,5 +1,7 @@
-# Amazon Data Modelling
-This DBT package models the Amazon Adverstising data coming from [Daton](https://sarasanalytics.com/daton/). [Daton](https://sarasanalytics.com/daton/) is the Unified Data Platform for Global Commerce with 100+ pre-built connectors and data sets designed for accelerating the eCommerce data and analytics journey by [Saras Analytics](https://sarasanalytics.com).
+# Amazon Ads Data Modelling
+This DBT package models the Amazon Advertising data coming from [Daton](https://sarasanalytics.com/daton/). [Daton](https://sarasanalytics.com/daton/) is the Unified Data Platform for Global Commerce with 100+ pre-built connectors and data sets designed for accelerating the eCommerce data and analytics journey by [Saras Analytics](https://sarasanalytics.com).
+
+Daton Connectors for Amazon Ads Data - Amazon Sponsored Brands, Amazon Sponsored Display, Amazon Sponsored Products
 
 This package would be performing the following funtions:
 
@@ -17,7 +19,7 @@ If you haven't already, you will need to create a packages.yml file in your proj
 
 ```yaml
 packages:
-  - package: daton/amazon_adverstising_bigquery
+  - package: daton/amazon_advertising_bigquery
     version: [">=0.1.0", "<0.3.0"]
 ```
 
@@ -27,21 +29,21 @@ This package contains models from the Amazon API which includes Sponsored Brands
 
 | **Category**                 | **Model**  | **Description** |
 | ------------------------- | ---------------| ----------------------- |
-|Sponsored Brands | [SponsoredBrands_Portfolio](https://github.com/daton/amazon_advertising/blob/main/models/SponsoredBrands_Portfolio.sql)  | A list of portfolios associated with the account |
-|Sponsored Brands | [SponsoredBrands_Campaign](https://github.com/daton/amazon_advertising/blob/main/models/SponsoredBrands_Campaign.sql)  | A list of campaigns associated with the account |
-|Sponsored Brands | [SponsoredBrands_AdGroupsReport](https://github.com/daton/amazon_advertising/blob/main/models/SponsoredBrands_AdGroupsReport.sql)  | A list of ad groups associated with the account |
-|Sponsored Brands | [SponsoredBrands_AdGroupsVideoReport](https://github.com/daton/amazon_advertising/blob/main/models/SponsoredBrands_AdGroupsVideoReport.sql)| A list of ad groups related to sponsored brand video associated with the account |
-|Sponsored Brands | [SponsoredBrands_PlacementCampaignsReport](https://github.com/daton/amazon_advertising/blob/main/models/SponsoredBrands_PlacementCampaignsReport.sql)| A list of all the placement campaigns associated with the account |
-|Sponsored Brands | [SponsoredBrands_SearchTermKeywordsReport](https://github.com/daton/amazon_advertising/blob/main/models/SponsoredBrands_SearchTermKeywordsReport.sql)| A list of product search keywords report |
-|Sponsored Brands | [SponsoredBrands_SearchTermKeywordsVideoReport](https://github.com/daton/amazon_advertising/blob/main/models/SponsoredBrands_SearchTermKeywordsVideoReport.sql)| A list of keywords associated with sponsored brand video |
-|Sponsored Display | [SponsoredDisplay_Portfolio](https://github.com/daton/amazon_advertising/blob/main/models/SponsoredDisplay_Portfolio.sql)| A list of portfolios associated with the account |
-|Sponsored Display | [SponsoredBrands_Campaign](https://github.com/daton/amazon_advertising/blob/main/models/SponsoredBrands_Campaign.sql)| A list of campaigns associated with the account |
-|Sponsored Display | [SponsoredDisplay_ProductAdsReport](https://github.com/daton/amazon_advertising/blob/main/models/SponsoredDisplay_ProductAdsReport.sql)| A list of product ads associated with the account |
-|Sponsored Products | [SponsoredProducts_Portfolio](https://github.com/daton/amazon_advertising/blob/main/models/SponsoredProducts_Portfolio.sql)| A list of portfolios associated with the account |
-|Sponsored Products | [SponsoredProducts_Campaign](https://github.com/daton/amazon_advertising/blob/main/models/SponsoredProducts_Campaign.sql)| A list of campaigns associated with the account |
-|Sponsored Products | [SponsoredProducts_PlacementCampaignsReport](https://github.com/daton/amazon_advertising/blob/main/models/SponsoredProducts_PlacementCampaignsReport.sql)| A list of all the placement campaigns associated with the account |
-|Sponsored Products | [SponsoredProducts_ProductAdsReport](https://github.com/daton/amazon_advertising/blob/main/models/SponsoredProducts_ProductAdsReport.sql)| A list of product ads associated with the account |
-|Sponsored Products | [SponsoredProducts_SearchTermKeywordReport](https://github.com/daton/amazon_advertising/blob/main/models/SponsoredProducts_SearchTermKeywordReport.sql)| A list of product search keywords report |
+|Sponsored Brands | [SponsoredBrands_Portfolio](models/Amazon Adverstising/Sponsored Brands/SponsoredBrands_Portfolio.sql)  | A list of portfolios associated with the account |
+|Sponsored Brands | [SponsoredBrands_Campaign](models/Amazon Adverstising/Sponsored Brands/SponsoredBrands_Campaign.sql)  | A list of campaigns associated with the account |
+|Sponsored Brands | [SponsoredBrands_AdGroupsReport](models/Amazon Adverstising/Sponsored Brands/SponsoredBrands_AdGroupsReport.sql)  | A list of ad groups associated with the account |
+|Sponsored Brands | [SponsoredBrands_AdGroupsVideoReport](models/Amazon Adverstising/Sponsored Brands/SponsoredBrands_AdGroupsVideoReport.sql)| A list of ad groups related to sponsored brand video associated with the account |
+|Sponsored Brands | [SponsoredBrands_PlacementCampaignsReport](models/Amazon Adverstising/Sponsored Brands/SponsoredBrands_PlacementCampaignsReport.sql)| A list of all the placement campaigns associated with the account |
+|Sponsored Brands | [SponsoredBrands_SearchTermKeywordsReport](models/Amazon Adverstising/Sponsored Brands//SponsoredBrands_SearchTermKeywordsReport.sql)| A list of product search keywords report |
+|Sponsored Brands | [SponsoredBrands_SearchTermKeywordsVideoReport](models/Amazon Adverstising/Sponsored Brands/SponsoredBrands_SearchTermKeywordsVideoReport.sql)| A list of keywords associated with sponsored brand video |
+|Sponsored Display | [SponsoredDisplay_Portfolio](models/Amazon Adverstising/Sponsored Display/SponsoredDisplay_ProductAdsReport.sql)| A list of portfolios associated with the account |
+|Sponsored Display | [SponsoredDisplay_Campaign](models/Amazon Adverstising/Sponsored Display/SponsoredBrands_Campaign.sql)| A list of campaigns associated with the account |
+|Sponsored Display | [SponsoredDisplay_ProductAdsReport](models/Amazon Adverstising/Sponsored Display/SponsoredDisplay_ProductAdsReport.sql)| A list of product ads associated with the account |
+|Sponsored Products | [SponsoredProducts_Portfolio](models/Amazon Adverstising/Sponsored Products/SponsoredProducts_Portfolio.sql)| A list of portfolios associated with the account |
+|Sponsored Products | [SponsoredProducts_Campaign](models/Amazon Adverstising/Sponsored Products/SponsoredProducts_Campaign.sql)| A list of campaigns associated with the account |
+|Sponsored Products | [SponsoredProducts_PlacementCampaignsReport](models/Amazon Adverstising/Sponsored Products/SponsoredProducts_PlacementCampaignsReport.sql)| A list of all the placement campaigns associated with the account |
+|Sponsored Products | [SponsoredProducts_ProductAdsReport](models/Amazon Adverstising/Sponsored Products/SponsoredProducts_ProductAdsReport.sql)| A list of product ads associated with the account |
+|Sponsored Products | [SponsoredProducts_SearchTermKeywordReport](models/Amazon Adverstising/Sponsored Products/SponsoredProducts_SearchTermKeywordReport.sql)| A list of product search keywords report |
 
 # Configuration 
 
@@ -73,6 +75,17 @@ Setting these table exclusions will remove the modelling enabled for the below t
 ```
 vars:
     sp_flatfilev2settlement: True
+```
+
+
+## Scheduling the Package for refresh
+
+The ad tables that are being generated as part of this package are enabled for incremental refresh and can be scheduled by creating the job in Production Environment by giving the below command.
+
+```
+
+dbt run --select amazon_advertising_bigquery
+
 ```
 
 ## Resources:

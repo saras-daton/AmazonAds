@@ -1,0 +1,33 @@
+version: 2
+models:
+  - name: SponsoredBrands_Portfolio
+    description: A list of portfolios associated with the account
+  - name: SponsoredBrands_Campaign	
+    description: A list of campaigns associated with the account
+  - name: SponsoredBrands_AdGroupsReport
+    description: A list of ad groups associated with the account
+  - name: SponsoredBrands_AdGroupsVideoReport
+    description: A list of ad groups related to sponsored brand video associated with the account
+  - name: SponsoredBrands_PlacementCampaignsReport
+    description: A list of all the placement campaigns associated with the account.
+  - name: SponsoredBrands_SearchTermKeywordsReport
+    description: A list of product search keywords report
+  - name: SponsoredBrands_SearchTermKeywordsVideoReport
+    description: A list of keywords associated with sponsored brand video
+  - name: SponsoredDisplay_Portfolio
+    description: A list of portfolios associated with the account
+  - name: SponsoredDisplay_Campaign
+    description: A list of campaigns associated with the account
+  - name: 	SponsoredDisplay_ProductAdsReport
+    description: A list of product ads associated with the account
+  - name: SponsoredProducts_Portfolio
+    description: A list of portfolios associated with the account
+  - name: SponsoredProducts_Campaign
+    description: A list of campaigns associated with the account
+  - name: SponsoredProducts_PlacementCampaignsReport
+    description: A list of all the placement campaigns associated with the account
+  - name: SponsoredProducts_ProductAdsReport
+    description: A list of product ads associated with the account
+  - name: 	SponsoredProducts_SearchTermKeywordReport
+    description: A list of product search keywords report
+   
