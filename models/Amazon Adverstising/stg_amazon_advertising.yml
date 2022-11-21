@@ -18,7 +18,7 @@ models:
     description: A list of portfolios associated with the account
   - name: SponsoredDisplay_Campaign
     description: A list of campaigns associated with the account
-  - name: 	SponsoredDisplay_ProductAdsReport
+  - name: SponsoredDisplay_ProductAdsReport
     description: A list of product ads associated with the account
   - name: SponsoredProducts_Portfolio
     description: A list of portfolios associated with the account
@@ -28,6 +28,6 @@ models:
     description: A list of all the placement campaigns associated with the account
   - name: SponsoredProducts_ProductAdsReport
     description: A list of product ads associated with the account
-  - name: 	SponsoredProducts_SearchTermKeywordReport
+  - name: SponsoredProducts_SearchTermKeywordReport
     description: A list of product search keywords report
    

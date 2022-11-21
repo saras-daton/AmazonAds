@@ -23,28 +23,6 @@ packages:
     version: [">=0.1.0", "<0.3.0"]
 ```
 
-## Models
-
-This package contains models from the Amazon API which includes Sponsored Brands, Products, Display. The primary outputs of this package are described below.
-
-| **Category**                 | **Model**  | **Description** |
-| ------------------------- | ---------------| ----------------------- |
-|Sponsored Brands | [SponsoredBrands_Portfolio](models/Amazon Adverstising/Sponsored Brands/SponsoredBrands_Portfolio.sql)  | A list of portfolios associated with the account |
-|Sponsored Brands | [SponsoredBrands_Campaign](models/Amazon Adverstising/Sponsored Brands/SponsoredBrands_Campaign.sql)  | A list of campaigns associated with the account |
-|Sponsored Brands | [SponsoredBrands_AdGroupsReport](models/Amazon Adverstising/Sponsored Brands/SponsoredBrands_AdGroupsReport.sql)  | A list of ad groups associated with the account |
-|Sponsored Brands | [SponsoredBrands_AdGroupsVideoReport](models/Amazon Adverstising/Sponsored Brands/SponsoredBrands_AdGroupsVideoReport.sql)| A list of ad groups related to sponsored brand video associated with the account |
-|Sponsored Brands | [SponsoredBrands_PlacementCampaignsReport](models/Amazon Adverstising/Sponsored Brands/SponsoredBrands_PlacementCampaignsReport.sql)| A list of all the placement campaigns associated with the account |
-|Sponsored Brands | [SponsoredBrands_SearchTermKeywordsReport](models/Amazon Adverstising/Sponsored Brands//SponsoredBrands_SearchTermKeywordsReport.sql)| A list of product search keywords report |
-|Sponsored Brands | [SponsoredBrands_SearchTermKeywordsVideoReport](models/Amazon Adverstising/Sponsored Brands/SponsoredBrands_SearchTermKeywordsVideoReport.sql)| A list of keywords associated with sponsored brand video |
-|Sponsored Display | [SponsoredDisplay_Portfolio](models/Amazon Adverstising/Sponsored Display/SponsoredDisplay_ProductAdsReport.sql)| A list of portfolios associated with the account |
-|Sponsored Display | [SponsoredDisplay_Campaign](models/Amazon Adverstising/Sponsored Display/SponsoredBrands_Campaign.sql)| A list of campaigns associated with the account |
-|Sponsored Display | [SponsoredDisplay_ProductAdsReport](models/Amazon Adverstising/Sponsored Display/SponsoredDisplay_ProductAdsReport.sql)| A list of product ads associated with the account |
-|Sponsored Products | [SponsoredProducts_Portfolio](models/Amazon Adverstising/Sponsored Products/SponsoredProducts_Portfolio.sql)| A list of portfolios associated with the account |
-|Sponsored Products | [SponsoredProducts_Campaign](models/Amazon Adverstising/Sponsored Products/SponsoredProducts_Campaign.sql)| A list of campaigns associated with the account |
-|Sponsored Products | [SponsoredProducts_PlacementCampaignsReport](models/Amazon Adverstising/Sponsored Products/SponsoredProducts_PlacementCampaignsReport.sql)| A list of all the placement campaigns associated with the account |
-|Sponsored Products | [SponsoredProducts_ProductAdsReport](models/Amazon Adverstising/Sponsored Products/SponsoredProducts_ProductAdsReport.sql)| A list of product ads associated with the account |
-|Sponsored Products | [SponsoredProducts_SearchTermKeywordReport](models/Amazon Adverstising/Sponsored Products/SponsoredProducts_SearchTermKeywordReport.sql)| A list of product search keywords report |
-
 # Configuration 
 
 ## Required Variables
@@ -54,7 +32,7 @@ This package assumes that you have an existing DBT project with a BigQuery profi
 ```
 vars:
     raw_projectid: "your_gcp_project"
-    raw_dataset: "your_amazon_sp_api_dataset"
+    raw_dataset: "your_amazon_advertising_dataset"
 ```
 
 ## Optional Variables
@@ -68,6 +46,16 @@ vars:
     currency_conversion_flag: True
 ```
 
+### Timezone Conversion 
+
+To enable timezone conversion, which converts the major date columns according to given timezone,.  please add the following in the dbt_project.yml file. The data is available at UTC timezone and by setting the hr variable, it will be offset by the specified number of hours.(Eg: 7,8,-7,-11 etc) By default, it is False.
+
+```
+vars:
+    timezone_conversion_flag: False
+    hr: 7
+```
+
 ### Table Exclusions
 
 Setting these table exclusions will remove the modelling enabled for the below tables. By default, these tables are tagged True. 
@@ -77,16 +65,35 @@ vars:
     sp_flatfilev2settlement: True
 ```
 
-
 ## Scheduling the Package for refresh
 
 The ad tables that are being generated as part of this package are enabled for incremental refresh and can be scheduled by creating the job in Production Environment by giving the below command.
 
 ```
-
 dbt run --select amazon_advertising_bigquery
-
 ```
+
+## Models
+
+This package contains models from the Amazon API which includes Sponsored Brands, Products, Display. The primary outputs of this package are described below.
+
+| **Category**                 | **Model**  | **Description** |
+| ------------------------- | ---------------| ----------------------- |
+|Sponsored Brands | [SponsoredBrands_Portfolio](models/Amazon%20Adverstising/Sponsored%20Brands/SponsoredBrands_Portfolio.sql)  | A list of portfolios associated with the account |
+|Sponsored Brands | [SponsoredBrands_Campaign](models/Amazon%20Adverstising/Sponsored%20Brands/SponsoredBrands_Campaign.sql)  | A list of campaigns associated with the account |
+|Sponsored Brands | [SponsoredBrands_AdGroupsReport](models/Amazon%20Adverstising/Sponsored%20Brands/SponsoredBrands_AdGroupsReport.sql)  | A list of ad groups associated with the account |
+|Sponsored Brands | [SponsoredBrands_AdGroupsVideoReport](models/Amazon%20Adverstising/Sponsored%20Brands/SponsoredBrands_AdGroupsVideoReport.sql)| A list of ad groups related to sponsored brand video associated with the account |
+|Sponsored Brands | [SponsoredBrands_PlacementCampaignsReport](models/Amazon%20Adverstising/Sponsored%20Brands/SponsoredBrands_PlacementCampaignsReport.sql)| A list of all the placement campaigns associated with the account |
+|Sponsored Brands | [SponsoredBrands_SearchTermKeywordsReport](models/Amazon%20Adverstising/Sponsored%20Brands/SponsoredBrands_SearchTermKeywordsReport.sql)| A list of product search keywords report |
+|Sponsored Brands | [SponsoredBrands_SearchTermKeywordsVideoReport](models/Amazon%20Adverstising/Sponsored%20Brands/SponsoredBrands_SearchTermKeywordsVideoReport.sql)| A list of keywords associated with sponsored brand video |
+|Sponsored Display | [SponsoredDisplay_Portfolio](models/Amazon%20Adverstising/Sponsored%20Display/SponsoredDisplay_ProductAdsReport.sql)| A list of portfolios associated with the account |
+|Sponsored Display | [SponsoredDisplay_Campaign](models/Amazon%20Adverstising/Sponsored%20Display/SponsoredBrands_Campaign.sql)| A list of campaigns associated with the account |
+|Sponsored Display | [SponsoredDisplay_ProductAdsReport](models/Amazon%20Adverstising/Sponsored%20Display/SponsoredDisplay_ProductAdsReport.sql)| A list of product ads associated with the account |
+|Sponsored Products | [SponsoredProducts_Portfolio](models/Amazon%20Adverstising/Sponsored%20Products/SponsoredProducts_Portfolio.sql)| A list of portfolios associated with the account |
+|Sponsored Products | [SponsoredProducts_Campaign](models/Amazon%20Adverstising/Sponsored%20Products/SponsoredProducts_Campaign.sql)| A list of campaigns associated with the account |
+|Sponsored Products | [SponsoredProducts_PlacementCampaignsReport](models/Amazon%20Adverstising/Sponsored%20Products/SponsoredProducts_PlacementCampaignsReport.sql)| A list of all the placement campaigns associated with the account |
+|Sponsored Products | [SponsoredProducts_ProductAdsReport](models/Amazon%20Adverstising/Sponsored%20Products/SponsoredProducts_ProductAdsReport.sql)| A list of product ads associated with the account |
+|Sponsored Products | [SponsoredProducts_SearchTermKeywordReport](models/Amazon%20Adverstising/Sponsored%20Products/SponsoredProducts_SearchTermKeywordReport.sql)| A list of product search keywords report |
 
 ## Resources:
 - Have questions, feedback, or need [help](https://meetings.hubspot.com/balaji-kolli/)? Schedule a call with our data experts or email us at info@sarasanalytics.com.
