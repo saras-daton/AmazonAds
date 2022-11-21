@@ -1,9 +1,16 @@
+{% if var('table_partition_flag') %}
 {{config( 
     materialized='incremental', 
     incremental_strategy='merge', 
     cluster_by = ['campaignId','campaignStatus'], 
     partition_by = { 'field': 'reportDate', 'data_type': 'date' },
     unique_key = ['reportdate','campaignId','placement'])}}
+{% else %}
+{{config( 
+    materialized='incremental', 
+    incremental_strategy='merge', 
+    unique_key = ['reportdate','campaignId','placement'])}}
+{% endif %}
 
 {% if is_incremental() %}
 {%- set max_loaded_query -%}
@@ -36,9 +43,17 @@ where lower(table_name) like '%sponsoredbrands_placementcampaignsreport'
 {% set results_list = [] %}
 {% endif %}
 
+{% if var('timezone_conversion_flag') %}
+    {% set hr = var('timezone_conversion_hours') %}
+{% endif %}
 
 {% for i in results_list %}
-    {% set id =i.split('.')[2].split('_')[0] %}
+    {% if var('brand_consolidation_flag') %}
+        {% set id =i.split('.')[2].split('_')[var('brand_name_position')] %}
+    {% else %}
+        {% set id = var('brand_name') %}
+    {% endif %}
+
     SELECT * except(row_num)
     From (
         select '{{id}}' as brand,
@@ -47,7 +62,11 @@ where lower(table_name) like '%sponsoredbrands_placementcampaignsreport'
         countryName,
         accountName,
         accountId,
-        CAST(reportDate as DATE) reportDate,
+        {% if var('timezone_conversion_flag') %}
+            cast(DATETIME_ADD(cast(reportDate as timestamp), INTERVAL {{hr}} HOUR ) as DATE) reportDate,
+        {% else %}
+            cast(reportDate as DATE) reportDate,
+        {% endif %}
         placement,
         campaignId,
         campaignBudgetType,
@@ -76,12 +95,18 @@ where lower(table_name) like '%sponsoredbrands_placementcampaignsreport'
         _daton_user_id,
         _daton_batch_runtime,
         _daton_batch_id,
-
+        {% if var('timezone_conversion_flag') %}
+           DATETIME_ADD(cast(reportDate as timestamp), INTERVAL {{hr}} HOUR ) as _edm_eff_strt_ts,
+        {% else %}
+           CAST(reportDate as timestamp) as _edm_eff_strt_ts,
+        {% endif %}
+        null as _edm_eff_end_ts,
+        unix_micros(current_timestamp()) as _edm_runtime,
+        
         DENSE_RANK() OVER (PARTITION BY reportdate,campaignId,placement order by _daton_batch_runtime desc) row_num
         from {{i}}    
             {% if is_incremental() %}
             {# /* -- this filter will only be applied on an incremental run */ #}
-            --WHERE 1=1
             WHERE _daton_batch_runtime  >= {{max_loaded}}
             {% endif %}
         )
