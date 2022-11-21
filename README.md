@@ -53,16 +53,25 @@ To enable timezone conversion, which converts the major date columns according t
 ```
 vars:
     timezone_conversion_flag: False
-    hr: 7
+    timezone_conversion_hours: 7
+```
+
+### Table Partitions
+
+To enable partitioning for the tables, please add the following in the dbt_project.yml file. By default, it is False.
+
+```
+vars:
+    table_partition_flag: False
 ```
 
 ### Table Exclusions
 
-Setting these table exclusions will remove the modelling enabled for the below tables. By default, these tables are tagged True. 
+Setting these table exclusions will remove the modelling enabled for the below tables. By declaring the model names as variables as below, they get disabled. Refer the table below for model details. By default, these tables are tagged True. 
 
 ```
 vars:
-    sp_flatfilev2settlement: True
+    SponsoredBrands_Portfolio: True
 ```
 
 ## Scheduling the Package for refresh

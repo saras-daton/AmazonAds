@@ -1,11 +1,19 @@
+--To disable the model, set the model name variable as False within your dbt_project.yml file.
+{{ config(enabled=var('SponsoredProducts_ProductAdsReport', True)) }}
+
+{% if var('table_partition_flag') %}
 {{config( 
     materialized='incremental', 
     incremental_strategy='merge', 
     partition_by = { 'field': 'reportDate', 'data_type': 'date' },
     cluster_by = ['campaignId', 'adGroupId','asin','sku'], 
     unique_key = ['reportDate', 'campaignId', 'adGroupId','adId'])}}
-
--- depends_on: {{ ref('ExchangeRates') }}
+{% else %}
+{{config( 
+    materialized='incremental', 
+    incremental_strategy='merge', 
+    unique_key = ['reportDate', 'campaignId', 'adGroupId','adId'])}}
+{% endif %}
 
 {% if is_incremental() %}
 {%- set max_loaded_query -%}
@@ -28,7 +36,6 @@ where lower(table_name) like '%sponsoredproducts_productadsreport'
 {% endset %}  
 
 
-
 {% set results = run_query(table_name_query) %}
 
 {% if execute %}
@@ -38,18 +45,35 @@ where lower(table_name) like '%sponsoredproducts_productadsreport'
 {% set results_list = [] %}
 {% endif %}
 
+{% if var('timezone_conversion_flag') %}
+    {% set hr = var('timezone_conversion_hours') %}
+{% endif %}
 
 {% for i in results_list %}
-    {% set id =i.split('.')[2].split('_')[1] %}
+    {% if var('brand_consolidation_flag') %}
+        {% set id =i.split('.')[2].split('_')[var('brand_name_position')] %}
+    {% else %}
+        {% set id = var('brand_name') %}
+    {% endif %}
+
+
     SELECT * except(row_num)
     From (
         select '{{id}}' as brand,
-        cast(DATETIME_ADD(RequestTime, INTERVAL -7 HOUR ) as Date) RequestTime,
+        {% if var('timezone_conversion_flag') %}
+            cast(DATETIME_ADD(RequestTime, INTERVAL {{hr}} HOUR ) as Date) RequestTime,
+        {% else %}
+            cast(RequestTime as DATE) RequestTime,
+        {% endif %}	
         profileId,
         countryName,
         accountName,
         accountId,
-        CAST(reportDate as DATE) reportDate,
+         {% if var('timezone_conversion_flag') %}
+            cast(DATETIME_ADD(cast(reportDate as timestamp), INTERVAL {{hr}} HOUR ) as DATE) reportDate,
+        {% else %}
+            cast(reportDate as DATE) reportDate,
+        {% endif %}
         campaignName,
         campaignId,
         adGroupName,
@@ -89,19 +113,32 @@ where lower(table_name) like '%sponsoredproducts_productadsreport'
         campaignBudgetType,
         campaignStatus,
         CURRENT_TIMESTAMP as updated_date,
-        c.value as conversion_rate,
-        c.from_currency_code as conversion_currency,
+        {% if var('currency_conversion_flag') %}
+            c.value as conversion_rate,
+            c.from_currency_code as conversion_currency, 
+        {% else %}
+            cast(1 as decimal) as conversion_rate,
+            cast(null as string) as conversion_currency, 
+        {% endif %}
         a._daton_user_id,
         a._daton_batch_runtime,
         a._daton_batch_id,
+        {% if var('timezone_conversion_flag') %}
+           DATETIME_ADD(cast(reportDate as timestamp), INTERVAL {{hr}} HOUR ) as _edm_eff_strt_ts,
+        {% else %}
+           CAST(reportDate as timestamp) as _edm_eff_strt_ts,
+        {% endif %}
+        null as _edm_eff_end_ts,
+        unix_micros(current_timestamp()) as _edm_runtime,
         DENSE_RANK() OVER (PARTITION BY reportDate, campaignId, adGroupId,adId order by a._daton_batch_runtime desc) row_num
-        from {{i}} a left join {{ref('ExchangeRates')}} c on date(a.RequestTime) = c.date and a.currency = c.to_currency_code
+        from {{i}} a    
+            {% if var('currency_conversion_flag') %} 
+                left join {{ var('stg_projectid') }}.{{ var('stg_dataset_common') }}.ExchangeRates c on date(a.RequestTime) = c.date and a.currency = c.to_currency_code
+            {% endif %}
             {% if is_incremental() %}
             {# /* -- this filter will only be applied on an incremental run */ #}
-            --WHERE 1=1
             WHERE a._daton_batch_runtime  >= {{max_loaded}}
-            {% endif %}
-    
+            {% endif %}    
         )
     where row_num =1 
     {% if not loop.last %} union all {% endif %}
