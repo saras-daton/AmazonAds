@@ -122,7 +122,7 @@ where lower(table_name) like '%sponsoreddisplay_productadsreport'
             c.from_currency_code as conversion_currency, 
         {% else %}
             cast(1 as decimal) as conversion_rate,
-            cast(null as string) as conversion_currency
+            cast(null as string) as conversion_currency,
         {% endif %}
         a._daton_user_id,
         a._daton_batch_runtime,
