@@ -1,3 +1,5 @@
+-- depends_on: {{ref('ExchangeRates')}}
+
 --To disable the model, set the model name variable as False within your dbt_project.yml file.
 {{ config(enabled=var('SponsoredProducts_PlacementCampaignsReport', True)) }}
 
@@ -133,7 +135,7 @@ where lower(table_name) like '%sponsoredproducts_placementcampaignsreport'
         DENSE_RANK() OVER (PARTITION BY reportDate,campaignId,placement order by a._daton_batch_runtime desc) row_num
         from {{i}} a
             {% if var('currency_conversion_flag') %} 
-                 left join {{ref('ExchangeRates')}} c on date(a.RequestTime) = c.date and a.currency = c.to_currency_code
+                 left join {{ var('stg_projectid') }}.{{ var('stg_dataset_common') }}.ExchangeRates c on date(a.RequestTime) = c.date and a.currency = c.to_currency_code
             {% endif %}
             {% if is_incremental() %}
             {# /* -- this filter will only be applied on an incremental run */ #}

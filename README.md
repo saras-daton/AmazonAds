@@ -1,7 +1,8 @@
 # Amazon Ads Data Modelling
 This DBT package models the Amazon Advertising data coming from [Daton](https://sarasanalytics.com/daton/). [Daton](https://sarasanalytics.com/daton/) is the Unified Data Platform for Global Commerce with 100+ pre-built connectors and data sets designed for accelerating the eCommerce data and analytics journey by [Saras Analytics](https://sarasanalytics.com).
 
-Daton Connectors for Amazon Ads Data - Amazon Sponsored Brands, Amazon Sponsored Display, Amazon Sponsored Products
+### Prerequisite 
+Daton Connectors for Amazon Ads Data - Amazon Sponsored Brands, Amazon Sponsored Display, Amazon Sponsored Products, Exchange Rates(Optional)
 
 This package would be performing the following funtions:
 
@@ -20,7 +21,7 @@ If you haven't already, you will need to create a packages.yml file in your proj
 ```yaml
 packages:
   - package: daton/amazon_advertising_bigquery
-    version: [">=0.1.0", "<0.3.0"]
+    version: 0.1.0
 ```
 
 # Configuration 
@@ -29,7 +30,7 @@ packages:
 
 This package assumes that you have an existing DBT project with a BigQuery profile connected & tested. Source data is located using the following variables which must be set in your `dbt_project.yml` file.
 
-```
+```yaml
 vars:
     raw_projectid: "your_gcp_project"
     raw_dataset: "your_amazon_advertising_dataset"
@@ -37,42 +38,39 @@ vars:
 
 ## Optional Variables
 
+Package offer different configurations which must be set in your `dbt_project.yml` file. These variables can be marked as True/False based on your requirements. Details about the variables are given below.
+
+```yaml
+vars:
+    currency_conversion_flag: True
+    timezone_conversion_flag: False
+    timezone_conversion_hours: 7
+    table_partition_flag: False
+    SponsoredBrands_Portfolio: True
+    brand_consolidation_flag: False
+    brand_name_position: 1
+    brand_name: "ABC"
+```
+
 ### Currency Conversion 
 
 To enable currency conversion, which produces two columns - conversion_rate, conversion_currency based on the data from the Exchange Rates Connector from Daton.  please add the following in the dbt_project.yml file. By default, it is False.
-
-```
-vars:
-    currency_conversion_flag: True
-```
 
 ### Timezone Conversion 
 
 To enable timezone conversion, which converts the major date columns according to given timezone,.  please add the following in the dbt_project.yml file. The data is available at UTC timezone and by setting the hr variable, it will be offset by the specified number of hours.(Eg: 7,8,-7,-11 etc) By default, it is False.
 
-```
-vars:
-    timezone_conversion_flag: False
-    timezone_conversion_hours: 7
-```
-
 ### Table Partitions
 
 To enable partitioning for the tables, please add the following in the dbt_project.yml file. By default, it is False.
 
-```
-vars:
-    table_partition_flag: False
-```
-
 ### Table Exclusions
 
-Setting these table exclusions will remove the modelling enabled for the below tables. By declaring the model names as variables as below, they get disabled. Refer the table below for model details. By default, these tables are tagged True. 
+Setting these table exclusions will remove the modelling enabled for the below tables. By declaring the model names as variables as below, they get disabled. Refer the table below for model details. By default, all tables are created. 
 
-```
-vars:
-    SponsoredBrands_Portfolio: True
-```
+### Brand Consolidation
+
+Given, your amazon account has more than one brand, enabling the brand consolidation flag, helps add the brand name to the tables while creating them. Brand name positions (Eg: 0/1/2) helps get the brand name from the integration name based on the location you have given. In case there is only a single brand, adding the name in brand name variable adds the column to the tables. By default, brand consolidation flag is False
 
 ## Scheduling the Package for refresh
 
