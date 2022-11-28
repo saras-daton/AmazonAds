@@ -1,7 +1,7 @@
 # Amazon Ads Data Modelling
 This DBT package models the Amazon Advertising data coming from [Daton](https://sarasanalytics.com/daton/). [Daton](https://sarasanalytics.com/daton/) is the Unified Data Platform for Global Commerce with 100+ pre-built connectors and data sets designed for accelerating the eCommerce data and analytics journey by [Saras Analytics](https://sarasanalytics.com).
 
-### Prerequisite 
+#### Prerequisite 
 Daton Connectors for Amazon Ads Data - Amazon Sponsored Brands, Amazon Sponsored Display, Amazon Sponsored Products, Exchange Rates(Optional)
 
 This package would be performing the following funtions:
@@ -38,11 +38,11 @@ vars:
 
 ## Optional Variables
 
-Package offer different configurations which must be set in your `dbt_project.yml` file. These variables can be marked as True/False based on your requirements. Details about the variables are given below.
+Package offers different configurations which must be set in your `dbt_project.yml` file under the above variables. These variables can be marked as True/False based on your requirements. Details about the variables are given below.
 
 ```yaml
 vars:
-    currency_conversion_flag: True
+    currency_conversion_flag: False
     timezone_conversion_flag: False
     timezone_conversion_hours: 7
     table_partition_flag: False
@@ -54,19 +54,19 @@ vars:
 
 ### Currency Conversion 
 
-To enable currency conversion, which produces two columns - conversion_rate, conversion_currency based on the data from the Exchange Rates Connector from Daton.  please add the following in the dbt_project.yml file. By default, it is False.
+To enable currency conversion, which produces two columns - conversion_rate, conversion_currency based on the data from the Exchange Rates Connector from Daton.  please add the above in the dbt_project.yml file. By default, it is False.
 
 ### Timezone Conversion 
 
-To enable timezone conversion, which converts the major date columns according to given timezone,.  please add the following in the dbt_project.yml file. The data is available at UTC timezone and by setting the hr variable, it will be offset by the specified number of hours.(Eg: 7,8,-7,-11 etc) By default, it is False.
+To enable timezone conversion, which converts the major date columns according to given timezone, please add the above time zone variables in the dbt_project.yml file. The data is available at UTC timezone and by setting the hr variable, it will be offset by the specified number of hours.(Eg: 7,8,-7,-11 etc) By default, it is False.
 
 ### Table Partitions
 
-To enable partitioning for the tables, please add the following in the dbt_project.yml file. By default, it is False.
+To enable partitioning for the tables, please mark table_partition_flag variable as True. By default, it is False.
 
 ### Table Exclusions
 
-Setting these table exclusions will remove the modelling enabled for the below tables. By declaring the model names as variables as below, they get disabled. Refer the table below for model details. By default, all tables are created. 
+Setting these table exclusions will remove the modelling enabled for the below models. By declaring the model names as variables as above and marking them as False, they get disabled. Refer the table below for model details. By default, all tables are created. 
 
 ### Brand Consolidation
 
