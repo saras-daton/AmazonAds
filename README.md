@@ -1,5 +1,5 @@
 # Amazon Ads Data Modelling
-This DBT package models the Amazon Advertising data coming from [Daton](https://sarasanalytics.com/daton/). [Daton](https://sarasanalytics.com/daton/) is the Unified Data Platform for Global Commerce with 100+ pre-built connectors and data sets designed for accelerating the eCommerce data and analytics journey by [Saras Analytics](https://sarasanalytics.com).
+This DBT package models the Amazon Ads data coming from [Daton](https://sarasanalytics.com/daton/). [Daton](https://sarasanalytics.com/daton/) is the Unified Data Platform for Global Commerce with 100+ pre-built connectors and data sets designed for accelerating the eCommerce data and analytics journey by [Saras Analytics](https://sarasanalytics.com).
 
 This package would be performing the following funtions:
 
@@ -86,21 +86,21 @@ This package contains models from the Amazon API which includes Sponsored Brands
 
 | **Category**                 | **Model**  | **Description** |
 | ------------------------- | ---------------| ----------------------- |
-|Sponsored Brands | [SponsoredBrands_Portfolio](models/Amazon%20Adverstising/Sponsored%20Brands/SponsoredBrands_Portfolio.sql)  | A list of portfolios associated with the account |
-|Sponsored Brands | [SponsoredBrands_Campaign](models/Amazon%20Adverstising/Sponsored%20Brands/SponsoredBrands_Campaign.sql)  | A list of campaigns associated with the account |
-|Sponsored Brands | [SponsoredBrands_AdGroupsReport](models/Amazon%20Adverstising/Sponsored%20Brands/SponsoredBrands_AdGroupsReport.sql)  | A list of ad groups associated with the account |
-|Sponsored Brands | [SponsoredBrands_AdGroupsVideoReport](models/Amazon%20Adverstising/Sponsored%20Brands/SponsoredBrands_AdGroupsVideoReport.sql)| A list of ad groups related to sponsored brand video associated with the account |
-|Sponsored Brands | [SponsoredBrands_PlacementCampaignsReport](models/Amazon%20Adverstising/Sponsored%20Brands/SponsoredBrands_PlacementCampaignsReport.sql)| A list of all the placement campaigns associated with the account |
-|Sponsored Brands | [SponsoredBrands_SearchTermKeywordsReport](models/Amazon%20Adverstising/Sponsored%20Brands/SponsoredBrands_SearchTermKeywordsReport.sql)| A list of product search keywords report |
-|Sponsored Brands | [SponsoredBrands_SearchTermKeywordsVideoReport](models/Amazon%20Adverstising/Sponsored%20Brands/SponsoredBrands_SearchTermKeywordsVideoReport.sql)| A list of keywords associated with sponsored brand video |
-|Sponsored Display | [SponsoredDisplay_Portfolio](models/Amazon%20Adverstising/Sponsored%20Display/SponsoredDisplay_Portfolio.sql)| A list of portfolios associated with the account |
-|Sponsored Display | [SponsoredDisplay_Campaign](models/Amazon%20Adverstising/Sponsored%20Display/SponsoredDisplay_Campaign.sql)| A list of campaigns associated with the account |
-|Sponsored Display | [SponsoredDisplay_ProductAdsReport](models/Amazon%20Adverstising/Sponsored%20Display/SponsoredDisplay_ProductAdsReport.sql)| A list of product ads associated with the account |
-|Sponsored Products | [SponsoredProducts_Portfolio](models/Amazon%20Adverstising/Sponsored%20Products/SponsoredProducts_Portfolio.sql)| A list of portfolios associated with the account |
-|Sponsored Products | [SponsoredProducts_Campaign](models/Amazon%20Adverstising/Sponsored%20Products/SponsoredProducts_Campaign.sql)| A list of campaigns associated with the account |
-|Sponsored Products | [SponsoredProducts_PlacementCampaignsReport](models/Amazon%20Adverstising/Sponsored%20Products/SponsoredProducts_PlacementCampaignsReport.sql)| A list of all the placement campaigns associated with the account |
-|Sponsored Products | [SponsoredProducts_ProductAdsReport](models/Amazon%20Adverstising/Sponsored%20Products/SponsoredProducts_ProductAdsReport.sql)| A list of product ads associated with the account |
-|Sponsored Products | [SponsoredProducts_SearchTermKeywordReport](models/Amazon%20Adverstising/Sponsored%20Products/SponsoredProducts_SearchTermKeywordReport.sql)| A list of product search keywords report |
+|Sponsored Brands | [SB_Portfolio](models/Amazon%20Ads/Sponsored%20Brands/SB_Portfolio.sql)  | A list of portfolios associated with the account |
+|Sponsored Brands | [SB_Campaign](models/Amazon%20Ads/Sponsored%20Brands/SB_Campaign.sql)  | A list of campaigns associated with the account |
+|Sponsored Brands | [SB_AdGroupsReport](models/Amazon%20Ads/Sponsored%20Brands/SB_AdGroupsReport.sql)  | A list of ad groups associated with the account |
+|Sponsored Brands | [SB_AdGroupsVideoReport](models/Amazon%20Ads/Sponsored%20Brands/SB_AdGroupsVideoReport.sql)| A list of ad groups related to sponsored brand video associated with the account |
+|Sponsored Brands | [SB_PlacementCampaignsReport](models/Amazon%20Ads/Sponsored%20Brands/SB_PlacementCampaignsReport.sql)| A list of all the placement campaigns associated with the account |
+|Sponsored Brands | [SB_SearchTermKeywordsReport](models/Amazon%20Ads/Sponsored%20Brands/SB_SearchTermKeywordsReport.sql)| A list of product search keywords report |
+|Sponsored Brands | [SB_SearchTermKeywordsVideoReport](models/Amazon%20Ads/Sponsored%20Brands/SB_SearchTermKeywordsVideoReport.sql)| A list of keywords associated with sponsored brand video |
+|Sponsored Display | [SD_Portfolio](models/Amazon%20Ads/Sponsored%20Display/SD_Portfolio.sql)| A list of portfolios associated with the account |
+|Sponsored Display | [SD_Campaign](models/Amazon%20Ads/Sponsored%20Display/SD_Campaign.sql)| A list of campaigns associated with the account |
+|Sponsored Display | [SD_ProductAdsReport](models/Amazon%20Ads/Sponsored%20Display/SD_ProductAdsReport.sql)| A list of product ads associated with the account |
+|Sponsored Products | [SP_Portfolio](models/Amazon%20Ads/Sponsored%20Products/SP_Portfolio.sql)| A list of portfolios associated with the account |
+|Sponsored Products | [SP_Campaign](models/Amazon%20Ads/Sponsored%20Products/SP_Campaign.sql)| A list of campaigns associated with the account |
+|Sponsored Products | [SP_PlacementCampaignsReport](models/Amazon%20Ads/Sponsored%20Products/SP_PlacementCampaignsReport.sql)| A list of all the placement campaigns associated with the account |
+|Sponsored Products | [SP_ProductAdsReport](models/Amazon%20Ads/Sponsored%20Products/SP_ProductAdsReport.sql)| A list of product ads associated with the account |
+|Sponsored Products | [SP_SearchTermKeywordReport](models/Amazon%20Ads/Sponsored%20Products/SP_SearchTermKeywordReport.sql)| A list of product search keywords report |
 
 ## Resources:
 - Have questions, feedback, or need [help](https://calendly.com/priyanka-vankadaru/30min)? Schedule a call with our data experts or email us at info@sarasanalytics.com.

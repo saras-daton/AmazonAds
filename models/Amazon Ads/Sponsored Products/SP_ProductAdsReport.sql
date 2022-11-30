@@ -1,22 +1,21 @@
 -- depends_on: {{ref('ExchangeRates')}}
 
 --To disable the model, set the model name variable as False within your dbt_project.yml file.
-{{ config(enabled=var('SponsoredProducts_SearchTermKeywordReport', True)) }}
+{{ config(enabled=var('SponsoredProducts_ProductAdsReport', True)) }}
 
 {% if var('table_partition_flag') %}
 {{config( 
     materialized='incremental', 
     incremental_strategy='merge', 
     partition_by = { 'field': 'reportDate', 'data_type': 'date' },
-    cluster_by = ['campaignId','adGroupId','keywordId','matchType'], 
-    unique_key = ['reportDate','campaignId','adGroupId','keywordId','matchType','query'])}}
+    cluster_by = ['campaignId', 'adGroupId','asin','sku'], 
+    unique_key = ['reportDate', 'campaignId', 'adGroupId','adId'])}}
 {% else %}
 {{config( 
     materialized='incremental', 
     incremental_strategy='merge', 
-    unique_key = ['reportDate','campaignId','adGroupId','keywordId','matchType','query'])}}
+    unique_key = ['reportDate', 'campaignId', 'adGroupId','adId'])}}
 {% endif %}
-
 
 {% if is_incremental() %}
 {%- set max_loaded_query -%}
@@ -35,9 +34,8 @@ SELECT MAX(_daton_batch_runtime) - 2592000000 FROM {{ this }}
 {% set table_name_query %}
 select concat('`', table_catalog,'.',table_schema, '.',table_name,'`') as tables 
 from {{ var('raw_projectid') }}.{{ var('raw_dataset') }}.INFORMATION_SCHEMA.TABLES 
-where lower(table_name) like '%sponsoredproducts_searchtermkeywordreport' 
+where lower(table_name) like '%sponsoredproducts_productadsreport' 
 {% endset %}  
-
 
 
 {% set results = run_query(table_name_query) %}
@@ -60,6 +58,7 @@ where lower(table_name) like '%sponsoredproducts_searchtermkeywordreport'
         {% set id = var('brand_name') %}
     {% endif %}
 
+
     SELECT * except(row_num)
     From (
         select '{{id}}' as brand,
@@ -72,23 +71,21 @@ where lower(table_name) like '%sponsoredproducts_searchtermkeywordreport'
         countryName,
         accountName,
         accountId,
-        {% if var('timezone_conversion_flag') %}
+         {% if var('timezone_conversion_flag') %}
             cast(DATETIME_ADD(cast(reportDate as timestamp), INTERVAL {{hr}} HOUR ) as DATE) reportDate,
         {% else %}
-            cast(reportDate as timestamp) reportDate,
+            cast(reportDate as DATE) reportDate,
         {% endif %}
-        query,
         campaignName,
         campaignId,
         adGroupName,
         adGroupId,
-        keywordId,
-        keywordText,
-        CAST(null as numeric) as KeywordBid,
-        matchType,
         impressions,
         clicks,
         cost,
+        currency,
+        asin,
+        sku,
         attributedConversions1d,
         attributedConversions7d,
         attributedConversions14d,
@@ -113,12 +110,10 @@ where lower(table_name) like '%sponsoredproducts_searchtermkeywordreport'
         attributedUnitsOrdered7dSameSKU,
         attributedUnitsOrdered14dSameSKU,
         attributedUnitsOrdered30dSameSKU,
-        api,
+        adId,
         campaignBudget,
         campaignBudgetType,
         campaignStatus,
-        currency,
-        keywordStatus,
         CURRENT_TIMESTAMP as updated_date,
         {% if var('currency_conversion_flag') %}
             c.value as conversion_rate,
@@ -137,10 +132,10 @@ where lower(table_name) like '%sponsoredproducts_searchtermkeywordreport'
         {% endif %}
         null as _edm_eff_end_ts,
         unix_micros(current_timestamp()) as _edm_runtime,
-        DENSE_RANK() OVER (PARTITION BY reportDate,campaignId,adGroupId,keywordId,matchType,query order by a._daton_batch_runtime desc) row_num
-        from {{i}} a 
+        DENSE_RANK() OVER (PARTITION BY reportDate, campaignId, adGroupId,adId order by a._daton_batch_runtime desc) row_num
+        from {{i}} a    
             {% if var('currency_conversion_flag') %} 
-                left join {{ var('stg_projectid') }}.{{ var('stg_dataset_common') }}.ExchangeRates c on date(a.RequestTime) = c.date and a.currency = c.to_currency_code
+                left join {{ref('ExchangeRates')}} c on date(a.RequestTime) = c.date and a.currency = c.to_currency_code
             {% endif %}
             {% if is_incremental() %}
             {# /* -- this filter will only be applied on an incremental run */ #}
