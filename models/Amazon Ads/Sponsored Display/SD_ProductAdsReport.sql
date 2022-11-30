@@ -140,7 +140,7 @@ where lower(table_name) like '%sponsoreddisplay_productadsreport'
         asin, sku order by a._daton_batch_runtime desc) row_num
         from {{i}} a
             {% if var('currency_conversion_flag') %} 
-                left join {{ var('stg_projectid') }}.{{ var('stg_dataset_common') }}.ExchangeRates c on date(a.RequestTime) = c.date and a.currency = c.to_currency_code
+                left join {{ref('ExchangeRates')}} c on date(a.RequestTime) = c.date and a.currency = c.to_currency_code
             {% endif %}
             {% if is_incremental() %}
             {# /* -- this filter will only be applied on an incremental run */ #}
