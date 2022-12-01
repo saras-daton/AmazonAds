@@ -44,7 +44,7 @@ where lower(table_name) like '%sponsoredbrands_searchtermkeywordsreport'
 {% set results_list = [] %}
 {% endif %}
 
-{% if var('timezone_conversion_flag') %}
+{% if var('timezone_conversion_flag')['amazon_ads'] %}
     {% set hr = var('timezone_conversion_hours') %}
 {% endif %}
 
@@ -68,7 +68,7 @@ where lower(table_name) like '%sponsoredbrands_searchtermkeywordsreport'
         countryName,
         accountName,
         accountId,
-        {% if var('timezone_conversion_flag') %}
+        {% if var('timezone_conversion_flag')['amazon_ads'] %}
             cast(DATETIME_ADD(cast(reportDate as timestamp), INTERVAL {{hr}} HOUR ) as DATE) reportDate,
         {% else %}
             cast(reportDate as DATE) reportDate,
@@ -92,7 +92,7 @@ where lower(table_name) like '%sponsoredbrands_searchtermkeywordsreport'
         _daton_user_id,
         _daton_batch_runtime,
         _daton_batch_id,
-        {% if var('timezone_conversion_flag') %}
+        {% if var('timezone_conversion_flag')['amazon_ads'] %}
            DATETIME_ADD(cast(reportDate as timestamp), INTERVAL {{hr}} HOUR ) as _edm_eff_strt_ts,
         {% else %}
            CAST(reportDate as timestamp) as _edm_eff_strt_ts,

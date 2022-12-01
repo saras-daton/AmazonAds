@@ -36,6 +36,16 @@ vars:
     raw_dataset: "your_amazon_ads_dataset"
 ```
 
+## Schema Change
+
+We will create the models under the schema (<target_schema>_stg_amazon). In case, you would like the models to be written to the target schema or a different custom schema, please add the following in the dbt_project.yml file.
+
+```yml
+models:
+  amazon_ads_bigquery:
+    +schema: custom_schema_name # leave blank for just the target_schema
+```
+
 ## Optional Variables
 
 Package offers different configurations which must be set in your `dbt_project.yml` file under the above variables. These variables can be marked as True/False based on your requirements. Details about the variables are given below.
@@ -43,7 +53,8 @@ Package offers different configurations which must be set in your `dbt_project.y
 ```yaml
 vars:
     currency_conversion_flag: False
-    timezone_conversion_flag: False
+    timezone_conversion_flag:
+        amazon_ads: False
     timezone_conversion_hours: 7
     table_partition_flag: False
     SponsoredBrands_Portfolio: True
@@ -58,7 +69,7 @@ To enable currency conversion, which produces two columns - conversion_rate, con
 
 ### Timezone Conversion 
 
-To enable timezone conversion, which converts the major date columns according to given timezone, please mark the time zone conversion variable as True in the dbt_project.yml file. The data is available at UTC timezone and by setting the hr variable, it will be offset by the specified number of hours.(Eg: 7,8,-7,-11 etc) By default, it is False.
+To enable timezone conversion, which converts the major date columns according to given timezone, please mark the time zone conversion variable for this pakage as True in the dbt_project.yml file. The Ads data is available at local timezone and by setting the hr variable, it will be offset by the specified number of hours.(Eg: 7,8,-7,-11 etc) By default, it is False.
 
 ### Table Partitions
 
@@ -70,7 +81,7 @@ Setting these table exclusions will remove the modelling enabled for the below m
 
 ### Brand Consolidation
 
-Given, your amazon account has more than one brand, enabling the brand consolidation flag, adds the brand name to the tables while creating them. Brand name positions (Eg: 0/1/2) gets the brand name from the integration name based on the location you have given. In case there is only a single brand, adding the name in brand name variable adds the column to the tables. By default, brand consolidation flag is False and brand name variable needs to be set.
+The Amazon Seller Name would be called the Brand name in this case. If you sell more than one brand, then brand consolidation can be enabled. Brand name positions (Eg: 0/1/2) gets the brand name from the integration name based on the location you have given. In case there is only a single brand, adding the name in brand name variable adds the column to the tables. By default, brand consolidation flag is False and brand name variable needs to be set.
 
 ## Scheduling the Package for refresh
 
