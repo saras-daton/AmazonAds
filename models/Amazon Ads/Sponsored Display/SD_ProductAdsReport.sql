@@ -47,7 +47,7 @@ where lower(table_name) like '%sponsoreddisplay_productadsreport'
 {% set results_list = [] %}
 {% endif %}
 
-{% if var('timezone_conversion_flag') %}
+{% if var('timezone_conversion_flag')['amazon_ads'] %}
     {% set hr = var('timezone_conversion_hours') %}
 {% endif %}
 
@@ -61,7 +61,7 @@ where lower(table_name) like '%sponsoreddisplay_productadsreport'
     SELECT * except(row_num)
     From (
         select '{{id}}' as brand,
-        {% if var('timezone_conversion_flag') %}
+        {% if var('timezone_conversion_flag')['amazon_ads'] %}
             cast(DATETIME_ADD(RequestTime, INTERVAL {{hr}} HOUR ) as Date) RequestTime,
         {% else %}
             cast(RequestTime as DATE) RequestTime,
@@ -71,7 +71,7 @@ where lower(table_name) like '%sponsoreddisplay_productadsreport'
         countryName,
         accountName,
         accountId,
-        {% if var('timezone_conversion_flag') %}
+        {% if var('timezone_conversion_flag')['amazon_ads'] %}
             cast(DATETIME_ADD(cast(reportDate as timestamp), INTERVAL {{hr}} HOUR ) as DATE) reportDate,
         {% else %}
             cast(reportDate as DATE) reportDate,
@@ -129,7 +129,7 @@ where lower(table_name) like '%sponsoreddisplay_productadsreport'
         a._daton_user_id,
         a._daton_batch_runtime,
         a._daton_batch_id,
-        {% if var('timezone_conversion_flag') %}
+        {% if var('timezone_conversion_flag')['amazon_ads'] %}
            DATETIME_ADD(cast(reportDate as timestamp), INTERVAL {{hr}} HOUR ) as _edm_eff_strt_ts,
         {% else %}
            CAST(reportDate as timestamp) as _edm_eff_strt_ts,

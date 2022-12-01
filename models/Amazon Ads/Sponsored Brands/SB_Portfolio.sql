@@ -52,14 +52,14 @@ where table_name like '%SB%Portfolio'
     {% else %}
         {% set brand = var('brand_name') %}
     {% endif %}
-    {% if var('timezone_conversion_flag') %}
+    {% if var('timezone_conversion_flag')['amazon_ads'] %}
         {% set hr = var('timezone_conversion_hours') %}
     {% endif %}
     SELECT * 
     FROM (
         select 
         '{{brand}}' as Brand,
-        {% if var('timezone_conversion_flag') %}
+        {% if var('timezone_conversion_flag')['amazon_ads'] %}
             cast(DATETIME_ADD(timestamp(RequestTime), INTERVAL {{hr}} HOUR ) as timestamp) RequestTime,
         {% else %}
             cast(RequestTime as timestamp) RequestTime,
@@ -81,7 +81,7 @@ where table_name like '%SB%Portfolio'
         _daton_user_id,
         _daton_batch_runtime,
         _daton_batch_id,
-        {% if var('timezone_conversion_flag') %}
+        {% if var('timezone_conversion_flag')['amazon_ads'] %}
             cast(DATETIME_ADD(timestamp(RequestTime), INTERVAL {{hr}} HOUR ) as timestamp) _edm_eff_strt_ts,
         {% else %}
             CAST(RequestTime as timestamp) as _edm_eff_strt_ts,
