@@ -1,5 +1,5 @@
 --To disable the model, set the model name variable as False within your dbt_project.yml file.
-{{ config(enabled=var('SponsoredProductss_Portfolio', True)) }}
+{{ config(enabled=var('SP_Portfolio', True)) }}
 
 {% if var('table_partition_flag') %}
 {{config(
@@ -18,7 +18,7 @@
 
 {% if is_incremental() %}
 {%- set max_loaded_query -%}
-SELECT MAX(_daton_batch_runtime) - 2592000000 FROM {{ this }}
+SELECT coalesce(MAX(_daton_batch_runtime) - 2592000000,0) FROM {{ this }}
 {% endset %}
 
 {%- set max_loaded_results = run_query(max_loaded_query) -%}
