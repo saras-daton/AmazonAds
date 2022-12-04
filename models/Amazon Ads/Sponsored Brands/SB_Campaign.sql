@@ -59,16 +59,17 @@ where lower(table_name) like '%sponsoredbrands_campaign'
     FROM (
         select 
         '{{brand}}' as Brand,
-        {% if var('timezone_conversion_flag')['amazon_ads'] %}
-            cast(DATETIME_ADD(timestamp(RequestTime), INTERVAL {{hr}} HOUR ) as timestamp) RequestTime,
-        {% else %}
-            cast(RequestTime as timestamp) RequestTime,
+        CAST(RequestTime as timestamp) RequestTime,
         {% endif %}
         profileId,
         countryName,
         accountName,
         accountId,
-        fetchDate,
+        {% if var('timezone_conversion_flag')['amazon_ads'] %}
+            cast(DATETIME_ADD(cast(fetchDate as timestamp), INTERVAL {{hr}} HOUR ) as DATE) fetchDate,
+        {% else %}
+            cast(fetchDate as DATE) fetchDate,
+        {% endif %}
         campaignId,
         name,
         budget,
@@ -95,9 +96,9 @@ where lower(table_name) like '%sponsoredbrands_campaign'
         _daton_batch_runtime,
         _daton_batch_id,
         {% if var('timezone_conversion_flag')['amazon_ads'] %}
-            cast(DATETIME_ADD(timestamp(RequestTime), INTERVAL {{hr}} HOUR ) as timestamp) _edm_eff_strt_ts,
+            cast(DATETIME_ADD(timestamp(fetchDate), INTERVAL {{hr}} HOUR ) as timestamp) _edm_eff_strt_ts,
         {% else %}
-            CAST(RequestTime as timestamp) as _edm_eff_strt_ts,
+            CAST(fetchDate as timestamp) as _edm_eff_strt_ts,
         {% endif %}
         null as _edm_eff_end_ts,
         unix_micros(current_timestamp()) as _edm_runtime,

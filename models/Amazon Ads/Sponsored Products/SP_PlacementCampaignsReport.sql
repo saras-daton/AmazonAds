@@ -61,11 +61,7 @@ where lower(table_name) like '%sponsoredproducts_placementcampaignsreport'
     SELECT * except(row_num)
     From (
         select '{{id}}' as brand,
-        {% if var('timezone_conversion_flag')['amazon_ads'] %}
-            cast(DATETIME_ADD(RequestTime, INTERVAL {{hr}} HOUR ) as Date) RequestTime,
-        {% else %}
-            cast(RequestTime as DATE) RequestTime,
-        {% endif %}	
+        cast(RequestTime as DATE) RequestTime,
         profileId,
         countryName,
         accountName,

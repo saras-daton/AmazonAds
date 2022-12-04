@@ -12,7 +12,7 @@
 {{config(
     materialized='incremental',
     incremental_strategy='merge',
-    unique_key = ['RequestTime', 'campaignId'])}}
+    unique_key = ['fetchDate', 'profileId', 'portfolioId'])}}
 {% endif %}
 
 
@@ -59,16 +59,16 @@ where table_name like '%SB%Portfolio'
     FROM (
         select 
         '{{brand}}' as Brand,
-        {% if var('timezone_conversion_flag')['amazon_ads'] %}
-            cast(DATETIME_ADD(timestamp(RequestTime), INTERVAL {{hr}} HOUR ) as timestamp) RequestTime,
-        {% else %}
-            cast(RequestTime as timestamp) RequestTime,
-        {% endif %}
+        cast(RequestTime as timestamp) RequestTime,
         profileId,
         countryName,
         accountName,
         accountId,
-        fetchDate,
+        {% if var('timezone_conversion_flag')['amazon_ads'] %}
+            cast(DATETIME_ADD(cast(fetchDate as timestamp), INTERVAL {{hr}} HOUR ) as DATE) fetchDate,
+        {% else %}
+            cast(fetchDate as DATE) fetchDate,
+        {% endif %}
         portfolioId,
         name,
         budget.amount,
@@ -82,9 +82,9 @@ where table_name like '%SB%Portfolio'
         _daton_batch_runtime,
         _daton_batch_id,
         {% if var('timezone_conversion_flag')['amazon_ads'] %}
-            cast(DATETIME_ADD(timestamp(RequestTime), INTERVAL {{hr}} HOUR ) as timestamp) _edm_eff_strt_ts,
+            cast(DATETIME_ADD(timestamp(fetchDate), INTERVAL {{hr}} HOUR ) as timestamp) _edm_eff_strt_ts,
         {% else %}
-            CAST(RequestTime as timestamp) as _edm_eff_strt_ts,
+            CAST(fetchDate as timestamp) as _edm_eff_strt_ts,
         {% endif %}
         null as _edm_eff_end_ts,
         unix_micros(current_timestamp()) as _edm_runtime,
