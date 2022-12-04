@@ -60,7 +60,6 @@ where lower(table_name) like '%sponsoredbrands_campaign'
         select 
         '{{brand}}' as Brand,
         CAST(RequestTime as timestamp) RequestTime,
-        {% endif %}
         profileId,
         countryName,
         accountName,
