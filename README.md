@@ -85,11 +85,7 @@ The Amazon Seller Name would be called the Brand name in this case. If you sell 
 
 ## Scheduling the Package for refresh
 
-The ad tables that are being generated as part of this package are enabled for incremental refresh and can be scheduled by creating the job in Production Environment by giving the below command.
-
-```
-dbt run --select amazon_ads_bigquery
-```
+The ad tables that are being generated as part of this package are enabled for incremental refresh and can be scheduled by creating the job in Production Environment. During 'DBT Build', the models get refreshed.
 
 ## Models
 
