@@ -71,7 +71,7 @@ where lower(table_name) like '%sponsoredproducts_searchtermkeywordreport'
         {% if var('timezone_conversion_flag')['amazon_ads'] %}
             cast(DATETIME_ADD(cast(reportDate as timestamp), INTERVAL {{hr}} HOUR ) as DATE) reportDate,
         {% else %}
-            cast(reportDate as timestamp) reportDate,
+            cast(reportDate as Date) reportDate,
         {% endif %}
         query,
         campaignName,
