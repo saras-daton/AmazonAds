@@ -101,7 +101,7 @@ where table_name like '%SB%Portfolio'
 
 dedup as (
 select *,
-DENSE_RANK() OVER (PARTITION BY fetchDate, profileId, portfolioId order by _daton_batch_runtime desc) row_num
+row_number() OVER (PARTITION BY fetchDate, profileId, portfolioId order by _daton_batch_runtime desc) row_num
 from unnested_table 
 )
 
