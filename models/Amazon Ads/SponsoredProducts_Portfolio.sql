@@ -1,18 +1,5 @@
 
-    {% if var('table_partition_flag') %}
-    {{config(
-        materialized='incremental',
-        incremental_strategy='merge',
-        partition_by = { 'field': 'fetchDate', 'data_type': 'date' },
-        cluster_by = ['profileId', 'portfolioId'], 
-        unique_key = ['fetchDate', 'profileId', 'portfolioId'])}}
-    {% else %}
-    {{config(
-        materialized='incremental',
-        incremental_strategy='merge',
-        unique_key = ['fetchDate', 'profileId', 'portfolioId'])}}
-    {% endif %}
-
+{% if var('SponsoredProducts_Portfolio') %}
 
     {% if is_incremental() %}
     {%- set max_loaded_query -%}
@@ -28,33 +15,33 @@
     {%- endif -%}
     {% endif %}
 
-
-    with final as (
-    with unnested_BUDGET as (
     {% set table_name_query %}
     {{set_table_name('%sponsoredproducts%portfolio')}}    
     {% endset %}  
 
-
     {% set results = run_query(table_name_query) %}
     {% if execute %}
-    {# Return the first column #}
-    {% set results_list = results.columns[0].values() %}
+        {# Return the first column #}
+        {% set results_list = results.columns[0].values() %}
+        {% set tables_lowercase_list = results.columns[1].values() %}
     {% else %}
-    {% set results_list = [] %}
+        {% set results_list = [] %}
+        {% set tables_lowercase_list = [] %}
     {% endif %}
 
+    with final as (
+    with unnested_BUDGET as (
     {% for i in results_list %}
-        {% if var('brand_consolidation_flag') %}
-            {% set brand =i.split('.')[2].split('_')[var('brand_name_position')] %}
+        {% if var('get_brandname_from_tablename_flag') %}
+            {% set brand =i.split('.')[2].split('_')[var('brandname_position_in_tablename')] %}
         {% else %}
-            {% set brand = var('brand_name') %}
+            {% set brand = var('default_brandname') %}
         {% endif %}
 
-        {% if var('store_consolidation_flag') %}
-            {% set store =i.split('.')[2].split('_')[var('store_name_position')] %}
+        {% if var('get_storename_from_tablename_flag') %}
+            {% set store =i.split('.')[2].split('_')[var('storename_position_in_tablename')] %}
         {% else %}
-            {% set store = var('store') %}
+            {% set store = var('default_storename') %}
         {% endif %}
 
         SELECT *
@@ -85,20 +72,11 @@
             {% endif %}
             inBudget,
             state,
-	        {{daton_user_id()}},
-            {{daton_batch_runtime()}},
-            {{daton_batch_id()}},
-	        {% if var('timezone_conversion_flag') %}
-                DATETIME_ADD(cast(fetchDate as timestamp), INTERVAL {{hr}} HOUR ) as effective_start_date,
-                null as effective_end_date,
-                DATETIME_ADD(current_timestamp(), INTERVAL {{hr}} HOUR ) as last_updated,
-                null as run_id
-            {% else %}
-                cast(fetchDate as timestamp) as effective_start_date,
-                null as effective_end_date,
-                current_timestamp() as last_updated,
-                null as run_id
-            {% endif %}
+	        {{daton_user_id()}} as _daton_user_id,
+            {{daton_batch_runtime()}} as _daton_batch_runtime,
+            {{daton_batch_id()}} as _daton_batch_id,            
+            current_timestamp() as _last_updated,
+            '{{env_var("DBT_CLOUD_RUN_ID", "manual")}}' as _run_id
             FROM  {{i}}  
              {{unnesting("BUDGET")}} 
             {% if is_incremental() %}
@@ -119,3 +97,4 @@
     from final
     where row_num = 1
 
+{% endif %}

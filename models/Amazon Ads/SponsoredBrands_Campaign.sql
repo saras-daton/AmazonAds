@@ -1,17 +1,5 @@
 
-    {% if var('table_partition_flag') %}
-    {{config(
-        materialized='incremental',
-        incremental_strategy='merge',
-        partition_by = { 'field': 'fetchDate', 'data_type': 'date' },
-        cluster_by = ['fetchDate', 'campaignId'], 
-        unique_key = ['fetchDate', 'campaignId'])}}
-    {% else %}
-    {{config(
-        materialized='incremental',
-        incremental_strategy='merge',
-        unique_key = ['fetchDate', 'campaignId'])}}
-    {% endif %}
+{% if var('SponsoredBrands_Campaign') %}
 
     {% if is_incremental() %}
     {%- set max_loaded_query -%}
@@ -42,16 +30,16 @@
     {% endif %}
 
     {% for i in results_list %}
-        {% if var('brand_consolidation_flag') %}
-            {% set brand =i.split('.')[2].split('_')[var('brand_name_position')] %}
+        {% if var('get_brandname_from_tablename_flag') %}
+            {% set brand =i.split('.')[2].split('_')[var('brandname_position_in_tablename')] %}
         {% else %}
-            {% set brand = var('brand_name') %}
+            {% set brand = var('default_brandname') %}
         {% endif %}
 
-        {% if var('store_consolidation_flag') %}
-            {% set store =i.split('.')[2].split('_')[var('store_name_position')] %}
+        {% if var('get_storename_from_tablename_flag') %}
+            {% set store =i.split('.')[2].split('_')[var('storename_position_in_tablename')] %}
         {% else %}
-            {% set store = var('store') %}
+            {% set store = var('default_storename') %}
         {% endif %}
 
         SELECT * {{exclude()}} (row_num)
@@ -100,20 +88,11 @@
             BIDADJUSTMENTS.bidAdjustmentPercent,
             {% endif %}
             adFormat,
-	        {{daton_user_id()}},
-            {{daton_batch_runtime()}},
-            {{daton_batch_id()}},
-	        {% if var('timezone_conversion_flag') %}
-                DATETIME_ADD(cast(RequestTime as timestamp), INTERVAL {{hr}} HOUR ) as effective_start_date,
-                null as effective_end_date,
-                DATETIME_ADD(current_timestamp(), INTERVAL {{hr}} HOUR ) as last_updated,
-                null as run_id,
-            {% else %}
-                cast(RequestTime as timestamp) as effective_start_date,
-                null as effective_end_date,
-                current_timestamp() as last_updated,
-                null as run_id,
-            {% endif %}
+	        {{daton_user_id()}} as _daton_user_id,
+            {{daton_batch_runtime()}} as _daton_batch_runtime,
+            {{daton_batch_id()}} as _daton_batch_id,            
+            current_timestamp() as _last_updated,
+            '{{env_var("DBT_CLOUD_RUN_ID", "manual")}}' as _run_id,
             DENSE_RANK() OVER (PARTITION BY campaignId, fetchDate order by {{daton_batch_runtime()}} desc) row_num
             FROM {{i}}
             {{unnesting("CREATIVE")}} 
@@ -128,3 +107,4 @@
             {% if not loop.last %} union all {% endif %}
      {% endfor %}
 
+{% endif %}
