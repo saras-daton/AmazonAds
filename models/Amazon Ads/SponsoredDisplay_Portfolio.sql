@@ -56,7 +56,7 @@
             CAST(fetchDate as Date) fetchDate,
             portfolioId,
             name,
-            {% if var('snowflake_database_flag') %} 
+            {% if target.type=='snowflake' %} 
             BUDGET.VALUE:amount :: FLOAT as amount,
             BUDGET.VALUE:currencyCode :: VARCHAR as currencyCode,
             BUDGET.VALUE:policy :: VARCHAR as policy,

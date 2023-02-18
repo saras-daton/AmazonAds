@@ -15,8 +15,7 @@
     {%- endif -%}
     {% endif %}
 
-    with final as (
-    with unnested_table as (
+    
     {% set table_name_query %}
     {{set_table_name('%sponsoreddisplay_campaign')}}    
     {% endset %}  
@@ -31,6 +30,9 @@
         {% set tables_lowercase_list = [] %}
     {% endif %}
 
+
+    with final as (
+    with unnested_table as (
     {% for i in results_list %}
         {% if var('get_brandname_from_tablename_flag') %}
             {% set brand =i.split('.')[2].split('_')[var('brandname_position_in_tablename')] %}

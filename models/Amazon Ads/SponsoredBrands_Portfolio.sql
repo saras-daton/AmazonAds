@@ -16,8 +16,6 @@
     {% endif %}
 
 
-    with final as (
-    with unnested_BUDGET as (
     {% set table_name_query %}
     {{set_table_name('%sb%portfolio')}}    
     {% endset %}  
@@ -30,6 +28,9 @@
     {% set results_list = [] %}
     {% endif %}
 
+
+    with final as (
+    with unnested_BUDGET as (
     {% for i in results_list %}
         {% if var('get_brandname_from_tablename_flag') %}
             {% set brand =i.split('.')[2].split('_')[var('brandname_position_in_tablename')] %}
@@ -56,7 +57,7 @@
             CAST(fetchDate as Date) fetchDate,
             portfolioId,
             name,
-            {% if var('snowflake_database_flag') %}
+            {% if target.type=='snowflake' %}
             BUDGET.VALUE:amount :: FLOAT as amount,
             BUDGET.VALUE:currencyCode :: varchar as currencyCode,
             BUDGET.VALUE:policy :: varchar as budgetpolicy ,

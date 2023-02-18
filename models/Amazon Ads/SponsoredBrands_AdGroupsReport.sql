@@ -30,11 +30,6 @@
     {% endif %}
 
 
-
-    {% if var('timezone_conversion_flag') %}
-        {% set hr = var('timezone_conversion_hours') %}
-    {% endif %}
-
     {% for i in results_list %}
         {% if var('get_brandname_from_tablename_flag') %}
             {% set brand =i.split('.')[2].split('_')[var('brandname_position_in_tablename')] %}
@@ -48,6 +43,12 @@
             {% set store = var('default_storename') %}
         {% endif %}
 
+        {% if var('timezone_conversion_flag') and i.lower() in tables_lowercase_list %}
+            {% set hr = var('raw_table_timezone_offset_hours')[i] %}
+        {% else %}
+            {% set hr = 0 %}
+        {% endif %}
+
         SELECT * {{exclude()}} (row_num)
         From (
             select '{{brand}}' as brand,
@@ -57,11 +58,7 @@
             countryName,
             accountName,
             accountId,
-            {% if var('timezone_conversion_flag') %}
-                cast(DATETIME_ADD(cast(reportDate as timestamp), INTERVAL {{hr}} HOUR ) as DATE) reportDate,
-            {% else %}
-                cast(reportDate as DATE) reportDate,
-            {% endif %}
+            CAST({{ dbt.dateadd(datepart="hour", interval=hr, from_date_or_timestamp="cast(reportDate as timestamp)") }} as {{ dbt.type_timestamp() }}) as reportDate,
             coalesce(campaignId,'') campaignId,
             campaignName,
             campaignBudget,

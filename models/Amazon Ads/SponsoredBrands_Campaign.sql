@@ -64,7 +64,7 @@
             bidOptimization,
             bidMultiplier,
             portfolioId,
-            {% if var('snowflake_database_flag') %}
+            {% if target.type=='snowflake' %}
             CREATIVE.VALUE:brandName :: VARCHAR as brandname,
             CREATIVE.VALUE:brandLogoAssetID :: VARCHAR as brandLogoAssetID ,
             CREATIVE.VALUE:brandLogoUrl :: VARCHAR as brandLogoUrl,

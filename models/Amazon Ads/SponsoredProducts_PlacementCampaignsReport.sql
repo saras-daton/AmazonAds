@@ -19,8 +19,6 @@
     {{set_table_name('%sponsoredproducts_placementcampaignsreport')}}    
     {% endset %}  
 
-
-
     {% set results = run_query(table_name_query) %}
     {% if execute %}
     {# Return the first column #}
@@ -29,11 +27,6 @@
     {% set results_list = [] %}
     {% endif %}
 
-
-
-    {% if var('timezone_conversion_flag') %}
-        {% set hr = var('timezone_conversion_hours') %}
-    {% endif %}
 
     {% for i in results_list %}
         {% if var('get_brandname_from_tablename_flag') %}
@@ -46,6 +39,12 @@
             {% set store =i.split('.')[2].split('_')[var('storename_position_in_tablename')] %}
         {% else %}
             {% set store = var('default_storename') %}
+        {% endif %}
+
+        {% if var('timezone_conversion_flag') and i.lower() in tables_lowercase_list %}
+            {% set hr = var('raw_table_timezone_offset_hours')[i] %}
+        {% else %}
+            {% set hr = 0 %}
         {% endif %}
 
         SELECT * {{exclude()}} (row_num)
@@ -62,11 +61,7 @@
             countryName,
             accountName,
             accountId,
-            {% if var('timezone_conversion_flag') %}
-                cast(DATETIME_ADD(cast(reportDate as timestamp), INTERVAL {{hr}} HOUR ) as DATE) reportDate,
-            {% else %}
-                cast(reportDate as DATE) reportDate,
-            {% endif %}
+            CAST({{ dbt.dateadd(datepart="hour", interval=hr, from_date_or_timestamp="cast(reportDate as timestamp)") }} as {{ dbt.type_timestamp() }}) as reportDate,
             campaignName,
             coalesce(placement,'') as placement,
             bidPlus,
@@ -110,7 +105,7 @@
                 case when c.from_currency_code is null then a.currency else c.from_currency_code end as exchange_currency_code,
             {% else %}
                 cast(1 as decimal) as exchange_currency_rate,
-                cast(null as string) as exchange_currency_code, 
+                a.currency as exchange_currency_code, 
             {% endif %}
 	        a.{{daton_user_id()}} as _daton_user_id,
             a.{{daton_batch_runtime()}} as _daton_batch_runtime,

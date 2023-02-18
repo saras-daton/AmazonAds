@@ -13,13 +13,10 @@
     {% set max_loaded = 0 %}
     {%- endif -%}
     {% endif %}
-
-    with final as (
-    with unnested_table as (
+    
     {% set table_name_query %}
     {{set_table_name('%sponsoredproducts_campaign')}}    
-    {% endset %}  
- 
+    {% endset %}   
 
     {% set results = run_query(table_name_query) %}
     {% if execute %}
@@ -31,6 +28,9 @@
         {% set tables_lowercase_list = [] %}
     {% endif %}
 
+
+    with final as (
+    with unnested_table as (
     {% for i in results_list %}
         {% if var('get_brandname_from_tablename_flag') %}
             {% set brand =i.split('.')[2].split('_')[var('brandname_position_in_tablename')] %}
@@ -63,7 +63,7 @@
             dailyBudget,
             startDate,
             premiumBidAdjustment,
-            {% if var('snowflake_database_flag') %} 
+            {% if target.type=='snowflake' %}
             BIDDING.VALUE:strategy :: VARCHAR as strategy,
             BIDDING.VALUE:adjustments :: VARCHAR as adjustments,
             {% else %}

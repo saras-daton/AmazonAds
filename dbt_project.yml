@@ -30,7 +30,7 @@ vars:
   SponsoredDisplay_Campaign: True
   SponsoredDisplay_Portfolio: True
   SponsoredDisplay_ProductAdsReport: True
-  SponsoredProdcuts_SearchTermKeywordReport: True
+  SponsoredProducts_SearchTermKeywordReport: True
   SponsoredProducts_Campaign: True
   SponsoredProducts_PlacementCampaignsReport: True
   SponsoredProducts_Portfolio: True
