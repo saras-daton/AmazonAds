@@ -20,26 +20,22 @@ vars:
   # Example- default_storename: "US"
   default_storename: "" 
 
-  AllListingsreport: True
-  CatalogItemsSummary: True
-  FBAAmazonFulfilledShipmentsReport: True
-  FBAManageInventory: True
-  FBAManageInventoryHealthReport: True
-  FBAReturnsReport: True
-  FlatFileAllOrdersReportByLastUpdate: True
-  FlatFileReturnsReportByReturnDate: True
-  InventoryLedgerDetailedReport: True
-  ListOrder: True
-  OrderFees: True
-  OrderFees: True
-  OrderPromotions: True
-  OrderRevenue: True
-  OrderTaxes: True
-  RefundFees: True
-  RefundPromotions: True
-  RefundRevenue: True
-  RefundTaxes: True
-  SalesAndTrafficReportByChildASIN: True
+  SponsoredBrands_AdGroupsReport: True
+  SponsoredBrands_AdGroupsVideoReport: True
+  SponsoredBrands_Campaign: True
+  SponsoredBrands_PlacementCampaignsReport: True
+  SponsoredBrands_Portfolio: True
+  SponsoredBrands_SearchTermKeywordsReport: True
+  SponsoredBrands_SearchTermKeywordsVideoReport: True
+  SponsoredDisplay_Campaign: True
+  SponsoredDisplay_Portfolio: True
+  SponsoredDisplay_ProductAdsReport: True
+  SponsoredProdcuts_SearchTermKeywordReport: True
+  SponsoredProducts_Campaign: True
+  SponsoredProducts_PlacementCampaignsReport: True
+  SponsoredProducts_Portfolio: True
+  SponsoredProducts_ProductAdsReport: True
+
 
   timezone_conversion_flag: False
   raw_table_timezone_offset_hours: {
