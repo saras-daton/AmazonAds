@@ -26,12 +26,7 @@
     {% else %}
     {% set results_list = [] %}
     {% endif %}
-
-
-
-    {% if var('timezone_conversion_flag') %}
-        {% set hr = var('timezone_conversion_hours') %}
-    {% endif %}
+    
 
     {% for i in results_list %}
         {% if var('get_brandname_from_tablename_flag') %}

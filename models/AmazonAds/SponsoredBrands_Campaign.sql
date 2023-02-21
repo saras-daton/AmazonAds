@@ -45,7 +45,7 @@
         SELECT * {{exclude()}} (row_num)
             From (
             select 
-            '{{brand}}' as Brand,
+            '{{brand}}' as brand,
             '{{store}}' as store,
             cast(RequestTime as timestamp) RequestTime,
             profileId,

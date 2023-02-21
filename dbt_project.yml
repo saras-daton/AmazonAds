@@ -10,7 +10,7 @@ require-dbt-version: [">=1.0.0", "<2.0.0"]
 vars:
   raw_database: "edm-saras" #equivalent to project_id in BigQuery
   raw_schema: "EDM_Daton" #equivalent to dataset in BigQuery
-  currency_conversion_flag: False
+  currency_conversion_flag: True
   get_brandname_from_tablename_flag: True
   brandname_position_in_tablename: 0
   # Example- default_brandname: "Nike"
@@ -43,6 +43,11 @@ vars:
     "edm-saras.EDM_Daton.Brand_US_AmazonSellerCentral_ListOrder":5,
     "edm-saras.EDM_Daton.Brand_US_AmazonSellerCentral_FBAAmazonFulfilledShipmentsReport":6,
     "edm-saras.EDM_Daton.Brand_US_AmazonSellerCentral_InventoryLedgerDetailedReport":8,
+    "edm-saras.EDM_Daton.Brand_US_SB_BQ_188748230088354_SponsoredBrands_AdGroupsReport":5,
+    "edm-saras.EDM_Daton.Brand_US_SB_BQ_188748230088354_SponsoredBrands_PlacementCampaignsReport":4,
+    "edm-saras.EDM_Daton.Brand_US_SB_BQ_188748230088354_SponsoredBrands_SearchTermKeywordsReport":3,
+    "edm-saras.EDM_Daton.Brand_US_SponsoredProducts_188748230088354_SponsoredProducts_ProductAdsReport":6,
+    "edm-saras.EDM_Daton.Brand_US_SB_BQ_188748230088354_SponsoredBrands_SearchTermKeywordsVideoReport":2,
     "EDM.EDM.BRAND_US_AMAZONSELLERCENTRAL_SF_FBAAMAZONFULFILLEDSHIPMENTSREPORT":8,
     "EDM.EDM.BRAND_US_AMAZONSELLERCENTRAL_SF_LISTORDER":8,
     "EDM.EDM.BRAND_US_AMAZONSELLERCENTRAL_SF_FLATFILEALLORDERSREPORTBYLASTUPDATE":8,
@@ -67,6 +72,6 @@ clean-targets:         # directories to be removed by `dbt clean`
 
 
 models:
-  amazon_sellerpartner:
-    AmazonSellerCentral:
+  amazon_ads:
+    AmazonAds:
       +schema: stg_amazon_dbthub
