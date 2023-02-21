@@ -3,7 +3,7 @@
 
     {% if is_incremental() %}
     {%- set max_loaded_query -%}
-    SELECT coalesce(MAX({{daton_batch_runtime()}}) - 2592000000,0) FROM {{ this }}
+    SELECT coalesce(MAX(_daton_batch_runtime) - 2592000000,0) FROM {{ this }}
     {% endset %}
 
     {%- set max_loaded_results = run_query(max_loaded_query) -%}
@@ -88,7 +88,7 @@
     ))
 
     select *,
-    DENSE_RANK() OVER (PARTITION BY fetchDate, profileId, portfolioId order by {{daton_batch_runtime()}} desc) row_num
+    DENSE_RANK() OVER (PARTITION BY fetchDate, profileId, portfolioId order by _daton_batch_runtime desc) row_num
     FROM unnested_BUDGET
     )
 

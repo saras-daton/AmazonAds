@@ -2,7 +2,7 @@
 
     {% if is_incremental() %}
     {%- set max_loaded_query -%}
-    SELECT coalesce(MAX({{daton_batch_runtime()}}) - 2592000000,0) FROM {{ this }}
+    SELECT coalesce(MAX(_daton_batch_runtime) - 2592000000,0) FROM {{ this }}
     {% endset %}
 
     {%- set max_loaded_results = run_query(max_loaded_query) -%}
@@ -26,7 +26,7 @@
     {% else %}
     {% set results_list = [] %}
     {% endif %}
-    
+
 
     {% for i in results_list %}
         {% if var('get_brandname_from_tablename_flag') %}

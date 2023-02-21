@@ -3,7 +3,7 @@
 
     {% if is_incremental() %}
     {%- set max_loaded_query -%}
-    SELECT coalesce(MAX({{daton_batch_runtime()}}) - 2592000000,0) FROM {{ this }}
+    SELECT coalesce(MAX(_daton_batch_runtime) - 2592000000,0) FROM {{ this }}
     {% endset %}
 
     {%- set max_loaded_results = run_query(max_loaded_query) -%}
@@ -52,11 +52,7 @@
            select 
            '{{brand}}' as brand,
            '{{store}}' as store,
-            {% if var('timezone_conversion_flag') %}
-                cast(DATETIME_ADD(RequestTime, INTERVAL {{hr}} HOUR ) as Date) RequestTime,
-            {% else %}
-                cast(RequestTime as DATE) RequestTime,
-            {% endif %}	
+            CAST({{ dbt.dateadd(datepart="hour", interval=hr, from_date_or_timestamp="cast(RequestTime as timestamp)") }} as {{ dbt.type_timestamp() }}) as RequestTime,
             profileId,
             countryName,
             accountName,

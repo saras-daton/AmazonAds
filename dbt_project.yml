@@ -8,9 +8,9 @@ config-version: 2
 require-dbt-version: [">=1.0.0", "<2.0.0"]
 
 vars:
-  raw_database: "edm-saras" #equivalent to project_id in BigQuery
-  raw_schema: "EDM_Daton" #equivalent to dataset in BigQuery
-  currency_conversion_flag: True
+  raw_database: "EDM" #equivalent to project_id in BigQuery
+  raw_schema: "EDM" #equivalent to dataset in BigQuery
+  currency_conversion_flag: False
   get_brandname_from_tablename_flag: True
   brandname_position_in_tablename: 0
   # Example- default_brandname: "Nike"
@@ -37,7 +37,7 @@ vars:
   SponsoredProducts_ProductAdsReport: True
 
 
-  timezone_conversion_flag: False
+  timezone_conversion_flag: True
   raw_table_timezone_offset_hours: {
     "edm-saras.EDM_Daton.Brand_US_AmazonSellerCentral_FlatFileAllOrdersReportbyLastUpdate":7,
     "edm-saras.EDM_Daton.Brand_US_AmazonSellerCentral_ListOrder":5,
@@ -51,7 +51,12 @@ vars:
     "EDM.EDM.BRAND_US_AMAZONSELLERCENTRAL_SF_FBAAMAZONFULFILLEDSHIPMENTSREPORT":8,
     "EDM.EDM.BRAND_US_AMAZONSELLERCENTRAL_SF_LISTORDER":8,
     "EDM.EDM.BRAND_US_AMAZONSELLERCENTRAL_SF_FLATFILEALLORDERSREPORTBYLASTUPDATE":8,
-    "EDM.EDM.BRAND_US_AMAZONSELLERCENTRAL_SF_INVENTORYLEDGERDETAILEDREPORT":8
+    "EDM.EDM.BRAND_US_AMAZONSELLERCENTRAL_SF_INVENTORYLEDGERDETAILEDREPORT":8,
+    "EDM.EDM.BRAND_US_SB_SF_188748230088354_SPONSOREDBRANDS_ADGROUPSREPORT":5,
+    "EDM.EDM.BRAND_US_SB_SF_188748230088354_SPONSOREDBRANDS_PLACEMENTCAMPAIGNSREPORT":4,
+    "EDM.EDM.BRAND_US_SB_SF_188748230088354_SPONSOREDBRANDS_SEARCHTERMKEYWORDSREPORT":3,
+    "EDM.EDM.BRAND_US_SPONSOREDPRODUCTS_SF_188748230088354_SPONSOREDPRODUCTS_PLACEMENTCAMPAIGNSREPORT":5,
+    "EDM.EDM.BRAND_US_SPONSOREDPRODUCTS_SF_188748230088354_SPONSOREDPRODUCTS_PRODUCTADSREPORT":2
     }
 
   
