@@ -1,5 +1,7 @@
 {% if var('SponsoredProducts_ProductAdsReport') %}
--- depends_on: {{ref('ExchangeRates')}}
+{% if var('currency_conversion_flag') %}
+--depends_on: {{ ref('ExchangeRates') }}
+{% endif %}
 
     {% if is_incremental() %}
     {%- set max_loaded_query -%}
@@ -113,7 +115,7 @@
             '{{env_var("DBT_CLOUD_RUN_ID", "manual")}}' as _run_id,
             ROW_NUMBER() OVER (PARTITION BY reportDate, campaignId, adGroupId,adId order by a.{{daton_batch_runtime()}} desc) row_num
             from {{i}} a
-                {% if var('currency_conversion_flag') %} 
+                {% if var('currency_conversion_flag') %}
                     left join {{ref('ExchangeRates')}} c on date(a.RequestTime) = c.date and a.currency = c.to_currency_code
                 {% endif %}
                 {% if is_incremental() %}
