@@ -8,7 +8,7 @@ This dbt package is for the Amazon Advertising data unification Ingested by [Dat
 
 #### Typical challenges with raw data are:
 - Array/Nested Array columns which makes queries for Data Analytics complex
-- Data duplication due to look back period while fetching report data from Amazon Seller Partner
+- Data duplication due to look back period while fetching report data from Amazon
 - Separate tables at marketplaces/Store, brand, account level for same kind of report/data feeds
 
 By doing Data Unification the above challenges can be overcomed and simplifies Data Analytics. 
@@ -106,7 +106,7 @@ SponsoredBrands_AdGroupsReport: False
 
 ## Models
 
-This package contains models from the Amazon Selling Partner API which includes reports on {{sales, margin, inventory, product}}. The primary outputs of this package are described below.
+This package contains models from the Amazon Advertising API which includes reports on {{sales, margin, inventory, product}}. The primary outputs of this package are described below.
 
 | **Category**                 | **Model**  | **Description** |
 | ------------------------- | ---------------| ----------------------- |
