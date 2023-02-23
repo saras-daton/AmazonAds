@@ -1,5 +1,8 @@
-
 {% if var('SponsoredBrands_Portfolio') %}
+{{ config( enabled = True ) }}
+{% else %}
+{{ config( enabled = False ) }}
+{% endif %}
     
     {% if is_incremental() %}
     {%- set max_loaded_query -%}
@@ -96,5 +99,3 @@
     select * {{exclude()}} (row_num)
     from final
     where row_num = 1
-
-{% endif %}

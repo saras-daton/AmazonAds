@@ -1,4 +1,9 @@
 {% if var('SponsoredProducts_PlacementCampaignsReport') %}
+{{ config( enabled = True ) }}
+{% else %}
+{{ config( enabled = False ) }}
+{% endif %}
+
 {% if var('currency_conversion_flag') %}
 --depends_on: {{ ref('ExchangeRates') }}
 {% endif %}
@@ -123,5 +128,3 @@
         where row_num = 1 
         {% if not loop.last %} union all {% endif %}
     {% endfor %}
-
-{% endif %}
