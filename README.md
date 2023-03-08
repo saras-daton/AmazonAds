@@ -37,7 +37,7 @@ If you haven't already, you will need to create a packages.yml file in your DBT 
 ```yaml
 packages:
   - package: saras-daton/amazon_ads
-    version: {{1.0.1}}
+    version: v1.0.1
 ```
 
 # Configuration 
