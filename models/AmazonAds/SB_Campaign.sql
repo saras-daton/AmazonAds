@@ -1,4 +1,4 @@
-{% if var('SponsoredProducts_Portfolio') %}
+{% if var('SB_Campaign') %}
 {{ config( enabled = True ) }}
 {% else %}
 {{ config( enabled = False ) }}
@@ -18,22 +18,20 @@
     {%- endif -%}
     {% endif %}
 
+
     {% set table_name_query %}
-    {{set_table_name('%sponsoredproducts%portfolio')}}    
+    {{set_table_name('%sponsoredbrands_campaign')}}    
     {% endset %}  
+
 
     {% set results = run_query(table_name_query) %}
     {% if execute %}
-        {# Return the first column #}
-        {% set results_list = results.columns[0].values() %}
-        {% set tables_lowercase_list = results.columns[1].values() %}
+    {# Return the first column #}
+    {% set results_list = results.columns[0].values() %}
     {% else %}
-        {% set results_list = [] %}
-        {% set tables_lowercase_list = [] %}
+    {% set results_list = [] %}
     {% endif %}
 
-    with final as (
-    with unnested_BUDGET as (
     {% for i in results_list %}
         {% if var('get_brandname_from_tablename_flag') %}
             {% set brand =i.split('.')[2].split('_')[var('brandname_position_in_tablename')] %}
@@ -47,7 +45,7 @@
             {% set store = var('default_storename') %}
         {% endif %}
 
-        SELECT *
+        SELECT * {{exclude()}} (row_num)
             From (
             select 
             '{{brand}}' as brand,
@@ -58,44 +56,56 @@
             accountName,
             accountId,
             CAST(fetchDate as Date) fetchDate,
-            portfolioId,
+            campaignId,
             name,
-            {% if target.type=='snowflake' %}
-            BUDGET.VALUE:amount :: FLOAT as amount,
-            BUDGET.VALUE:currencyCode :: VARCHAR as currencyCode,
-            BUDGET.VALUE:policy :: VARCHAR as policy,
-            BUDGET.VALUE:startDate :: DATE as BudgetStartDate,
-            BUDGET.VALUE:endDate :: DATE as BudgetEndDate,
-            {% else %}
-            BUDGET.amount,
-            BUDGET.currencyCode,
-            BUDGET.policy,
-            BUDGET.startDate,
-            BUDGET.endDate,
-            {% endif %}
-            inBudget,
+            budget,
+            budgetType,
+            startDate,
+            endDate,
             state,
+            servingStatus,
+            bidOptimization,
+            bidMultiplier,
+            portfolioId,
+            {% if target.type=='snowflake' %}
+            CREATIVE.VALUE:brandName :: VARCHAR as brandname,
+            CREATIVE.VALUE:brandLogoAssetID :: VARCHAR as brandLogoAssetID ,
+            CREATIVE.VALUE:brandLogoUrl :: VARCHAR as brandLogoUrl,
+            CREATIVE.VALUE:headline :: VARCHAR as headline,
+            CREATIVE.VALUE:asins :: VARCHAR as asins,
+            CREATIVE.VALUE:shouldOptimizeAsins :: VARCHAR as shouldOptimizeAsins,
+            LANDINGPAGE.VALUE:url :: VARCHAR as landingPageURL,
+            brandEntityId,
+            BIDADJUSTMENTS.VALUE:bidAdjustmentPredicate :: VARCHAR as bidAdjustmentPredicate,
+            BIDADJUSTMENTS.VALUE:bidAdjustmentPercent :: FLOAT as bidAdjustmentPercent,
+            {% else %}
+            CREATIVE.brandName,
+            CREATIVE.brandLogoAssetID,
+            CREATIVE.brandLogoUrl,
+            CREATIVE.headline,
+            CREATIVE.asins,
+            CREATIVE.shouldOptimizeAsins,
+            LANDINGPAGE.url,
+            brandEntityId,
+            BIDADJUSTMENTS.bidAdjustmentPredicate,
+            BIDADJUSTMENTS.bidAdjustmentPercent,
+            {% endif %}
+            adFormat,
 	        {{daton_user_id()}} as _daton_user_id,
             {{daton_batch_runtime()}} as _daton_batch_runtime,
             {{daton_batch_id()}} as _daton_batch_id,            
             current_timestamp() as _last_updated,
-            '{{env_var("DBT_CLOUD_RUN_ID", "manual")}}' as _run_id
-            FROM  {{i}}  
-             {{unnesting("BUDGET")}} 
+            '{{env_var("DBT_CLOUD_RUN_ID", "manual")}}' as _run_id,
+            DENSE_RANK() OVER (PARTITION BY campaignId, fetchDate order by {{daton_batch_runtime()}} desc) row_num
+            FROM {{i}}
+            {{unnesting("CREATIVE")}} 
+            {{unnesting("LANDINGPAGE")}} 
+            {{unnesting("BIDADJUSTMENTS")}} 
             {% if is_incremental() %}
             {# /* -- this filter will only be applied on an incremental run */ #}
             WHERE {{daton_batch_runtime()}}  >= {{max_loaded}}
             {% endif %}
+            )
+            where row_num = 1
             {% if not loop.last %} union all {% endif %}
      {% endfor %}
-
-    ))
-
-    select *,
-    DENSE_RANK() OVER (PARTITION BY fetchDate, profileId, portfolioId order by _daton_batch_runtime desc) row_num
-    FROM unnested_BUDGET
-    )
-
-    select * {{exclude()}} (row_num)
-    from final
-    where row_num = 1

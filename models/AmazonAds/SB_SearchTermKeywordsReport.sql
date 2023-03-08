@@ -1,4 +1,4 @@
-{% if var('SponsoredBrands_AdGroupsVideoReport') %}
+{% if var('SB_SearchTermKeywordsReport') %}
 {{ config( enabled = True ) }}
 {% else %}
 {{ config( enabled = False ) }}
@@ -18,19 +18,19 @@
     {%- endif -%}
     {% endif %}
 
-
-
     {% set table_name_query %}
-    {{set_table_name('%sponsoredbrands_adgroupsvideoreport')}}    
+    {{set_table_name('%sponsoredbrands_searchtermkeywordsreport')}}    
     {% endset %}  
 
 
     {% set results = run_query(table_name_query) %}
     {% if execute %}
-    {# Return the first column #}
-    {% set results_list = results.columns[0].values() %}
+        {# Return the first column #}
+        {% set results_list = results.columns[0].values() %}
+        {% set tables_lowercase_list = results.columns[1].values() %}
     {% else %}
-    {% set results_list = [] %}
+        {% set results_list = [] %}
+        {% set tables_lowercase_list = [] %}
     {% endif %}
 
 
@@ -55,61 +55,49 @@
 
         SELECT * {{exclude()}} (row_num)
         From (
-            select 
+           select 
             '{{brand}}' as brand,
             '{{store}}' as store,
-            CAST(RequestTime as date) as RequestTime,
+            CAST(RequestTime as timestamp) RequestTime,
+            impressions,
+            clicks,
+            cost,
+            attributedConversions14d,
+            attributedSales14d,
             profileId,
             countryName,
             accountName,
             accountId,
             CAST({{ dbt.dateadd(datepart="hour", interval=hr, from_date_or_timestamp="cast(reportDate as timestamp)") }} as {{ dbt.type_timestamp() }}) as reportDate,
-            coalesce(campaignId,'') as campaignId,
+            coalesce(query,'') as query,
+            coalesce(campaignId,'') as campaignId, 
             campaignName,
-            campaignBudget,
+            adGroupId,
+            adGroupName,
             campaignBudgetType,
             campaignStatus,
-            coalesce(adGroupId,'') as adGroupId,
-            adGroupName,
-            impressions,
-            clicks,
-            cost,
-            attributedSales14d,
-            attributedSales14dSameSKU,
-            attributedConversions14d,
-            attributedConversions14dSameSKU,
-            attributedDetailPageViewsClicks14d,
-            attributedOrderRateNewToBrand14d,
-            attributedOrdersNewToBrand14d,
-            attributedOrdersNewToBrandPercentage14d,
-            attributedSalesNewToBrand14d,
-            attributedSalesNewToBrandPercentage14d,
-            attributedUnitsOrderedNewToBrand14d,
-            attributedUnitsOrderedNewToBrandPercentage14d,
-            dpv14d,
-            vctr,
-            video5SecondViewRate,
-            video5SecondViews,
-            videoCompleteViews,
-            videoFirstQuartileViews,
-            videoMidpointViews,
-            videoThirdQuartileViews,
-            videoUnmutes,
-            viewableImpressions,
-            vtr,
-            CAST(0 as int) units_sold,
+            coalesce(keywordId,'') as keywordId,
+            keywordStatus,
+            KeywordBid,
+            keywordText,
+            coalesce(matchType,'') as matchType,
+            campaignBudget,
+            searchTermImpressionRank,
+            searchTermImpressionShare,
+            CAST(null as int) units_sold,
 	        {{daton_user_id()}} as _daton_user_id,
             {{daton_batch_runtime()}} as _daton_batch_runtime,
             {{daton_batch_id()}} as _daton_batch_id,            
             current_timestamp() as _last_updated,
             '{{env_var("DBT_CLOUD_RUN_ID", "manual")}}' as _run_id,
-            DENSE_RANK() OVER (PARTITION BY reportDate, campaignId, adGroupId order by {{daton_batch_runtime()}} desc) row_num
-            from {{i}} 
-                        {% if is_incremental() %}
+            ROW_NUMBER() OVER (PARTITION BY reportDate,campaignId,keywordId,matchType,
+            query order by {{daton_batch_runtime()}} desc) row_num
+            from {{i}}
+                {% if is_incremental() %}
                 {# /* -- this filter will only be applied on an incremental run */ #}
                 WHERE {{daton_batch_runtime()}}  >= {{max_loaded}}
-                {% endif %}  
-            )
-         where row_num = 1 
+                {% endif %} 
+        )
+        where row_num = 1 
         {% if not loop.last %} union all {% endif %}
     {% endfor %}

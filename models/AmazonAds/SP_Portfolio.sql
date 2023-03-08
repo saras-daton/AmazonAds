@@ -1,9 +1,9 @@
-{% if var('SponsoredBrands_Portfolio') %}
+{% if var('SP_Portfolio') %}
 {{ config( enabled = True ) }}
 {% else %}
 {{ config( enabled = False ) }}
 {% endif %}
-    
+
     {% if is_incremental() %}
     {%- set max_loaded_query -%}
     SELECT coalesce(MAX(_daton_batch_runtime) - 2592000000,0) FROM {{ this }}
@@ -18,19 +18,19 @@
     {%- endif -%}
     {% endif %}
 
-
     {% set table_name_query %}
-    {{set_table_name('%sb%portfolio')}}    
+    {{set_table_name('%sponsoredproducts%portfolio')}}    
     {% endset %}  
 
     {% set results = run_query(table_name_query) %}
     {% if execute %}
-    {# Return the first column #}
-    {% set results_list = results.columns[0].values() %}
+        {# Return the first column #}
+        {% set results_list = results.columns[0].values() %}
+        {% set tables_lowercase_list = results.columns[1].values() %}
     {% else %}
-    {% set results_list = [] %}
+        {% set results_list = [] %}
+        {% set tables_lowercase_list = [] %}
     {% endif %}
-
 
     with final as (
     with unnested_BUDGET as (
@@ -62,30 +62,30 @@
             name,
             {% if target.type=='snowflake' %}
             BUDGET.VALUE:amount :: FLOAT as amount,
-            BUDGET.VALUE:currencyCode :: varchar as currencyCode,
-            BUDGET.VALUE:policy :: varchar as budgetpolicy ,
+            BUDGET.VALUE:currencyCode :: VARCHAR as currencyCode,
+            BUDGET.VALUE:policy :: VARCHAR as policy,
             BUDGET.VALUE:startDate :: DATE as BudgetStartDate,
-            BUDGET.VALUE:endDate :: DATE BudgetEndDate,
+            BUDGET.VALUE:endDate :: DATE as BudgetEndDate,
             {% else %}
-            budget.amount,
-            budget.currencyCode,
-            budget.policy,
-            budget.startDate,
-            budget.endDate,
+            BUDGET.amount,
+            BUDGET.currencyCode,
+            BUDGET.policy,
+            BUDGET.startDate,
+            BUDGET.endDate,
             {% endif %}
             inBudget,
             state,
-            {{daton_user_id()}} as _daton_user_id,
+	        {{daton_user_id()}} as _daton_user_id,
             {{daton_batch_runtime()}} as _daton_batch_runtime,
             {{daton_batch_id()}} as _daton_batch_id,            
             current_timestamp() as _last_updated,
             '{{env_var("DBT_CLOUD_RUN_ID", "manual")}}' as _run_id
-            FROM {{i}} 
-                    {{unnesting("BUDGET")}}
-                    {% if is_incremental() %}
-                    {# /* -- this filter will only be applied on an incremental run */ #}
-                    WHERE {{daton_batch_runtime()}}  >= {{max_loaded}}
-                    {% endif %}
+            FROM  {{i}}  
+             {{unnesting("BUDGET")}} 
+            {% if is_incremental() %}
+            {# /* -- this filter will only be applied on an incremental run */ #}
+            WHERE {{daton_batch_runtime()}}  >= {{max_loaded}}
+            {% endif %}
             {% if not loop.last %} union all {% endif %}
      {% endfor %}
 

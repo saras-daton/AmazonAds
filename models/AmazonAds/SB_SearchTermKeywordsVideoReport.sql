@@ -1,4 +1,4 @@
-{% if var('SponsoredBrands_SearchTermKeywordsReport') %}
+{% if var('SB_SearchTermKeywordsVideoReport') %}
 {{ config( enabled = True ) }}
 {% else %}
 {{ config( enabled = False ) }}
@@ -19,18 +19,16 @@
     {% endif %}
 
     {% set table_name_query %}
-    {{set_table_name('%sponsoredbrands_searchtermkeywordsreport')}}    
+    {{set_table_name('%sponsoredbrands_searchtermkeywordsvideoreport')}}    
     {% endset %}  
 
 
     {% set results = run_query(table_name_query) %}
     {% if execute %}
-        {# Return the first column #}
-        {% set results_list = results.columns[0].values() %}
-        {% set tables_lowercase_list = results.columns[1].values() %}
+    {# Return the first column #}
+    {% set results_list = results.columns[0].values() %}
     {% else %}
-        {% set results_list = [] %}
-        {% set tables_lowercase_list = [] %}
+    {% set results_list = [] %}
     {% endif %}
 
 
@@ -55,49 +53,58 @@
 
         SELECT * {{exclude()}} (row_num)
         From (
-           select 
+            select 
             '{{brand}}' as brand,
             '{{store}}' as store,
+            searchTermImpressionRank,
+            searchTermImpressionShare,
             CAST(RequestTime as timestamp) RequestTime,
-            impressions,
-            clicks,
-            cost,
-            attributedConversions14d,
-            attributedSales14d,
             profileId,
             countryName,
             accountName,
             accountId,
             CAST({{ dbt.dateadd(datepart="hour", interval=hr, from_date_or_timestamp="cast(reportDate as timestamp)") }} as {{ dbt.type_timestamp() }}) as reportDate,
-            coalesce(query,'') as query,
-            coalesce(campaignId,'') as campaignId, 
-            campaignName,
-            adGroupId,
-            adGroupName,
-            campaignBudgetType,
+            coalesce(campaignId,'') as campaignId,
             campaignStatus,
-            coalesce(keywordId,'') as keywordId,
-            keywordStatus,
-            KeywordBid,
-            keywordText,
-            coalesce(matchType,'') as matchType,
             campaignBudget,
-            searchTermImpressionRank,
-            searchTermImpressionShare,
-            CAST(null as int) units_sold,
+            campaignBudgetType,
+            campaignName,
+            impressions,
+            clicks,
+            cost,
+            CAST(attributedSales14d as int) attributedSales14d,
+            CAST(attributedConversions14d as int) attributedConversions14d,
+            keywordText,
+            KeywordBid,
+            adGroupName,
+            adGroupId,
+            keywordStatus,
+            coalesce(query,'') as query,
+            coalesce(keywordId,'') as keywordId,
+            coalesce(matchType,'') as matchType,
+            vctr,
+            video5SecondViewRate,
+            video5SecondViews,
+            videoFirstQuartileViews,
+            videoMidpointViews,
+            videoThirdQuartileViews,
+            videoUnmutes,
+            viewableImpressions,
+            vtr,
+            videoCompleteViews,
 	        {{daton_user_id()}} as _daton_user_id,
             {{daton_batch_runtime()}} as _daton_batch_runtime,
             {{daton_batch_id()}} as _daton_batch_id,            
             current_timestamp() as _last_updated,
             '{{env_var("DBT_CLOUD_RUN_ID", "manual")}}' as _run_id,
-            ROW_NUMBER() OVER (PARTITION BY reportDate,campaignId,keywordId,matchType,
+            DENSE_RANK() OVER (PARTITION BY reportDate,campaignId,keywordId,matchType,
             query order by {{daton_batch_runtime()}} desc) row_num
-            from {{i}}
+            from {{i}} 
                 {% if is_incremental() %}
                 {# /* -- this filter will only be applied on an incremental run */ #}
                 WHERE {{daton_batch_runtime()}}  >= {{max_loaded}}
-                {% endif %} 
-        )
-        where row_num = 1 
+                {% endif %}   
+            )
+         where row_num = 1 
         {% if not loop.last %} union all {% endif %}
     {% endfor %}

@@ -1,15 +1,15 @@
 version: 2
 models:
-  - name: SponsoredBrands_Portfolio
+  - name: SB_Portfolio
     description: A list of portfolios associated with the account
     config:
       materialized: incremental
       incremental_strategy: merge
-      partition_by: { 'field': 'fetchDate', 'data_type': dbt.type_timestamp() }
+      partition_by: { 'field': 'fetchDate', 'data_type': date }
       cluster_by: ['profileId', 'portfolioId'] 
       unique_key: ['fetchDate', 'profileId', 'portfolioId']
     
-  - name: SponsoredBrands_Campaign	
+  - name: SB_Campaign	
     description: A list of campaigns associated with the account
     config:
       materialized: incremental
@@ -18,120 +18,120 @@ models:
       cluster_by: ['fetchDate', 'campaignId'] 
       unique_key: ['fetchDate', 'campaignId']
 
-  - name: SponsoredBrands_AdGroupsReport
+  - name: SB_AdGroupsReport
     description: A list of ad groups associated with the account
     config:
       materialized: incremental
       incremental_strategy: merge
-      partition_by: { 'field': 'reportDate', 'data_type': dbt.type_timestamp() }
+      partition_by: { 'field': 'reportDate', 'data_type': timestamp }
       cluster_by: ['campaignId','adGroupId'] 
       unique_key: ['reportDate','campaignId','adGroupId']
 
-  - name: SponsoredBrands_AdGroupsVideoReport
+  - name: SB_AdGroupsVideoReport
     description: A list of ad groups related to sponsored brand video associated with the account
     config: 
       materialized: incremental
       incremental_strategy: merge
-      partition_by: { 'field': 'reportDate', 'data_type': dbt.type_timestamp() }
+      partition_by: { 'field': 'reportDate', 'data_type': timestamp }
       cluster_by: ['campaignId','adGroupId'] 
       unique_key: ['reportDate','campaignId','adGroupId']
 
-  - name: SponsoredBrands_PlacementCampaignsReport
+  - name: SB_PlacementCampaignsReport
     description: A list of all the placement campaigns associated with the account.
     config:
       materialized: incremental 
       incremental_strategy: merge
       cluster_by: ['campaignId','campaignStatus'] 
-      partition_by: { 'field': 'reportDate', 'data_type': dbt.type_timestamp() }
+      partition_by: { 'field': 'reportDate', 'data_type': timestamp }
       unique_key: ['reportdate','campaignId','placement']
 
-  - name: SponsoredBrands_SearchTermKeywordsReport
+  - name: SB_SearchTermKeywordsReport
     description: A list of product search keywords report
     config: 
       materialized: incremental
       incremental_strategy: merge
-      partition_by: { 'field': 'reportDate', 'data_type': dbt.type_timestamp() }
+      partition_by: { 'field': 'reportDate', 'data_type': timestamp }
       cluster_by: ['campaignId','keywordId','matchType'] 
       unique_key: ['reportDate','campaignId','keywordId','matchType','query']
 
-  - name: SponsoredBrands_SearchTermKeywordsVideoReport
+  - name: SB_SearchTermKeywordsVideoReport
     description: A list of keywords associated with sponsored brand video
     config:
       materialized: incremental
       incremental_strategy: merge
-      partition_by: { 'field': 'reportDate', 'data_type': dbt.type_timestamp() }
+      partition_by: { 'field': 'reportDate', 'data_type': timestamp }
       cluster_by: ['campaignId','keywordId','matchType'] 
       unique_key: ['reportDate','campaignId','keywordId','matchType','query']
 
-  - name: SponsoredDisplay_Portfolio
+  - name: SD_Portfolio
     description: A list of portfolios associated with the account
     config:
       materialized: incremental
       incremental_strategy: merge
-      partition_by: { 'field': 'fetchDate', 'data_type': dbt.type_timestamp() }
+      partition_by: { 'field': 'fetchDate', 'data_type': date }
       cluster_by: ['profileId', 'portfolioId'] 
       unique_key: ['fetchDate', 'profileId', 'portfolioId']
 
-  - name: SponsoredDisplay_Campaign
+  - name: SD_Campaign
     description: A list of campaigns associated with the account
     config:
       materialized: incremental
       incremental_strategy: merge
-      partition_by: { 'field': 'fetchDate', 'data_type': dbt.type_timestamp() }
+      partition_by: { 'field': 'fetchDate', 'data_type': date }
       cluster_by: ['fetchDate', 'campaignId'] 
       unique_key: ['fetchDate', 'campaignId']
 
-  - name: SponsoredDisplay_ProductAdsReport
+  - name: SD_ProductAdsReport
     description: A list of product ads associated with the account
     config:
       materialized: incremental
       incremental_strategy: merge
-      partition_by: { 'field': 'reportDate', 'data_type': dbt.type_timestamp() }
+      partition_by: { 'field': 'reportDate', 'data_type': timestamp }
       cluster_by: ['CampaignId', 'adGroupID', 'asin', 'sku'] 
       unique_key: ['reportDate','CampaignId', 'adGroupID', 'asin', 'sku']
 
-  - name: SponsoredProducts_Portfolio
+  - name: SP_Portfolio
     description: A list of portfolios associated with the account
     config:
       materialized: incremental
       incremental_strategy: merge
-      partition_by: { 'field': 'fetchDate', 'data_type': dbt.type_timestamp() }
+      partition_by: { 'field': 'fetchDate', 'data_type': date }
       cluster_by: ['profileId', 'portfolioId'] 
       unique_key: ['fetchDate', 'profileId', 'portfolioId']
 
-  - name: SponsoredProducts_Campaign
+  - name: SP_Campaign
     description: A list of campaigns associated with the account
     config:
       materialized: incremental
       incremental_strategy: merge
-      partition_by: { 'field': 'fetchDate', 'data_type': dbt.type_timestamp() }
+      partition_by: { 'field': 'fetchDate', 'data_type': date }
       cluster_by: ['fetchDate', 'campaignId'] 
       unique_key: ['fetchDate', 'campaignId']
 
-  - name: SponsoredProducts_PlacementCampaignsReport
+  - name: SP_PlacementCampaignsReport
     description: A list of all the placement campaigns associated with the account
     config: 
       materialized: incremental
       incremental_strategy: merge
-      partition_by: { 'field': 'reportDate', 'data_type': dbt.type_timestamp() }
+      partition_by: { 'field': 'reportDate', 'data_type': timestamp }
       cluster_by: ['campaignId','placement'] 
       unique_key: ['reportDate','campaignId','placement']
 
-  - name: SponsoredProducts_ProductAdsReport
+  - name: SP_ProductAdsReport
     description: A list of product ads associated with the account
     config: 
       materialized: incremental
       incremental_strategy: merge
-      partition_by: { 'field': 'reportDate', 'data_type': dbt.type_timestamp() }
+      partition_by: { 'field': 'reportDate', 'data_type': timestamp }
       cluster_by: ['campaignId', 'adGroupId','asin','sku'] 
       unique_key: ['reportDate', 'campaignId', 'adGroupId','adId']
 
-  - name: SponsoredProducts_SearchTermKeywordReport
+  - name: SP_SearchTermKeywordReport
     description: A list of product search keywords report
     config: 
       materialized: incremental
       incremental_strategy: merge
-      partition_by: { 'field': 'reportDate', 'data_type': dbt.type_timestamp() }
+      partition_by: { 'field': 'reportDate', 'data_type': timestamp }
       cluster_by: ['campaignId','adGroupId','keywordId','matchType'] 
       unique_key: ['reportDate','campaignId','adGroupId','keywordId','matchType','query','impressions']
    

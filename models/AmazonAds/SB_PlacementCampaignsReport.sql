@@ -1,4 +1,4 @@
-{% if var('SponsoredBrands_PlacementCampaignsReport') %}
+{% if var('SB_PlacementCampaignsReport') %}
 {{ config( enabled = True ) }}
 {% else %}
 {{ config( enabled = False ) }}

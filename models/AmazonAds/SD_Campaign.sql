@@ -1,4 +1,4 @@
-{% if var('SponsoredDisplay_Campaign') %}
+{% if var('SD_Campaign') %}
 {{ config( enabled = True ) }}
 {% else %}
 {{ config( enabled = False ) }}

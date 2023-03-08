@@ -10,55 +10,46 @@ require-dbt-version: [">=1.0.0", "<2.0.0"]
 vars:
   raw_database: "edm-saras" #equivalent to project_id in BigQuery
   raw_schema: "EDM_Daton" #equivalent to dataset in BigQuery
-  currency_conversion_flag: False
+
   get_brandname_from_tablename_flag: True
   brandname_position_in_tablename: 0
-  # Example- default_brandname: "Nike"
+    # Example- Daton Integration Name: Nike_US_SponsoredBrands --> Position 0, separated by '_'
   default_brandname: "" 
+    # Example- default_brandname: "Nike" --> for Single Brand users, with no Brandname in Daton Integration Name
+
   get_storename_from_tablename_flag: True 
   storename_position_in_tablename: 1
-  # Example- default_storename: "US"
+    # Example- Daton Integration Name: Nike_US_SponsoredBrands --> Position 1, separated by '_'
   default_storename: "" 
-
-  SponsoredBrands_AdGroupsReport: False
-  SponsoredBrands_AdGroupsVideoReport: True
-  SponsoredBrands_Campaign: True
-  SponsoredBrands_PlacementCampaignsReport: True
-  SponsoredBrands_Portfolio: True
-  SponsoredBrands_SearchTermKeywordsReport: True
-  SponsoredBrands_SearchTermKeywordsVideoReport: True
-  SponsoredDisplay_Campaign: True
-  SponsoredDisplay_Portfolio: True
-  SponsoredDisplay_ProductAdsReport: True
-  SponsoredProducts_SearchTermKeywordReport: True
-  SponsoredProducts_Campaign: True
-  SponsoredProducts_PlacementCampaignsReport: True
-  SponsoredProducts_Portfolio: True
-  SponsoredProducts_ProductAdsReport: True
+    # Example- default_storename: "US" --> for Single Store users, with no Storename in Daton Integration Name
 
 
-  timezone_conversion_flag: True
+  currency_conversion_flag: False
+  timezone_conversion_flag: False
   raw_table_timezone_offset_hours: {
-    "edm-saras.EDM_Daton.Brand_US_AmazonSellerCentral_FlatFileAllOrdersReportbyLastUpdate":7,
-    "edm-saras.EDM_Daton.Brand_US_AmazonSellerCentral_ListOrder":5,
-    "edm-saras.EDM_Daton.Brand_US_AmazonSellerCentral_FBAAmazonFulfilledShipmentsReport":6,
-    "edm-saras.EDM_Daton.Brand_US_AmazonSellerCentral_InventoryLedgerDetailedReport":8,
-    "edm-saras.EDM_Daton.Brand_US_SB_BQ_188748230088354_SponsoredBrands_AdGroupsReport":5,
-    "edm-saras.EDM_Daton.Brand_US_SB_BQ_188748230088354_SponsoredBrands_PlacementCampaignsReport":4,
-    "edm-saras.EDM_Daton.Brand_US_SB_BQ_188748230088354_SponsoredBrands_SearchTermKeywordsReport":3,
-    "edm-saras.EDM_Daton.Brand_US_SponsoredProducts_188748230088354_SponsoredProducts_ProductAdsReport":6,
-    "edm-saras.EDM_Daton.Brand_US_SB_BQ_188748230088354_SponsoredBrands_SearchTermKeywordsVideoReport":2,
-    "EDM.EDM.BRAND_US_AMAZONSELLERCENTRAL_SF_FBAAMAZONFULFILLEDSHIPMENTSREPORT":8,
-    "EDM.EDM.BRAND_US_AMAZONSELLERCENTRAL_SF_LISTORDER":8,
-    "EDM.EDM.BRAND_US_AMAZONSELLERCENTRAL_SF_FLATFILEALLORDERSREPORTBYLASTUPDATE":8,
-    "EDM.EDM.BRAND_US_AMAZONSELLERCENTRAL_SF_INVENTORYLEDGERDETAILEDREPORT":8,
-    "EDM.EDM.BRAND_US_SB_SF_188748230088354_SPONSOREDBRANDS_ADGROUPSREPORT":5,
-    "EDM.EDM.BRAND_US_SB_SF_188748230088354_SPONSOREDBRANDS_PLACEMENTCAMPAIGNSREPORT":4,
-    "EDM.EDM.BRAND_US_SB_SF_188748230088354_SPONSOREDBRANDS_SEARCHTERMKEYWORDSREPORT":3,
-    "EDM.EDM.BRAND_US_SPONSOREDPRODUCTS_SF_188748230088354_SPONSOREDPRODUCTS_PLACEMENTCAMPAIGNSREPORT":5,
-    "EDM.EDM.BRAND_US_SPONSOREDPRODUCTS_SF_188748230088354_SPONSOREDPRODUCTS_PRODUCTADSREPORT":2
+    "Amazon.Ads.SPONSOREDBRANDS_ADGROUPSREPORT":-4,
+    "Amazon.Ads.SPONSOREDBRANDS_PLACEMENTCAMPAIGNSREPORT":-4,
+    "Amazon.Ads.SPONSOREDBRANDS_SEARCHTERMKEYWORDSREPORT":-4,
+    "Amazon.Ads.SPONSOREDPRODUCTS_PLACEMENTCAMPAIGNSREPORT":-4,
+    "Amazon.Ads.SPONSOREDPRODUCTS_PRODUCTADSREPORT":-4
     }
+      # Above are Example entries for raw table level input offset hours
 
+  SB_AdGroupsReport: True
+  SB_AdGroupsVideoReport: True
+  SB_Campaign: True
+  SB_PlacementCampaignsReport: True
+  SB_Portfolio: True
+  SB_SearchTermKeywordsReport: True
+  SB_SearchTermKeywordsVideoReport: True
+  SD_Campaign: True
+  SD_Portfolio: True
+  SD_ProductAdsReport: True
+  SP_SearchTermKeywordReport: True
+  SP_Campaign: True
+  SP_PlacementCampaignsReport: True
+  SP_Portfolio: True
+  SP_ProductAdsReport: True
   
 # These configurations specify where dbt should look for different types of files.
 # The `model-paths` config, for example, states that models in this project can be
@@ -80,3 +71,5 @@ models:
   amazon_ads:
     AmazonAds:
       +schema: stg_amazon_dbthub
+
+
