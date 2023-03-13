@@ -1,4 +1,4 @@
-{% if var('SP_ProductAdsReport') %}
+{% if var('SPPlacementCampaignsReport') %}
 {{ config( enabled = True ) }}
 {% else %}
 {{ config( enabled = False ) }}
@@ -23,18 +23,15 @@
     {% endif %}
 
     {% set table_name_query %}
-    {{set_table_name('%sponsoredproducts_productadsreport')}}    
+    {{set_table_name('%sponsoredproducts_placementcampaignsreport')}}    
     {% endset %}  
-
 
     {% set results = run_query(table_name_query) %}
     {% if execute %}
-        {# Return the first column #}
-        {% set results_list = results.columns[0].values() %}
-        {% set tables_lowercase_list = results.columns[1].values() %}
+    {# Return the first column #}
+    {% set results_list = results.columns[0].values() %}
     {% else %}
-        {% set results_list = [] %}
-        {% set tables_lowercase_list = [] %}
+    {% set results_list = [] %}
     {% endif %}
 
 
@@ -59,25 +56,24 @@
 
         SELECT * {{exclude()}} (row_num)
         From (
-            select 
-            '{{brand}}' as brand,
-            '{{store}}' as store,
-            cast(RequestTime as timestamp) RequestTime,
+           select 
+           '{{brand}}' as brand,
+           '{{store}}' as store,
+            CAST({{ dbt.dateadd(datepart="hour", interval=hr, from_date_or_timestamp="cast(RequestTime as timestamp)") }} as {{ dbt.type_timestamp() }}) as RequestTime,
             profileId,
             countryName,
             accountName,
             accountId,
             CAST({{ dbt.dateadd(datepart="hour", interval=hr, from_date_or_timestamp="cast(reportDate as timestamp)") }} as {{ dbt.type_timestamp() }}) as reportDate,
             campaignName,
+            coalesce(placement,'') as placement,
+            bidPlus,
             coalesce(campaignId,'') as campaignId,
-            adGroupName,
-            coalesce(adGroupId,'') as adGroupId,
+            campaignStatus,
+            campaignBudget,
             impressions,
             clicks,
             cost,
-            currency,
-            asin,
-            sku,
             attributedConversions1d,
             attributedConversions7d,
             attributedConversions14d,
@@ -102,10 +98,11 @@
             attributedUnitsOrdered7dSameSKU,
             attributedUnitsOrdered14dSameSKU,
             attributedUnitsOrdered30dSameSKU,
-            coalesce(adId,'') as adId,
-            campaignBudget,
+            applicableBudgetRuleId,
+            applicableBudgetRuleName,
             campaignBudgetType,
-            campaignStatus,
+            campaignRuleBasedBudget,
+            currency,
             {% if var('currency_conversion_flag') %}
                 case when c.value is null then 1 else c.value end as exchange_currency_rate,
                 case when c.from_currency_code is null then a.currency else c.from_currency_code end as exchange_currency_code,
@@ -118,7 +115,7 @@
             a.{{daton_batch_id()}} as _daton_batch_id,            
             current_timestamp() as _last_updated,
             '{{env_var("DBT_CLOUD_RUN_ID", "manual")}}' as _run_id,
-            ROW_NUMBER() OVER (PARTITION BY reportDate, campaignId, adGroupId,adId order by a.{{daton_batch_runtime()}} desc) row_num
+            DENSE_RANK() OVER (PARTITION BY reportDate,campaignId,placement order by a.{{daton_batch_runtime()}} desc) row_num
             from {{i}} a
                 {% if var('currency_conversion_flag') %}
                     left join {{ref('ExchangeRates')}} c on date(a.RequestTime) = c.date and a.currency = c.to_currency_code
@@ -126,8 +123,8 @@
                 {% if is_incremental() %}
                 {# /* -- this filter will only be applied on an incremental run */ #}
                 WHERE a.{{daton_batch_runtime()}}  >= {{max_loaded}}
-                {% endif %}    
+                {% endif %}   
             )
-         where row_num = 1 
+        where row_num = 1 
         {% if not loop.last %} union all {% endif %}
     {% endfor %}

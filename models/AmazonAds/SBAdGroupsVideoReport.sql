@@ -1,4 +1,4 @@
-{% if var('SB_AdGroupsVideoReport') %}
+{% if var('SBAdGroupsVideoReport') %}
 {{ config( enabled = True ) }}
 {% else %}
 {{ config( enabled = False ) }}

@@ -1,4 +1,4 @@
-{% if var('SB_AdGroupsReport') %}
+{% if var('SBSearchTermKeywordsReport') %}
 {{ config( enabled = True ) }}
 {% else %}
 {{ config( enabled = False ) }}
@@ -18,10 +18,10 @@
     {%- endif -%}
     {% endif %}
 
-
     {% set table_name_query %}
-    {{set_table_name('%sponsoredbrands_adgroupsreport')}}    
+    {{set_table_name('%sponsoredbrands_searchtermkeywordsreport')}}    
     {% endset %}  
+
 
     {% set results = run_query(table_name_query) %}
     {% if execute %}
@@ -55,49 +55,48 @@
 
         SELECT * {{exclude()}} (row_num)
         From (
-            select '{{brand}}' as brand,
+           select 
+            '{{brand}}' as brand,
             '{{store}}' as store,
             CAST(RequestTime as timestamp) RequestTime,
+            impressions,
+            clicks,
+            cost,
+            attributedConversions14d,
+            attributedSales14d,
             profileId,
             countryName,
             accountName,
             accountId,
             CAST({{ dbt.dateadd(datepart="hour", interval=hr, from_date_or_timestamp="cast(reportDate as timestamp)") }} as {{ dbt.type_timestamp() }}) as reportDate,
-            coalesce(campaignId,'') campaignId,
+            coalesce(query,'') as query,
+            coalesce(campaignId,'') as campaignId, 
             campaignName,
-            campaignBudget,
+            adGroupId,
+            adGroupName,
             campaignBudgetType,
             campaignStatus,
-            coalesce(adGroupId,'') adGroupId,
-            adGroupName,
-            impressions,
-            clicks,
-            cost,
-            attributedDetailPageViewsClicks14d,
-            attributedSales14d,
-            attributedSales14dSameSKU,
-            attributedConversions14d,
-            attributedConversions14dSameSKU,
-            attributedOrdersNewToBrand14d,
-            attributedOrdersNewToBrandPercentage14d,
-            attributedOrderRateNewToBrand14d,
-            attributedSalesNewToBrand14d,
-            attributedSalesNewToBrandPercentage14d,
-            attributedUnitsOrderedNewToBrand14d,
-            attributedUnitsOrderedNewToBrandPercentage14d,
-            unitsSold14d,
-            dpv14d,
+            coalesce(keywordId,'') as keywordId,
+            keywordStatus,
+            KeywordBid,
+            keywordText,
+            coalesce(matchType,'') as matchType,
+            campaignBudget,
+            searchTermImpressionRank,
+            searchTermImpressionShare,
+            CAST(null as int) units_sold,
 	        {{daton_user_id()}} as _daton_user_id,
             {{daton_batch_runtime()}} as _daton_batch_runtime,
             {{daton_batch_id()}} as _daton_batch_id,            
             current_timestamp() as _last_updated,
             '{{env_var("DBT_CLOUD_RUN_ID", "manual")}}' as _run_id,
-            ROW_NUMBER() OVER (PARTITION BY reportDate, campaignId, adGroupId order by {{daton_batch_runtime()}} desc) row_num
-            from {{i}} 
+            ROW_NUMBER() OVER (PARTITION BY reportDate,campaignId,keywordId,matchType,
+            query order by {{daton_batch_runtime()}} desc) row_num
+            from {{i}}
                 {% if is_incremental() %}
                 {# /* -- this filter will only be applied on an incremental run */ #}
                 WHERE {{daton_batch_runtime()}}  >= {{max_loaded}}
-                {% endif %}        
+                {% endif %} 
         )
         where row_num = 1 
         {% if not loop.last %} union all {% endif %}

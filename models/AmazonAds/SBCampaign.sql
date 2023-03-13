@@ -1,4 +1,4 @@
-{% if var('SB_Campaign') %}
+{% if var('SBCampaign') %}
 {{ config( enabled = True ) }}
 {% else %}
 {{ config( enabled = False ) }}

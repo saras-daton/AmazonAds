@@ -1,4 +1,4 @@
-{% if var('SB_SearchTermKeywordsVideoReport') %}
+{% if var('SBSearchTermKeywordsVideoReport') %}
 {{ config( enabled = True ) }}
 {% else %}
 {{ config( enabled = False ) }}

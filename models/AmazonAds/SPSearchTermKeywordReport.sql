@@ -1,4 +1,4 @@
-{% if var('SD_ProductAdsReport') %}
+{% if var('SPSearchTermKeywordReport') %}
 {{ config( enabled = True ) }}
 {% else %}
 {{ config( enabled = False ) }}
@@ -7,6 +7,7 @@
 {% if var('currency_conversion_flag') %}
 --depends_on: {{ ref('ExchangeRates') }}
 {% endif %}
+
     {% if is_incremental() %}
     {%- set max_loaded_query -%}
     SELECT coalesce(MAX(_daton_batch_runtime) - 2592000000,0) FROM {{ this }}
@@ -21,11 +22,9 @@
     {%- endif -%}
     {% endif %}
 
-
     {% set table_name_query %}
-    {{set_table_name('%sponsoreddisplay_productadsreport')}}    
+    {{set_table_name('%sponsoredproducts_searchtermkeywordreport')}}    
     {% endset %}  
-
 
     {% set results = run_query(table_name_query) %}
     {% if execute %}
@@ -60,24 +59,24 @@
             select 
             '{{brand}}' as brand,
             '{{store}}' as store,
-            CAST({{ dbt.dateadd(datepart="hour", interval=hr, from_date_or_timestamp="cast(RequestTime as timestamp)") }} as {{ dbt.type_timestamp() }}) as RequestTime,
-            tactic,
-            profileId,        
+            cast(RequestTime as timestamp) RequestTime,
+            profileId,
             countryName,
             accountName,
             accountId,
             CAST({{ dbt.dateadd(datepart="hour", interval=hr, from_date_or_timestamp="cast(reportDate as timestamp)") }} as {{ dbt.type_timestamp() }}) as reportDate,
-            adGroupName,
-            coalesce(adGroupId,'') as adGroupId,
-            coalesce(asin,'') as asin,
-            coalesce(sku,'') as sku,
-            adId,
+            query,
             campaignName,
             coalesce(campaignId,'') as campaignId,
-            impressions,
+            adGroupName,
+            coalesce(adGroupId,'') as adGroupId,
+            coalesce(keywordId,'') as keywordId,
+            keywordText,
+            CAST(null as numeric) as KeywordBid,
+            coalesce(matchType,'') as matchType,
+            coalesce(impressions,0) as impressions,
             clicks,
             cost,
-            currency,
             attributedConversions1d,
             attributedConversions7d,
             attributedConversions14d,
@@ -89,50 +88,47 @@
             attributedUnitsOrdered1d,
             attributedUnitsOrdered7d,
             attributedUnitsOrdered14d,
-            attributedUnitsOrdered30d, 
+            attributedUnitsOrdered30d,
+            attributedSales1d,
+            attributedSales7d,
             attributedSales14d,
+            attributedSales30d,
             attributedSales1dSameSKU,
             attributedSales7dSameSKU,
             attributedSales14dSameSKU,
             attributedSales30dSameSKU,
-            attributedOrdersNewToBrand14d,	
-            attributedSalesNewToBrand14d,	
-            attributedUnitsOrderedNewToBrand14d,	
-            attributedDetailPageView14d,	
-            viewImpressions,	
-            viewAttributedConversions14d,	
-            viewAttributedSales14d,	
-            viewAttributedUnitsOrdered14d,	
-            viewAttributedDetailPageView14d,	
-            attributedBrandedSearches14d,	
-            viewAttributedBrandedSearches14d,	
-            viewAttributedOrdersNewToBrand14d,	
-            viewAttributedSalesNewToBrand14d,	
-            viewAttributedUnitsOrderedNewToBrand14d,
+            attributedUnitsOrdered1dSameSKU,
+            attributedUnitsOrdered7dSameSKU,
+            attributedUnitsOrdered14dSameSKU,
+            attributedUnitsOrdered30dSameSKU,
+            api,
+            campaignBudget,
+            campaignBudgetType,
+            campaignStatus,
+            currency,
+            keywordStatus,
             {% if var('currency_conversion_flag') %}
                 case when c.value is null then 1 else c.value end as exchange_currency_rate,
                 case when c.from_currency_code is null then a.currency else c.from_currency_code end as exchange_currency_code,
             {% else %}
                 cast(1 as decimal) as exchange_currency_rate,
-                a.currency as exchange_currency_code,
+                a.currency as exchange_currency_code, 
             {% endif %}
 	        a.{{daton_user_id()}} as _daton_user_id,
             a.{{daton_batch_runtime()}} as _daton_batch_runtime,
             a.{{daton_batch_id()}} as _daton_batch_id,            
             current_timestamp() as _last_updated,
             '{{env_var("DBT_CLOUD_RUN_ID", "manual")}}' as _run_id,
-            ROW_NUMBER() OVER (PARTITION BY reportDate,CampaignId, adGroupID,asin, sku order by a.{{daton_batch_runtime()}} desc) row_num
+            ROW_NUMBER() OVER (PARTITION BY reportDate,campaignId,adGroupId,keywordId,matchType,query order by a.{{daton_batch_runtime()}} desc) row_num
             from {{i}} a
-            
-                {% if var('currency_conversion_flag') %} 
-                    
+                {% if var('currency_conversion_flag') %}
                     left join {{ref('ExchangeRates')}} c on date(a.RequestTime) = c.date and a.currency = c.to_currency_code
                 {% endif %}
                 {% if is_incremental() %}
                 {# /* -- this filter will only be applied on an incremental run */ #}
                 WHERE a.{{daton_batch_runtime()}}  >= {{max_loaded}}
-                {% endif %}    
-        )
+                {% endif %}            
+            )
          where row_num = 1 
         {% if not loop.last %} union all {% endif %}
-    {% endfor %}
+{% endfor %}

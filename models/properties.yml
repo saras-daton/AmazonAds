@@ -1,6 +1,6 @@
 version: 2
 models:
-  - name: SB_Portfolio
+  - name: SBPortfolio
     description: A list of portfolios associated with the account
     config:
       materialized: incremental
@@ -9,7 +9,7 @@ models:
       cluster_by: ['profileId', 'portfolioId'] 
       unique_key: ['fetchDate', 'profileId', 'portfolioId']
     
-  - name: SB_Campaign	
+  - name: SBCampaign	
     description: A list of campaigns associated with the account
     config:
       materialized: incremental
@@ -18,7 +18,7 @@ models:
       cluster_by: ['fetchDate', 'campaignId'] 
       unique_key: ['fetchDate', 'campaignId']
 
-  - name: SB_AdGroupsReport
+  - name: SBAdGroupsReport
     description: A list of ad groups associated with the account
     config:
       materialized: incremental
@@ -27,7 +27,7 @@ models:
       cluster_by: ['campaignId','adGroupId'] 
       unique_key: ['reportDate','campaignId','adGroupId']
 
-  - name: SB_AdGroupsVideoReport
+  - name: SBAdGroupsVideoReport
     description: A list of ad groups related to sponsored brand video associated with the account
     config: 
       materialized: incremental
@@ -36,7 +36,7 @@ models:
       cluster_by: ['campaignId','adGroupId'] 
       unique_key: ['reportDate','campaignId','adGroupId']
 
-  - name: SB_PlacementCampaignsReport
+  - name: SBPlacementCampaignsReport
     description: A list of all the placement campaigns associated with the account.
     config:
       materialized: incremental 
@@ -45,7 +45,7 @@ models:
       partition_by: { 'field': 'reportDate', 'data_type': timestamp }
       unique_key: ['reportdate','campaignId','placement']
 
-  - name: SB_SearchTermKeywordsReport
+  - name: SBSearchTermKeywordsReport
     description: A list of product search keywords report
     config: 
       materialized: incremental
@@ -54,7 +54,7 @@ models:
       cluster_by: ['campaignId','keywordId','matchType'] 
       unique_key: ['reportDate','campaignId','keywordId','matchType','query']
 
-  - name: SB_SearchTermKeywordsVideoReport
+  - name: SBSearchTermKeywordsVideoReport
     description: A list of keywords associated with sponsored brand video
     config:
       materialized: incremental
@@ -63,7 +63,7 @@ models:
       cluster_by: ['campaignId','keywordId','matchType'] 
       unique_key: ['reportDate','campaignId','keywordId','matchType','query']
 
-  - name: SD_Portfolio
+  - name: SDPortfolio
     description: A list of portfolios associated with the account
     config:
       materialized: incremental
@@ -72,7 +72,7 @@ models:
       cluster_by: ['profileId', 'portfolioId'] 
       unique_key: ['fetchDate', 'profileId', 'portfolioId']
 
-  - name: SD_Campaign
+  - name: SDCampaign
     description: A list of campaigns associated with the account
     config:
       materialized: incremental
@@ -81,7 +81,7 @@ models:
       cluster_by: ['fetchDate', 'campaignId'] 
       unique_key: ['fetchDate', 'campaignId']
 
-  - name: SD_ProductAdsReport
+  - name: SDProductAdsReport
     description: A list of product ads associated with the account
     config:
       materialized: incremental
@@ -90,7 +90,7 @@ models:
       cluster_by: ['CampaignId', 'adGroupID', 'asin', 'sku'] 
       unique_key: ['reportDate','CampaignId', 'adGroupID', 'asin', 'sku']
 
-  - name: SP_Portfolio
+  - name: SPPortfolio
     description: A list of portfolios associated with the account
     config:
       materialized: incremental
@@ -99,7 +99,7 @@ models:
       cluster_by: ['profileId', 'portfolioId'] 
       unique_key: ['fetchDate', 'profileId', 'portfolioId']
 
-  - name: SP_Campaign
+  - name: SPCampaign
     description: A list of campaigns associated with the account
     config:
       materialized: incremental
@@ -108,7 +108,7 @@ models:
       cluster_by: ['fetchDate', 'campaignId'] 
       unique_key: ['fetchDate', 'campaignId']
 
-  - name: SP_PlacementCampaignsReport
+  - name: SPPlacementCampaignsReport
     description: A list of all the placement campaigns associated with the account
     config: 
       materialized: incremental
@@ -117,7 +117,7 @@ models:
       cluster_by: ['campaignId','placement'] 
       unique_key: ['reportDate','campaignId','placement']
 
-  - name: SP_ProductAdsReport
+  - name: SPProductAdsReport
     description: A list of product ads associated with the account
     config: 
       materialized: incremental
@@ -126,7 +126,7 @@ models:
       cluster_by: ['campaignId', 'adGroupId','asin','sku'] 
       unique_key: ['reportDate', 'campaignId', 'adGroupId','adId']
 
-  - name: SP_SearchTermKeywordReport
+  - name: SPSearchTermKeywordReport
     description: A list of product search keywords report
     config: 
       materialized: incremental
