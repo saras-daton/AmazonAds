@@ -37,7 +37,7 @@ If you haven't already, you will need to create a packages.yml file in your DBT 
 ```yaml
 packages:
   - package: saras-daton/amazon_ads
-    version: v1.0.3
+    version: v1.1.0
 ```
 
 # Configuration 
@@ -80,21 +80,19 @@ vars:
 
 ### Timezone Conversion 
 
-To enable timezone conversion, which converts the datetime columns from local timezone to given timezone, please mark the timezone_conversion_flag f as True in the dbt_project.yml file, by default, it is False
-Additionally, you need to provide offset hours for each raw table
+To enable timezone conversion, which converts the timezone columns from UTC timezone to local timezone, please mark the timezone_conversion_flag as True in the dbt_project.yml file, by default, it is False.
+Additionally, you need to provide offset hours between UTC and the timezone you want the data to convert into for each raw table for which you want timezone converison to be taken into account.
 
 Example:
 ```yaml
 vars:
 timezone_conversion_flag: False
 raw_table_timezone_offset_hours: {
-    "Amazon.Ads.SPONSOREDBRANDS_ADGROUPSREPORT":-4,
-    "Amazon.Ads.SPONSOREDBRANDS_PLACEMENTCAMPAIGNSREPORT":-4,
-    "Amazon.Ads.SPONSOREDBRANDS_SEARCHTERMKEYWORDSREPORT":-4,
-    "Amazon.Ads.SPONSOREDPRODUCTS_PLACEMENTCAMPAIGNSREPORT":-4,
-    "Amazon.Ads.SPONSOREDPRODUCTS_PRODUCTADSREPORT":-4
+    "Amazon.Ads.SPONSOREDBRANDS_ADGROUPSREPORT":-7,
+    "Amazon.Ads.SPONSOREDBRANDS_PLACEMENTCAMPAIGNSREPORT":-7,
     }
 ```
+Here, -7 represents the offset hours between UTC and PDT considering we are sitting in PDT timezone and want the data in this timezone
 
 ### Table Exclusions
 
@@ -112,21 +110,21 @@ This package contains models from the Amazon Advertising API which includes repo
 
 | **Category**                 | **Model**  | **Description** |
 | ------------------------- | ---------------| ----------------------- |
-|Sponsored Brands | [SB_Portfolio](models/AmazonAds/SB_Portfolio.sql)  | A list of portfolios associated with the account |
-|Sponsored Brands | [SB_Campaign](models/AmazonAds/SB_Campaign.sql)  | A list of campaigns associated with the account |
-|Sponsored Brands | [SB_AdGroupsReport](models/AmazonAds/SB_AdGroupsReport.sql)  | A list of ad groups associated with the account |
-|Sponsored Brands | [SB_AdGroupsVideoReport](models/AmazonAds/SB_AdGroupsVideoReport.sql)| A list of ad groups related to sponsored brand video associated with the account |
-|Sponsored Brands | [SB_PlacementCampaignsReport](models/AmazonAds/SB_PlacementCampaignsReport.sql)| A list of all the placement campaigns associated with the account |
-|Sponsored Brands | [SB_SearchTermKeywordsReport](models/AmazonAds/SB_SearchTermKeywordsReport.sql)| A list of product search keywords report |
-|Sponsored Brands | [SB_SearchTermKeywordsVideoReport](models/AmazonAds/SB_SearchTermKeywordsVideoReport.sql)| A list of keywords associated with sponsored brand video |
-|Sponsored Display | [SD_Portfolio](models/AmazonAds/SD_Portfolio.sql)| A list of portfolios associated with the account |
-|Sponsored Display | [SD_Campaign](models/AmazonAds/SD_Campaign.sql)| A list of campaigns associated with the account |
-|Sponsored Display | [SD_ProductAdsReport](models/AmazonAds/SD_ProductAdsReport.sql)| A list of product ads associated with the account |
-|Sponsored Products | [SP_Portfolio](models/AmazonAds/SP_Portfolio.sql)| A list of portfolios associated with the account |
-|Sponsored Products | [SP_Campaign](models/AmazonAds/SP_Campaign.sql)| A list of campaigns associated with the account |
-|Sponsored Products | [SP_PlacementCampaignsReport](models/AmazonAds/SP_PlacementCampaignsReport.sql)| A list of all the placement campaigns associated with the account |
-|Sponsored Products | [SP_ProductAdsReport](models/AmazonAds/SP_ProductAdsReport.sql)| A list of product ads associated with the account |
-|Sponsored Products | [SP_SearchTermKeywordReport](models/AmazonAds/SP_SearchTermKeywordReport.sql)| A list of product search keywords report |
+|Sponsored Brands | [SBPortfolio](models/AmazonAds/SBPortfolio.sql)  | A list of portfolios associated with the account |
+|Sponsored Brands | [SBCampaign](models/AmazonAds/SBCampaign.sql)  | A list of campaigns associated with the account |
+|Sponsored Brands | [SBAdGroupsReport](models/AmazonAds/SBAdGroupsReport.sql)  | A list of ad groups associated with the account |
+|Sponsored Brands | [SBAdGroupsVideoReport](models/AmazonAds/SBAdGroupsVideoReport.sql)| A list of ad groups related to sponsored brand video associated with the account |
+|Sponsored Brands | [SBPlacementCampaignsReport](models/AmazonAds/SBPlacementCampaignsReport.sql)| A list of all the placement campaigns associated with the account |
+|Sponsored Brands | [SBSearchTermKeywordsReport](models/AmazonAds/SBSearchTermKeywordsReport.sql)| A list of product search keywords report |
+|Sponsored Brands | [SBSearchTermKeywordsVideoReport](models/AmazonAds/SBSearchTermKeywordsVideoReport.sql)| A list of keywords associated with sponsored brand video |
+|Sponsored Display | [SDPortfolio](models/AmazonAds/SDPortfolio.sql)| A list of portfolios associated with the account |
+|Sponsored Display | [SDCampaign](models/AmazonAds/SDCampaign.sql)| A list of campaigns associated with the account |
+|Sponsored Display | [SDProductAdsReport](models/AmazonAds/SDProductAdsReport.sql)| A list of product ads associated with the account |
+|Sponsored Products | [SPPortfolio](models/AmazonAds/SPPortfolio.sql)| A list of portfolios associated with the account |
+|Sponsored Products | [SPCampaign](models/AmazonAds/SPCampaign.sql)| A list of campaigns associated with the account |
+|Sponsored Products | [SPPlacementCampaignsReport](models/AmazonAds/SPPlacementCampaignsReport.sql)| A list of all the placement campaigns associated with the account |
+|Sponsored Products | [SPProductAdsReport](models/AmazonAds/SPProductAdsReport.sql)| A list of product ads associated with the account |
+|Sponsored Products | [SPSearchTermKeywordReport](models/AmazonAds/SPSearchTermKeywordReport.sql)| A list of product search keywords report |
 
 
 
@@ -136,7 +134,7 @@ This package contains models from the Amazon Advertising API which includes repo
 ```yaml
 version: 2
 models:
-  - name: SB_Portfolio
+  - name: SBPortfolio
     description: A list of portfolios associated with the account
     config:
       materialized: incremental
@@ -145,7 +143,7 @@ models:
       cluster_by: ['profileId', 'portfolioId'] 
       unique_key: ['fetchDate', 'profileId', 'portfolioId']
     
-  - name: SB_Campaign	
+  - name: SBCampaign	
     description: A list of campaigns associated with the account
     config:
       materialized: incremental
@@ -154,7 +152,7 @@ models:
       cluster_by: ['fetchDate', 'campaignId'] 
       unique_key: ['fetchDate', 'campaignId']
 
-  - name: SB_AdGroupsReport
+  - name: SBAdGroupsReport
     description: A list of ad groups associated with the account
     config:
       materialized: incremental
@@ -163,7 +161,7 @@ models:
       cluster_by: ['campaignId','adGroupId'] 
       unique_key: ['reportDate','campaignId','adGroupId']
 
-  - name: SB_AdGroupsVideoReport
+  - name: SBAdGroupsVideoReport
     description: A list of ad groups related to sponsored brand video associated with the account
     config: 
       materialized: incremental
@@ -172,7 +170,7 @@ models:
       cluster_by: ['campaignId','adGroupId'] 
       unique_key: ['reportDate','campaignId','adGroupId']
 
-  - name: SB_PlacementCampaignsReport
+  - name: SBPlacementCampaignsReport
     description: A list of all the placement campaigns associated with the account.
     config:
       materialized: incremental 
@@ -181,7 +179,7 @@ models:
       partition_by: { 'field': 'reportDate', 'data_type': timestamp }
       unique_key: ['reportdate','campaignId','placement']
 
-  - name: SB_SearchTermKeywordsReport
+  - name: SBSearchTermKeywordsReport
     description: A list of product search keywords report
     config: 
       materialized: incremental
@@ -190,7 +188,7 @@ models:
       cluster_by: ['campaignId','keywordId','matchType'] 
       unique_key: ['reportDate','campaignId','keywordId','matchType','query']
 
-  - name: SB_SearchTermKeywordsVideoReport
+  - name: SBSearchTermKeywordsVideoReport
     description: A list of keywords associated with sponsored brand video
     config:
       materialized: incremental
@@ -199,7 +197,7 @@ models:
       cluster_by: ['campaignId','keywordId','matchType'] 
       unique_key: ['reportDate','campaignId','keywordId','matchType','query']
 
-  - name: SD_Portfolio
+  - name: SDPortfolio
     description: A list of portfolios associated with the account
     config:
       materialized: incremental
@@ -208,7 +206,7 @@ models:
       cluster_by: ['profileId', 'portfolioId'] 
       unique_key: ['fetchDate', 'profileId', 'portfolioId']
 
-  - name: SD_Campaign
+  - name: SDCampaign
     description: A list of campaigns associated with the account
     config:
       materialized: incremental
@@ -217,7 +215,7 @@ models:
       cluster_by: ['fetchDate', 'campaignId'] 
       unique_key: ['fetchDate', 'campaignId']
 
-  - name: SD_ProductAdsReport
+  - name: SDProductAdsReport
     description: A list of product ads associated with the account
     config:
       materialized: incremental
@@ -226,7 +224,7 @@ models:
       cluster_by: ['CampaignId', 'adGroupID', 'asin', 'sku'] 
       unique_key: ['reportDate','CampaignId', 'adGroupID', 'asin', 'sku']
 
-  - name: SP_Portfolio
+  - name: SPPortfolio
     description: A list of portfolios associated with the account
     config:
       materialized: incremental
@@ -235,7 +233,7 @@ models:
       cluster_by: ['profileId', 'portfolioId'] 
       unique_key: ['fetchDate', 'profileId', 'portfolioId']
 
-  - name: SP_Campaign
+  - name: SPCampaign
     description: A list of campaigns associated with the account
     config:
       materialized: incremental
@@ -244,7 +242,7 @@ models:
       cluster_by: ['fetchDate', 'campaignId'] 
       unique_key: ['fetchDate', 'campaignId']
 
-  - name: SP_PlacementCampaignsReport
+  - name: SPPlacementCampaignsReport
     description: A list of all the placement campaigns associated with the account
     config: 
       materialized: incremental
@@ -253,7 +251,7 @@ models:
       cluster_by: ['campaignId','placement'] 
       unique_key: ['reportDate','campaignId','placement']
 
-  - name: SP_ProductAdsReport
+  - name: SPProductAdsReport
     description: A list of product ads associated with the account
     config: 
       materialized: incremental
@@ -262,7 +260,7 @@ models:
       cluster_by: ['campaignId', 'adGroupId','asin','sku'] 
       unique_key: ['reportDate', 'campaignId', 'adGroupId','adId']
 
-  - name: SP_SearchTermKeywordReport
+  - name: SPSearchTermKeywordReport
     description: A list of product search keywords report
     config: 
       materialized: incremental
