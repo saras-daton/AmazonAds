@@ -1,6 +1,6 @@
 # Amazon Advertising Data Unification
 
-his dbt package is for Data Unification of Amazon Advertising ingested data by [Daton](https://sarasanalytics.com/daton/). [Daton](https://sarasanalytics.com/daton/) is the Unified Data Platform for Global Commerce with 100+ pre-built connectors and data sets designed for accelerating the eCommerce data and analytics journey by [Saras Analytics](https://sarasanalytics.com).
+This dbt package is for Data Unification of Amazon Advertising ingested data by [Daton](https://sarasanalytics.com/daton/). [Daton](https://sarasanalytics.com/daton/) is the Unified Data Platform for Global Commerce with 100+ pre-built connectors and data sets designed for accelerating the eCommerce data and analytics journey by [Saras Analytics](https://sarasanalytics.com).
 
 ### Supported Datawarehouses:
 - BigQuery
@@ -36,8 +36,8 @@ If you haven't already, you will need to create a packages.yml file in your DBT 
 
 ```yaml
 packages:
-  - package: saras-daton/amazon_ads
-    version: v1.1.0
+  - package: saras-daton/AmazonAds
+    version: v1.1.1
 ```
 
 # Configuration 
