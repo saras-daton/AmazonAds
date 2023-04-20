@@ -9,7 +9,7 @@ models:
       cluster_by: ['profileId', 'portfolioId'] 
       unique_key: ['fetchDate', 'profileId', 'portfolioId']
     
-  - name: SBCampaign	
+  - name: SBCampaign
     description: A list of campaigns associated with the account
     config:
       materialized: incremental
