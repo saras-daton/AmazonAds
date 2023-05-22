@@ -19,7 +19,7 @@
     {% endif %}
 
     {% set table_name_query %}
-    {{set_table_name('%sd%portfolio')}}    
+    {{set_table_name('%_sd_%portfolio')}}    
     {% endset %}  
 
     {% set results = run_query(table_name_query) %}
