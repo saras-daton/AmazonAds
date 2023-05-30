@@ -103,6 +103,10 @@
             campaignBudgetType,
             campaignRuleBasedBudget,
             currency,
+            costPerClick	,		
+            clickThroughRate	,		
+            attributedKindleEditionNormalizedPagesRead14d	,		
+            attributedKindleEditionNormalizedPagesRoyalties14d	,
             {% if var('currency_conversion_flag') %}
                 case when c.value is null then 1 else c.value end as exchange_currency_rate,
                 case when c.from_currency_code is null then a.currency else c.from_currency_code end as exchange_currency_code,
