@@ -44,6 +44,9 @@ vars:
   SBPortfolio: True
   SBSearchTermKeywordsReport: True
   SBSearchTermKeywordsVideoReport: True
+  SBTargetReport: True
+  SBTargetVideoReport: True
+  SDProductTargetingReport: True
   SDCampaign: True
   SDPortfolio: True
   SDProductAdsReport: True
