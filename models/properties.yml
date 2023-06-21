@@ -63,6 +63,24 @@ models:
       cluster_by: ['campaignId','keywordId','matchType'] 
       unique_key: ['reportDate','campaignId','keywordId','matchType','query']
 
+  - name: SBTargetReport
+    description: A list of product and category targeting report
+    config: 
+      materialized: incremental
+      incremental_strategy: merge
+      partition_by: { 'field': 'reportDate', 'data_type': timestamp }
+      cluster_by: ['campaignId','targetId','targetingType'] 
+      unique_key: ['reportDate','campaignId','targetId','targetingType']
+
+  - name: SBTargetVideoReport
+    description: A list of product and category targeting report for sponsored brand videos
+    config: 
+      materialized: incremental
+      incremental_strategy: merge
+      partition_by: { 'field': 'reportDate', 'data_type': timestamp }
+      cluster_by: ['campaignId','targetId','targetingType'] 
+      unique_key: ['reportDate','campaignId','targetId','targetingType']
+
   - name: SDPortfolio
     description: A list of portfolios associated with the account
     config:
@@ -80,6 +98,15 @@ models:
       partition_by: { 'field': 'fetchDate', 'data_type': date }
       cluster_by: ['fetchDate', 'campaignId'] 
       unique_key: ['fetchDate', 'campaignId']
+
+  - name: SDProductTargetingReport
+    description: A list of product and category targeting report for sponsored display
+    config: 
+      materialized: incremental
+      incremental_strategy: merge
+      partition_by: { 'field': 'reportDate', 'data_type': timestamp }
+      cluster_by: ['campaignId','targetId','targetingType'] 
+      unique_key: ['reportDate','campaignId','targetId','targetingType']
 
   - name: SDProductAdsReport
     description: A list of product ads associated with the account
