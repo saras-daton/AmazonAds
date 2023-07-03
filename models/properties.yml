@@ -16,10 +16,27 @@ models:
             - portfolioId
     columns:
       - name: fetchDate
+        tests:         
+          - not_null:
+              config:
+                severity: error
+
+      - name: profileId
+        tests:  
+          - not_null:
+              config:
+                severity: error
+
+      - name: portfolioId
+        tests:        
+          - not_null:
+              config:
+                severity: error
+
+      - name: brand
         tests:
-          - dbt_expectations.expect_row_values_to_have_recent_data:
-              datepart: day
-              interval: 1
+          - accepted_values:
+              values: ['Default']
     
   - name: SBCampaign
     description: A list of campaigns associated with the account
@@ -40,6 +57,21 @@ models:
           - dbt_expectations.expect_row_values_to_have_recent_data:
               datepart: day
               interval: 1
+          - not_null:
+              config:
+                severity: error
+
+      - name: campaignId
+        tests:  
+          - not_null:
+              config:
+                severity: error
+
+     
+      - name: brand
+        tests:
+          - accepted_values:
+              values: ['Default']
 
   - name: SBAdGroupsReport
     description: A list of ad groups associated with the account
@@ -61,6 +93,27 @@ models:
           - dbt_expectations.expect_row_values_to_have_recent_data:
               datepart: day
               interval: 1
+          - not_null:
+              config:
+                severity: error
+
+      - name: campaignId
+        tests:  
+          - not_null:
+              config:
+                severity: error
+
+      - name: adGroupId
+        tests:  
+          - not_null:
+              config:
+                severity: error
+
+     
+      - name: brand
+        tests:
+          - accepted_values:
+              values: ['Default']
 
   - name: SBAdGroupsVideoReport
     description: A list of ad groups related to sponsored brand video associated with the account
@@ -82,6 +135,27 @@ models:
           - dbt_expectations.expect_row_values_to_have_recent_data:
               datepart: day
               interval: 1
+          - not_null:
+              config:
+                severity: error
+
+      - name: campaignId
+        tests:  
+          - not_null:
+              config:
+                severity: error
+
+      - name: adGroupId
+        tests:  
+          - not_null:
+              config:
+                severity: error
+
+     
+      - name: brand
+        tests:
+          - accepted_values:
+              values: ['Default']
 
   - name: SBPlacementCampaignsReport
     description: A list of all the placement campaigns associated with the account.
@@ -103,6 +177,27 @@ models:
           - dbt_expectations.expect_row_values_to_have_recent_data:
               datepart: day
               interval: 1
+          - not_null:
+              config:
+                severity: error
+
+      - name: campaignId
+        tests:  
+          - not_null:
+              config:
+                severity: error
+
+      - name: placement
+        tests:  
+          - not_null:
+              config:
+                severity: error
+
+     
+      - name: brand
+        tests:
+          - accepted_values:
+              values: ['Default']
 
   - name: SBSearchTermKeywordsReport
     description: A list of product search keywords report
@@ -126,6 +221,39 @@ models:
           - dbt_expectations.expect_row_values_to_have_recent_data:
               datepart: day
               interval: 1
+          - not_null:
+              config:
+                severity: error
+
+      - name: campaignId
+        tests:  
+          - not_null:
+              config:
+                severity: error
+
+      - name: keywordId
+        tests:  
+          - not_null:
+              config:
+                severity: error
+
+      - name: matchType
+        tests:  
+          - not_null:
+              config:
+                severity: error
+
+      - name: query
+        tests:  
+          - not_null:
+              config:
+                severity: error
+
+     
+      - name: brand
+        tests:
+          - accepted_values:
+              values: ['Default']
 
   - name: SBSearchTermKeywordsVideoReport
     description: A list of keywords associated with sponsored brand video
@@ -149,6 +277,39 @@ models:
           - dbt_expectations.expect_row_values_to_have_recent_data:
               datepart: day
               interval: 1
+          - not_null:
+              config:
+                severity: error
+
+      - name: campaignId
+        tests:  
+          - not_null:
+              config:
+                severity: error
+
+      - name: keywordId
+        tests:  
+          - not_null:
+              config:
+                severity: error
+
+      - name: matchType
+        tests:  
+          - not_null:
+              config:
+                severity: error
+
+      - name: query
+        tests:  
+          - not_null:
+              config:
+                severity: error
+
+     
+      - name: brand
+        tests:
+          - accepted_values:
+              values: ['Default']
 
   - name: SBTargetReport
     description: A list of product and category targeting report
@@ -171,6 +332,35 @@ models:
           - dbt_expectations.expect_row_values_to_have_recent_data:
               datepart: day
               interval: 1
+          - not_null:
+              config:
+                severity: error
+
+      - name: campaignId
+        tests:  
+          - not_null:
+              config:
+                severity: error
+
+      - name: targetId
+        tests:  
+          - not_null:
+              config:
+                severity: error
+
+      - name: targetingType
+        tests:  
+          - not_null:
+              config:
+                severity: error
+
+     
+
+     
+      - name: brand
+        tests:
+          - accepted_values:
+              values: ['Default']
 
   - name: SBTargetVideoReport
     description: A list of product and category targeting report for sponsored brand videos
@@ -193,6 +383,32 @@ models:
           - dbt_expectations.expect_row_values_to_have_recent_data:
               datepart: day
               interval: 1
+          - not_null:
+              config:
+                severity: error
+
+      - name: campaignId
+        tests:  
+          - not_null:
+              config:
+                severity: error
+
+      - name: targetId
+        tests:  
+          - not_null:
+              config:
+                severity: error
+
+      - name: targetingType
+        tests:  
+          - not_null:
+              config:
+                severity: error
+     
+      - name: brand
+        tests:
+          - accepted_values:
+              values: ['Default']
 
   - name: SDPortfolio
     description: A list of portfolios associated with the account
@@ -214,6 +430,27 @@ models:
           - dbt_expectations.expect_row_values_to_have_recent_data:
               datepart: day
               interval: 1
+          - not_null:
+              config:
+                severity: error
+
+      - name: profileId
+        tests:  
+          - not_null:
+              config:
+                severity: error
+
+      - name: portfolioId
+        tests:  
+          - not_null:
+              config:
+                severity: error
+
+     
+      - name: brand
+        tests:
+          - accepted_values:
+              values: ['Default']
 
   - name: SDCampaign
     description: A list of campaigns associated with the account
@@ -234,6 +471,21 @@ models:
           - dbt_expectations.expect_row_values_to_have_recent_data:
               datepart: day
               interval: 1
+          - not_null:
+              config:
+                severity: error
+
+      - name: campaignId
+        tests:  
+          - not_null:
+              config:
+                severity: error
+
+     
+      - name: brand
+        tests:
+          - accepted_values:
+              values: ['Default']
 
   - name: SDProductTargetingReport
     description: A list of product and category targeting report for sponsored display
@@ -256,6 +508,33 @@ models:
           - dbt_expectations.expect_row_values_to_have_recent_data:
               datepart: day
               interval: 1
+          - not_null:
+              config:
+                severity: error
+
+      - name: targetId
+        tests:  
+          - not_null:
+              config:
+                severity: error
+
+      - name: campaignId
+        tests:  
+          - not_null:
+              config:
+                severity: error
+
+      - name: targetingType
+        tests:  
+          - not_null:
+              config:
+                severity: error
+
+     
+      - name: brand
+        tests:
+          - accepted_values:
+              values: ['Default']
 
   - name: SDProductAdsReport
     description: A list of product ads associated with the account
@@ -279,6 +558,39 @@ models:
           - dbt_expectations.expect_row_values_to_have_recent_data:
               datepart: day
               interval: 1
+          - not_null:
+              config:
+                severity: error
+
+      - name: campaignId
+        tests:  
+          - not_null:
+              config:
+                severity: error
+
+      - name: adGroupID
+        tests:  
+          - not_null:
+              config:
+                severity: error
+
+      - name: asin
+        tests:  
+          - not_null:
+              config:
+                severity: error
+
+      - name: sku
+        tests:  
+          - not_null:
+              config:
+                severity: error
+
+     
+      - name: brand
+        tests:
+          - accepted_values:
+              values: ['Default']
 
   - name: SPPortfolio
     description: A list of portfolios associated with the account
@@ -300,6 +612,27 @@ models:
           - dbt_expectations.expect_row_values_to_have_recent_data:
               datepart: day
               interval: 1
+          - not_null:
+              config:
+                severity: error
+
+      - name: profileId
+        tests:  
+          - not_null:
+              config:
+                severity: error
+
+      - name: portfolioId
+        tests:  
+          - not_null:
+              config:
+                severity: error
+
+     
+      - name: brand
+        tests:
+          - accepted_values:
+              values: ['Default']
 
   - name: SPCampaign
     description: A list of campaigns associated with the account
@@ -320,6 +653,21 @@ models:
           - dbt_expectations.expect_row_values_to_have_recent_data:
               datepart: day
               interval: 1
+          - not_null:
+              config:
+                severity: error
+
+      - name: campaignId
+        tests:  
+          - not_null:
+              config:
+                severity: error
+
+     
+      - name: brand
+        tests:
+          - accepted_values:
+              values: ['Default']
 
   - name: SPPlacementCampaignsReport
     description: A list of all the placement campaigns associated with the account
@@ -341,6 +689,27 @@ models:
           - dbt_expectations.expect_row_values_to_have_recent_data:
               datepart: day
               interval: 1
+          - not_null:
+              config:
+                severity: error
+
+      - name: campaignId
+        tests:  
+          - not_null:
+              config:
+                severity: error
+
+      - name: placement
+        tests:  
+          - not_null:
+              config:
+                severity: error
+
+     
+      - name: brand
+        tests:
+          - accepted_values:
+              values: ['Default']
 
   - name: SPProductAdsReport
     description: A list of product ads associated with the account
@@ -363,6 +732,33 @@ models:
           - dbt_expectations.expect_row_values_to_have_recent_data:
               datepart: day
               interval: 1
+          - not_null:
+              config:
+                severity: error
+
+      - name: campaignId
+        tests:  
+          - not_null:
+              config:
+                severity: error
+
+      - name: adGroupId
+        tests:  
+          - not_null:
+              config:
+                severity: error
+
+      - name: adId
+        tests:  
+          - not_null:
+              config:
+                severity: error
+
+     
+      - name: brand
+        tests:
+          - accepted_values:
+              values: ['Default']
 
   - name: SPSearchTermKeywordReport
     description: A list of product search keywords report
@@ -388,4 +784,49 @@ models:
           - dbt_expectations.expect_row_values_to_have_recent_data:
               datepart: day
               interval: 1
+          - not_null:
+              config:
+                severity: error
+
+      - name: campaignId
+        tests:  
+          - not_null:
+              config:
+                severity: error
+
+      - name: adGroupId
+        tests:  
+          - not_null:
+              config:
+                severity: error
+
+      - name: keywordId
+        tests:  
+          - not_null:
+              config:
+                severity: error
+
+      - name: matchType
+        tests:  
+          - not_null:
+              config:
+                severity: error
+
+      - name: query
+        tests:  
+          - not_null:
+              config:
+                severity: error
+
+      - name: impressions
+        tests:  
+          - not_null:
+              config:
+                severity: error
+
+     
+      - name: brand
+        tests:
+          - accepted_values:
+              values: ['Default']
    
