@@ -66,7 +66,7 @@
             countryName,
             accountName,
             accountId,
-            CAST({{ dbt.dateadd(datepart="hour", interval=hr, from_date_or_timestamp="cast(reportDate as timestamp)") }} as {{ dbt.type_timestamp() }}) as reportDate,
+            reportDate,
             adGroupName,
             coalesce(adGroupId,'') as adGroupId,
             coalesce(asin,'') as asin,
