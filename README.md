@@ -115,6 +115,196 @@ This package contains models from the Amazon Advertising API which includes repo
 |Sponsored Products | [SPSearchTermKeywordReport](models/AmazonAds/SPSearchTermKeywordReport.sql)| A list of product search keywords report |
 
 
+## DBT Tests
+
+The tests property defines assertions about a column, table, or view. The property contains a list of generic tests, referenced by name, which can include the four built-in generic tests available in dbt. For example, you can add tests that ensure a column contains no duplicates and zero null values. Any arguments or configurations passed to those tests should be nested below the test name.
+
+| **Tests**  | **Description** |
+| ---------------| ------------------------------------------- |
+| [Not Null Test](https://docs.getdbt.com/reference/resource-properties/tests#testing-an-expression)  | This test validates that there are no null values present in a column |
+| [Data Recency Test](https://github.com/dbt-labs/dbt-utils/blob/main/macros/generic_tests/recency.sql)  | This is used to check for issues with data refresh within {{ x }} days, please specify the value of number of days at {{ x }} |
+| [Accepted Value Test](https://docs.getdbt.com/reference/resource-properties/tests#accepted_values)  | This test validates that all of the values in a column are present in a supplied list of values. If any values other than those provided in the list are present, then the test will fail, by default it consists of default values and this needs to be changed based on the project |
+| [Uniqueness Test](https://docs.getdbt.com/reference/resource-properties/tests#testing-an-expression)  | This test validates that there are no duplicate values present in a field |
+
+### Table Name: SBPortfolio
+
+| **Columns**  | **Not Null Test** | **Data Recency Test** | **Accepted Value Test** | **Uniqueness Test** |
+| :--------------- | :--------------- | :--------------- | :--------------- | :--------------- |
+| fetchDate | Yes | Yes |  | Yes |
+| profileId | Yes |  |  | Yes |
+| portfolioId | Yes |  |  | Yes |
+| brand |  |  | Yes |  |
+
+
+### Table Name: SBCampaign
+
+| **Columns**  | **Not Null Test** | **Data Recency Test** | **Accepted Value Test** | **Uniqueness Test** |
+| :--------------- | :--------------- | :--------------- | :--------------- | :--------------- |
+| fetchDate | Yes | Yes |  | Yes |
+| campaignId | Yes |  |  | Yes |
+| brand |  |  | Yes |  |
+
+
+### Table Name: SBAdGroupsReport
+
+| **Columns**  | **Not Null Test** | **Data Recency Test** | **Accepted Value Test** | **Uniqueness Test** |
+| :--------------- | :--------------- | :--------------- | :--------------- | :--------------- |
+| reportDate | Yes | Yes |  | Yes |
+| campaignId | Yes |  |  | Yes |
+| adGroupId | Yes |  |  | Yes |
+| brand |  |  | Yes |  |
+
+### Table Name: SBAdGroupsVideoReport
+
+| **Columns**  | **Not Null Test** | **Data Recency Test** | **Accepted Value Test** | **Uniqueness Test** |
+| :--------------- | :--------------- | :--------------- | :--------------- | :--------------- |
+| reportDate | Yes | Yes |  | Yes |
+| campaignId | Yes |  |  | Yes |
+| adGroupId | Yes |  |  | Yes |
+| brand |  |  | Yes |  |
+
+### Table Name: SBPlacementCampaignsReport
+
+| **Columns**  | **Not Null Test** | **Data Recency Test** | **Accepted Value Test** | **Uniqueness Test** |
+| :--------------- | :--------------- | :--------------- | :--------------- | :--------------- |
+| reportDate | Yes | Yes |  | Yes |
+| campaignId | Yes |  |  | Yes |
+| placement | Yes |  |  | Yes |
+| brand |  |  | Yes |  |
+
+### Table Name: SBSearchTermKeywordsReport
+
+| **Columns**  | **Not Null Test** | **Data Recency Test** | **Accepted Value Test** | **Uniqueness Test** |
+| :--------------- | :--------------- | :--------------- | :--------------- | :--------------- |
+| reportDate | Yes | Yes |  | Yes |
+| campaignId | Yes |  |  | Yes |
+| keywordId | Yes |  |  | Yes |
+| matchType | Yes |  |  | Yes |
+| query | Yes |  |  | Yes |
+| brand |  |  | Yes |  |
+
+### Table Name: SBSearchTermKeywordsVideoReport
+
+| **Columns**  | **Not Null Test** | **Data Recency Test** | **Accepted Value Test** | **Uniqueness Test** |
+| :--------------- | :--------------- | :--------------- | :--------------- | :--------------- |
+| reportDate | Yes | Yes |  | Yes |
+| campaignId | Yes |  |  | Yes |
+| keywordId | Yes |  |  | Yes |
+| matchType | Yes |  |  | Yes |
+| query | Yes |  |  | Yes |
+| brand |  |  | Yes |  |
+
+### Table Name: SBTargetReport
+
+| **Columns**  | **Not Null Test** | **Data Recency Test** | **Accepted Value Test** | **Uniqueness Test** |
+| :--------------- | :--------------- | :--------------- | :--------------- | :--------------- |
+| reportDate | Yes | Yes |  | Yes |
+| campaignId | Yes |  |  | Yes |
+| targetId | Yes |  |  | Yes |
+| targetingType | Yes |  |  | Yes |
+| brand |  |  | Yes |  |
+
+### Table Name: SBTargetVideoReport
+
+| **Columns**  | **Not Null Test** | **Data Recency Test** | **Accepted Value Test** | **Uniqueness Test** |
+| :--------------- | :--------------- | :--------------- | :--------------- | :--------------- |
+| reportDate | Yes | Yes |  | Yes |
+| campaignId | Yes |  |  | Yes |
+| targetId | Yes |  |  | Yes |
+| targetingType | Yes |  |  | Yes |
+| brand |  |  | Yes |  |
+
+### Table Name: SDPortfolio
+
+| **Columns**  | **Not Null Test** | **Data Recency Test** | **Accepted Value Test** | **Uniqueness Test** |
+| :--------------- | :--------------- | :--------------- | :--------------- | :--------------- |
+| fetchDate | Yes | Yes |  | Yes |
+| profileId | Yes |  |  | Yes |
+| portfolioId | Yes |  |  | Yes |
+| brand |  |  | Yes |  |
+
+
+### Table Name: SDCampaign
+
+| **Columns**  | **Not Null Test** | **Data Recency Test** | **Accepted Value Test** | **Uniqueness Test** |
+| :--------------- | :--------------- | :--------------- | :--------------- | :--------------- |
+| fetchDate | Yes | Yes |  | Yes |
+| campaignId | Yes |  |  | Yes |
+| brand |  |  | Yes |  |
+
+
+### Table Name: SDProductTargetingReport
+
+| **Columns**  | **Not Null Test** | **Data Recency Test** | **Accepted Value Test** | **Uniqueness Test** |
+| :--------------- | :--------------- | :--------------- | :--------------- | :--------------- |
+| reportDate | Yes | Yes |  | Yes |
+| campaignId | Yes |  |  | Yes |
+| targetId | Yes |  |  | Yes |
+| targetingType | Yes |  |  | Yes |
+| brand |  |  | Yes |  |
+
+### Table Name: SDProductAdsReport
+
+| **Columns**  | **Not Null Test** | **Data Recency Test** | **Accepted Value Test** | **Uniqueness Test** |
+| :--------------- | :--------------- | :--------------- | :--------------- | :--------------- |
+| reportDate | Yes | Yes |  | Yes |
+| campaignId | Yes |  |  | Yes |
+| adGroupID | Yes |  |  | Yes |
+| asin | Yes |  |  | Yes |
+| sku | Yes |  |  | Yes |
+| brand |  |  | Yes |  |
+
+### Table Name: SPPortfolio
+
+| **Columns**  | **Not Null Test** | **Data Recency Test** | **Accepted Value Test** | **Uniqueness Test** |
+| :--------------- | :--------------- | :--------------- | :--------------- | :--------------- |
+| fetchDate | Yes | Yes |  | Yes |
+| profileId | Yes |  |  | Yes |
+| portfolioId | Yes |  |  | Yes |
+| brand |  |  | Yes |  |
+
+### Table Name: SPCampaign
+
+| **Columns**  | **Not Null Test** | **Data Recency Test** | **Accepted Value Test** | **Uniqueness Test** |
+| :--------------- | :--------------- | :--------------- | :--------------- | :--------------- |
+| fetchDate | Yes | Yes |  | Yes |
+| campaignId | Yes |  |  | Yes |
+| brand |  |  | Yes |  |
+
+### Table Name: SPPlacementCampaignsReport
+
+| **Columns**  | **Not Null Test** | **Data Recency Test** | **Accepted Value Test** | **Uniqueness Test** |
+| :--------------- | :--------------- | :--------------- | :--------------- | :--------------- |
+| reportDate | Yes | Yes |  | Yes |
+| campaignId | Yes |  |  | Yes |
+| placement | Yes |  |  | Yes |
+| brand |  |  | Yes |  |
+
+### Table Name: SPProductAdsReport
+
+| **Columns**  | **Not Null Test** | **Data Recency Test** | **Accepted Value Test** | **Uniqueness Test** |
+| :--------------- | :--------------- | :--------------- | :--------------- | :--------------- |
+| reportDate | Yes | Yes |  | Yes |
+| campaignId | Yes |  |  | Yes |
+| adGroupId | Yes |  |  | Yes |
+
+
+### Table Name: SPSearchTermKeywordReport
+
+| **Columns**  | **Not Null Test** | **Data Recency Test** | **Accepted Value Test** | **Uniqueness Test** |
+| :--------------- | :--------------- | :--------------- | :--------------- | :--------------- |
+| reportDate | Yes | Yes |  | Yes |
+| campaignId | Yes |  |  | Yes |
+| adGroupID | Yes |  |  | Yes |
+| keywordId | Yes |  |  | Yes |
+| matchType | Yes |  |  | Yes |
+| query | Yes |  |  | Yes |
+| impressions | Yes |  |  | Yes |
+| brand |  |  | Yes |  |
+
+
+
+
 
 
 ### For details about default configurations for Table Primary Key columns, Partition columns, Clustering columns, please refer the properties.yaml used for this package as below. 
