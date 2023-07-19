@@ -1,4 +1,4 @@
-{% if var('SBSearchTermKeywordsReport') %}
+{% if var('SBUnifiedSearchTermKeywordsReport') %}
 {{ config( enabled = True ) }}
 {% else %}
 {{ config( enabled = False ) }}
