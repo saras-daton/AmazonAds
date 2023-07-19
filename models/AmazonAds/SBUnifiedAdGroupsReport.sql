@@ -1,4 +1,8 @@
-
+{% if var('SBUnifiedAdGroupsReport') %}
+{{ config( enabled = True ) }}
+{% else %}
+{{ config( enabled = False ) }}
+{% endif %}
 
     {% if is_incremental() %}
     {%- set max_loaded_query -%}
