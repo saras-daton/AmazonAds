@@ -1,4 +1,4 @@
-{% if var('SBPlacementCampaignsReport') %}
+{% if var('SBUnifiedPlacementCampaignsReport') %}
 {{ config( enabled = True ) }}
 {% else %}
 {{ config( enabled = False ) }}
