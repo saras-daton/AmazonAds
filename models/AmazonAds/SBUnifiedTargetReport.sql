@@ -1,4 +1,6 @@
-{% if var('SBTargetReport') %}
+
+{% if var('SBUnifiedTargetReport') %}
+
 {{ config( enabled = True ) }}
 {% else %}
 {{ config( enabled = False ) }}

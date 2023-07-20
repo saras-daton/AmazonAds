@@ -1,5 +1,43 @@
 version: 2
 models:
+
+  - name: SBUnifiedAdGroupsReport
+    description: A list of ad groups associated with the account
+    config:
+      materialized: incremental
+      incremental_strategy: merge
+      partition_by: { 'field': 'reportDate', 'data_type': date }
+      cluster_by: ['campaignId','adGroupId'] 
+      unique_key: ['reportDate','campaignId','adGroupId']
+
+  - name: SBUnifiedPlacementCampaignsReport
+    description: A list of all the SB, SBv and SB2 placement campaigns associated with the account.
+    config:
+      materialized: incremental 
+      incremental_strategy: merge
+      cluster_by: ['campaignId','campaignStatus'] 
+      partition_by: { 'field': 'reportDate', 'data_type': date }
+      unique_key: ['reportdate','campaignId','placement']
+
+  - name: SBUnifiedSearchTermKeywordsReport
+    description: A list of product search keywords report
+    config: 
+      materialized: incremental
+      incremental_strategy: merge
+      partition_by: { 'field': 'reportDate', 'data_type': date }
+      cluster_by: ['campaignId','keywordId','matchType'] 
+      unique_key: ['reportDate','campaignId','keywordId','matchType','query']
+
+  - name: SBUnifiedTargetReport
+    description: A list of product and category targeting report
+    config: 
+      materialized: incremental
+      incremental_strategy: merge
+      partition_by: { 'field': 'reportDate', 'data_type': date }
+      cluster_by: ['campaignId','targetId','targetingType'] 
+      unique_key: ['reportDate','campaignId','targetId','targetingType']
+  
+      
   - name: SBPortfolio
     description: A list of portfolios associated with the account
     config:
@@ -81,7 +119,7 @@ models:
     config:
       materialized: incremental
       incremental_strategy: merge
-      partition_by: { 'field': 'reportDate', 'data_type': timestamp }
+      partition_by: { 'field': 'reportDate', 'data_type': date }
       cluster_by: ['campaignId','adGroupId'] 
       unique_key: ['reportDate','campaignId','adGroupId']
     tests:
@@ -123,7 +161,7 @@ models:
     config: 
       materialized: incremental
       incremental_strategy: merge
-      partition_by: { 'field': 'reportDate', 'data_type': timestamp }
+      partition_by: { 'field': 'reportDate', 'data_type': date }
       cluster_by: ['campaignId','adGroupId'] 
       unique_key: ['reportDate','campaignId','adGroupId']
     tests:
@@ -166,7 +204,7 @@ models:
       materialized: incremental 
       incremental_strategy: merge
       cluster_by: ['campaignId','campaignStatus'] 
-      partition_by: { 'field': 'reportDate', 'data_type': timestamp }
+      partition_by: { 'field': 'reportDate', 'data_type': date }
       unique_key: ['reportdate','campaignId','placement']
     tests:
       - dbt_utils.unique_combination_of_columns:
@@ -207,7 +245,7 @@ models:
     config: 
       materialized: incremental
       incremental_strategy: merge
-      partition_by: { 'field': 'reportDate', 'data_type': timestamp }
+      partition_by: { 'field': 'reportDate', 'data_type': date }
       cluster_by: ['campaignId','keywordId','matchType'] 
       unique_key: ['reportDate','campaignId','keywordId','matchType','query']
     tests:
@@ -263,7 +301,7 @@ models:
     config:
       materialized: incremental
       incremental_strategy: merge
-      partition_by: { 'field': 'reportDate', 'data_type': timestamp }
+      partition_by: { 'field': 'reportDate', 'data_type': date }
       cluster_by: ['campaignId','keywordId','matchType'] 
       unique_key: ['reportDate','campaignId','keywordId','matchType','query']
     tests:
@@ -319,7 +357,7 @@ models:
     config: 
       materialized: incremental
       incremental_strategy: merge
-      partition_by: { 'field': 'reportDate', 'data_type': timestamp }
+      partition_by: { 'field': 'reportDate', 'data_type': date }
       cluster_by: ['campaignId','targetId','targetingType'] 
       unique_key: ['reportDate','campaignId','targetId','targetingType']
     tests:
@@ -370,7 +408,7 @@ models:
     config: 
       materialized: incremental
       incremental_strategy: merge
-      partition_by: { 'field': 'reportDate', 'data_type': timestamp }
+      partition_by: { 'field': 'reportDate', 'data_type': date }
       cluster_by: ['campaignId','targetId','targetingType'] 
       unique_key: ['reportDate','campaignId','targetId','targetingType']
     tests:
@@ -495,7 +533,7 @@ models:
     config: 
       materialized: incremental
       incremental_strategy: merge
-      partition_by: { 'field': 'reportDate', 'data_type': timestamp }
+      partition_by: { 'field': 'reportDate', 'data_type': date }
       cluster_by: ['campaignId','targetId','targetingType'] 
       unique_key: ['reportDate','campaignId','targetId','targetingType']
     tests:
@@ -544,7 +582,7 @@ models:
     config:
       materialized: incremental
       incremental_strategy: merge
-      partition_by: { 'field': 'reportDate', 'data_type': timestamp }
+      partition_by: { 'field': 'reportDate', 'data_type': date }
       cluster_by: ['CampaignId', 'adGroupID', 'asin', 'sku'] 
       unique_key: ['reportDate','CampaignId', 'adGroupID', 'asin', 'sku']
     tests:
@@ -677,7 +715,7 @@ models:
     config: 
       materialized: incremental
       incremental_strategy: merge
-      partition_by: { 'field': 'reportDate', 'data_type': timestamp }
+      partition_by: { 'field': 'reportDate', 'data_type': date }
       cluster_by: ['campaignId','placement'] 
       unique_key: ['reportDate','campaignId','placement']
     tests:
@@ -719,7 +757,7 @@ models:
     config: 
       materialized: incremental
       incremental_strategy: merge
-      partition_by: { 'field': 'reportDate', 'data_type': timestamp }
+      partition_by: { 'field': 'reportDate', 'data_type': date }
       cluster_by: ['campaignId', 'adGroupId','asin','sku'] 
       unique_key: ['reportDate', 'campaignId', 'adGroupId','adId']
     tests:
@@ -768,7 +806,7 @@ models:
     config: 
       materialized: incremental
       incremental_strategy: merge
-      partition_by: { 'field': 'reportDate', 'data_type': timestamp }
+      partition_by: { 'field': 'reportDate', 'data_type': date }
       cluster_by: ['campaignId','adGroupId','keywordId','matchType'] 
       unique_key: ['reportDate','campaignId','adGroupId','keywordId','matchType','query','impressions']
     tests:

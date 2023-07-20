@@ -64,7 +64,7 @@ SELECT coalesce(MAX(_daton_batch_runtime) - 2592000000,0) FROM {{ this }}
         countryName,
         accountName,
         accountId,
-        CAST({{ dbt.dateadd(datepart="hour", interval=hr, from_date_or_timestamp="cast(reportDate as timestamp)") }} as {{ dbt.type_timestamp() }}) as reportDate,
+        reportDate,
         coalesce(placement,'') as placement,
         coalesce(campaignId,'') as campaignId,
         campaignBudgetType,

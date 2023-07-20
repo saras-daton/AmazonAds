@@ -25,6 +25,8 @@ vars:
   default_storename: "" 
     # Example- default_storename: "US" --> for Single Store users, with no Storename in Daton Integration Name
 
+  # Variables used for dbt-tests
+  'dbt_date:time_zone': 'America/Los_Angeles'
 
   currency_conversion_flag: False
   timezone_conversion_flag: False
@@ -55,6 +57,10 @@ vars:
   SPPlacementCampaignsReport: True
   SPPortfolio: True
   SPProductAdsReport: True
+  SBUnifiedAdGroupsReport: True
+  SBUnifiedPlacementCampaignsReport: True
+  SBUnifiedSearchTermKeywordsReport: True
+  SBUnifiedTargetReport: True
   
 # These configurations specify where dbt should look for different types of files.
 # The `model-paths` config, for example, states that models in this project can be

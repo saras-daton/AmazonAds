@@ -1,4 +1,6 @@
-{% if var('SBSearchTermKeywordsReport') %}
+
+{% if var('SBUnifiedSearchTermKeywordsReport') %}
+
 {{ config( enabled = True ) }}
 {% else %}
 {{ config( enabled = False ) }}
@@ -68,7 +70,9 @@
             countryName,
             accountName,
             accountId,
-        reportDate,
+
+	          reportDate,
+
             coalesce(query,'') as query,
             coalesce(campaignId,'') as campaignId, 
             campaignName,
@@ -83,7 +87,9 @@
             coalesce(matchType,'') as matchType,
             campaignBudget,
             CAST(null as int) units_sold,
+
             {{daton_user_id()}} as _daton_user_id,
+
             {{daton_batch_runtime()}} as _daton_batch_runtime,
             {{daton_batch_id()}} as _daton_batch_id,            
             current_timestamp() as _last_updated,
