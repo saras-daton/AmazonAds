@@ -126,6 +126,78 @@ The tests property defines assertions about a column, table, or view. The proper
 | [Accepted Value Test](https://docs.getdbt.com/reference/resource-properties/tests#accepted_values)  | This test validates that all of the values in a column are present in a supplied list of values. If any values other than those provided in the list are present, then the test will fail, by default it consists of default values and this needs to be changed based on the project |
 | [Uniqueness Test](https://docs.getdbt.com/reference/resource-properties/tests#testing-an-expression)  | This test validates that there are no duplicate values present in a field |
 
+
+### Table Name: SBUnifiedAdGroupsReport
+
+| **Columns**  | **Not Null Test** | **Data Recency Test** | **Accepted Value Test** | **Uniqueness Test** |
+| :--------------- | :--------------- | :--------------- | :--------------- | :--------------- |
+| reportDate | Yes | Yes |  | Yes |
+| campaignId | Yes |  |  | Yes |
+| adGroupId | Yes |  |  | Yes |
+| brand |  |  | Yes |  |
+
+
+### Table Name: SBUnifiedPlacementCampaignsReport
+
+| **Columns**  | **Not Null Test** | **Data Recency Test** | **Accepted Value Test** | **Uniqueness Test** |
+| :--------------- | :--------------- | :--------------- | :--------------- | :--------------- |
+| reportDate | Yes | Yes |  | Yes |
+| campaignId | Yes |  |  | Yes |
+| placement | Yes |  |  | Yes |
+| brand |  |  | Yes |  |
+
+
+### Table Name: SBUnifiedSearchTermKeywordsReport
+
+| **Columns**  | **Not Null Test** | **Data Recency Test** | **Accepted Value Test** | **Uniqueness Test** |
+| :--------------- | :--------------- | :--------------- | :--------------- | :--------------- |
+| reportDate | Yes | Yes |  | Yes |
+| campaignId | Yes |  |  | Yes |
+| keywordId | Yes |  |  | Yes |
+| matchType | Yes |  |  | Yes |
+| query | Yes |  |  | Yes |
+| brand |  |  | Yes |  |
+
+### Table Name: SBUnifiedTargetReport
+
+| **Columns**  | **Not Null Test** | **Data Recency Test** | **Accepted Value Test** | **Uniqueness Test** |
+| :--------------- | :--------------- | :--------------- | :--------------- | :--------------- |
+| reportDate | Yes | Yes |  | Yes |
+| campaignId | Yes |  |  | Yes |
+| targetId | Yes |  |  | Yes |
+| targetingType | Yes |  |  | Yes |
+| brand |  |  | Yes |  |
+
+### Table Name: SBUnifiedCampaignsReport
+
+| **Columns**  | **Not Null Test** | **Data Recency Test** | **Accepted Value Test** | **Uniqueness Test** |
+| :--------------- | :--------------- | :--------------- | :--------------- | :--------------- |
+| reportDate | Yes | Yes |  | Yes |
+| campaignId | Yes |  |  | Yes |
+| brand |  |  | Yes |  |
+
+### Table Name: SBUnifiedKeywordsReport
+
+| **Columns**  | **Not Null Test** | **Data Recency Test** | **Accepted Value Test** | **Uniqueness Test** |
+| :--------------- | :--------------- | :--------------- | :--------------- | :--------------- |
+| reportDate | Yes | Yes |  | Yes |
+| campaignId | Yes |  |  | Yes |
+| keywordId | Yes |  |  | Yes |
+| matchType | Yes |  |  | Yes |
+| brand |  |  | Yes |  |
+
+### Table Name: SBUnifiedPlacementKeywordsReport
+
+| **Columns**  | **Not Null Test** | **Data Recency Test** | **Accepted Value Test** | **Uniqueness Test** |
+| :--------------- | :--------------- | :--------------- | :--------------- | :--------------- |
+| reportDate | Yes | Yes |  | Yes |
+| campaignId | Yes |  |  | Yes |
+| adGroupId | Yes |  |  | Yes |
+| keywordId | Yes |  |  | Yes |
+| matchType | Yes |  |  | Yes |
+| brand |  |  | Yes |  |
+
+
 ### Table Name: SBPortfolio
 
 | **Columns**  | **Not Null Test** | **Data Recency Test** | **Accepted Value Test** | **Uniqueness Test** |
