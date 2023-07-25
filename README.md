@@ -214,6 +214,7 @@ The tests property defines assertions about a column, table, or view. The proper
 | :--------------- | :--------------- | :--------------- | :--------------- | :--------------- |
 | fetchDate | Yes | Yes |  | Yes |
 | campaignId | Yes |  |  | Yes |
+| bidAdjustmentPredicate | Yes |  |  | Yes |
 | brand |  |  | Yes |  |
 
 
