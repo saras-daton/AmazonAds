@@ -380,12 +380,13 @@ models:
       incremental_strategy: merge
       partition_by: { 'field': 'fetchDate', 'data_type': date }
       cluster_by: ['fetchDate', 'campaignId'] 
-      unique_key: ['fetchDate', 'campaignId']
+      unique_key: ['fetchDate', 'campaignId', 'bidAdjustmentPredicate']
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
             - fetchDate
             - campaignId
+            - bidAdjustmentPredicate
     columns:
       - name: fetchDate
         tests:
@@ -398,6 +399,12 @@ models:
 
       - name: campaignId
         tests:  
+          - not_null:
+              config:
+                severity: error
+
+      - name: bidAdjustmentPredicate
+        tests:
           - not_null:
               config:
                 severity: error
