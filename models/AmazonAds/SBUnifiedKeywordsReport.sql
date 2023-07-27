@@ -1,11 +1,8 @@
-
-
-{% if var('SBUnifiedAdGroupsReport') %}
+{% if var('SBUnifiedKeywordsReport') %}
 {{ config( enabled = True ) }}
 {% else %}
 {{ config( enabled = False ) }}
 {% endif %}
-
 
     {% if is_incremental() %}
     {%- set max_loaded_query -%}
@@ -21,10 +18,10 @@
     {%- endif -%}
     {% endif %}
 
-
     {% set table_name_query %}
-    {{set_table_name('%sponsoredbrands_unifiedadgroupsreport')}}    
+    {{set_table_name('%sponsoredbrands_unifiedkeywordsreport')}}    
     {% endset %}  
+
 
     {% set results = run_query(table_name_query) %}
     {% if execute %}
@@ -58,49 +55,68 @@
 
         SELECT * {{exclude()}} (row_num)
         From (
-            select '{{brand}}' as brand,
+           select 
+            '{{brand}}' as brand,
             '{{store}}' as store,
-            CAST(RequestTime as timestamp) RequestTime,
+            RequestTime,
             profileId,
             countryName,
             accountName,
             accountId,
             reportDate,
-            coalesce(campaignId,'') campaignId,
-            campaignName,
+            campaignId,
+            campaignStatus,
             campaignBudget,
             campaignBudgetType,
-            campaignStatus,
-            coalesce(adGroupId,'') adGroupId,
-            adGroupName,
+            campaignName,
             impressions,
+            keywordBid,
+            keywordId,
+            keywordStatus,
+            keywordText,
+            matchType,
             clicks,
             cost,
-            attributedDetailPageViewsClicks14d,
+            unitsSold14d,
             attributedSales14d,
             attributedSales14dSameSKU,
             attributedConversions14d,
             attributedConversions14dSameSKU,
+            adGroupName,
+            adGroupId,
+            vctr,
+            video5SecondViewRate,
+            video5SecondViews,
+            videoFirstQuartileViews,
+            videoMidpointViews,
+            videoThirdQuartileViews,
+            videoUnmutes,
+            viewableImpressions,
+            vtr,
+            dpv14d,
+            attributedDetailPageViewsClicks14d,
+            attributedOrderRateNewToBrand14d,
             attributedOrdersNewToBrand14d,
             attributedOrdersNewToBrandPercentage14d,
-            attributedOrderRateNewToBrand14d,
             attributedSalesNewToBrand14d,
             attributedSalesNewToBrandPercentage14d,
             attributedUnitsOrderedNewToBrand14d,
             attributedUnitsOrderedNewToBrandPercentage14d,
-            unitsSold14d,
-            dpv14d,
+            attributedBrandedSearches14d,
+            currency,
+            topOfSearchImpressionShare,
+            videoCompleteViews,
 	        {{daton_user_id()}} as _daton_user_id,
             {{daton_batch_runtime()}} as _daton_batch_runtime,
             {{daton_batch_id()}} as _daton_batch_id,            
             current_timestamp() as _last_updated,
             '{{env_var("DBT_CLOUD_RUN_ID", "manual")}}' as _run_id,
-            ROW_NUMBER() OVER (PARTITION BY reportDate, campaignId, adGroupId order by {{daton_batch_runtime()}} desc) row_num
-            from {{i}} 
+            ROW_NUMBER() OVER (PARTITION BY reportDate,campaignId,keywordId,matchType order by {{daton_batch_runtime()}} desc) row_num
+            from {{i}}
                 {% if is_incremental() %}
                 {# /* -- this filter will only be applied on an incremental run */ #}
                 WHERE {{daton_batch_runtime()}}  >= {{max_loaded}}
-                {% endif %}        
+                {% endif %} 
         )
         where row_num = 1 
         {% if not loop.last %} union all {% endif %}

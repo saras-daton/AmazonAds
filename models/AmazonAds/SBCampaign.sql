@@ -96,7 +96,7 @@
             {{daton_batch_id()}} as _daton_batch_id,            
             current_timestamp() as _last_updated,
             '{{env_var("DBT_CLOUD_RUN_ID", "manual")}}' as _run_id,
-            DENSE_RANK() OVER (PARTITION BY campaignId, fetchDate order by {{daton_batch_runtime()}} desc) row_num
+            DENSE_RANK() OVER (PARTITION BY campaignId, fetchDate, BIDADJUSTMENTS.bidAdjustmentPredicate order by {{daton_batch_runtime()}} desc) row_num
             FROM {{i}}
             {{unnesting("CREATIVE")}} 
             {{unnesting("LANDINGPAGE")}} 

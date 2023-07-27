@@ -9,6 +9,39 @@ models:
       partition_by: { 'field': 'reportDate', 'data_type': date }
       cluster_by: ['campaignId','adGroupId'] 
       unique_key: ['reportDate','campaignId','adGroupId']
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - reportDate
+            - campaignId
+            - adGroupId
+    columns:
+      - name: reportDate
+        tests:
+          - dbt_expectations.expect_row_values_to_have_recent_data:
+              datepart: day
+              interval: 1
+          - not_null:
+              config:
+                severity: error
+
+      - name: campaignId
+        tests:  
+          - not_null:
+              config:
+                severity: error
+
+      - name: adGroupId
+        tests:  
+          - not_null:
+              config:
+                severity: error
+
+     
+      - name: brand
+        tests:
+          - accepted_values:
+              values: ['Default']
 
   - name: SBUnifiedPlacementCampaignsReport
     description: A list of all the SB, SBv and SB2 placement campaigns associated with the account.
@@ -18,6 +51,39 @@ models:
       cluster_by: ['campaignId','campaignStatus'] 
       partition_by: { 'field': 'reportDate', 'data_type': date }
       unique_key: ['reportdate','campaignId','placement']
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - reportDate
+            - campaignId
+            - placement
+    columns:
+      - name: reportDate
+        tests:
+          - dbt_expectations.expect_row_values_to_have_recent_data:
+              datepart: day
+              interval: 1
+          - not_null:
+              config:
+                severity: error
+
+      - name: campaignId
+        tests:  
+          - not_null:
+              config:
+                severity: error
+
+      - name: placement
+        tests:  
+          - not_null:
+              config:
+                severity: error
+
+     
+      - name: brand
+        tests:
+          - accepted_values:
+              values: ['Default']
 
   - name: SBUnifiedSearchTermKeywordsReport
     description: A list of product search keywords report
@@ -27,6 +93,53 @@ models:
       partition_by: { 'field': 'reportDate', 'data_type': date }
       cluster_by: ['campaignId','keywordId','matchType'] 
       unique_key: ['reportDate','campaignId','keywordId','matchType','query']
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - reportDate
+            - campaignId
+            - keywordId
+            - matchType
+            - query
+    columns:
+      - name: reportDate
+        tests:
+          - dbt_expectations.expect_row_values_to_have_recent_data:
+              datepart: day
+              interval: 1
+          - not_null:
+              config:
+                severity: error
+
+      - name: campaignId
+        tests:  
+          - not_null:
+              config:
+                severity: error
+
+      - name: keywordId
+        tests:  
+          - not_null:
+              config:
+                severity: error
+
+      - name: matchType
+        tests:  
+          - not_null:
+              config:
+                severity: error
+
+      - name: query
+        tests:  
+          - not_null:
+              config:
+                severity: error
+
+     
+      - name: brand
+        tests:
+          - accepted_values:
+              values: ['Default']
 
   - name: SBUnifiedTargetReport
     description: A list of product and category targeting report
@@ -36,7 +149,188 @@ models:
       partition_by: { 'field': 'reportDate', 'data_type': date }
       cluster_by: ['campaignId','targetId','targetingType'] 
       unique_key: ['reportDate','campaignId','targetId','targetingType']
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - reportDate
+            - campaignId
+            - targetId
+            - targetingType
+    columns:
+      - name: reportDate
+        tests:
+          - dbt_expectations.expect_row_values_to_have_recent_data:
+              datepart: day
+              interval: 1
+          - not_null:
+              config:
+                severity: error
+
+      - name: campaignId
+        tests:  
+          - not_null:
+              config:
+                severity: error
+
+      - name: targetId
+        tests:  
+          - not_null:
+              config:
+                severity: error
+
+      - name: targetingType
+        tests:  
+          - not_null:
+              config:
+                severity: error
+
+     
+      - name: brand
+        tests:
+          - accepted_values:
+              values: ['Default']
+
+
   
+  - name: SBUnifiedCampaignsReport
+    description: Unified Campaigns Report for Sponsored Brands
+    config: 
+      materialized: incremental
+      incremental_strategy: merge
+      partition_by: { 'field': 'reportDate', 'data_type': date }
+      cluster_by: ['campaignId'] 
+      unique_key: ['reportDate','campaignId']
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - reportDate
+            - campaignId
+    columns:
+      - name: reportDate
+        tests:
+          - dbt_expectations.expect_row_values_to_have_recent_data:
+              datepart: day
+              interval: 1
+          - not_null:
+              config:
+                severity: error
+
+      - name: campaignId
+        tests:  
+          - not_null:
+              config:
+                severity: error
+
+     
+      - name: brand
+        tests:
+          - accepted_values:
+              values: ['Default']
+
+
+
+  - name: SBUnifiedKeywordsReport
+    description: Unified Keywords Report for Sponsored Brands
+    config: 
+      materialized: incremental
+      incremental_strategy: merge
+      partition_by: { 'field': 'reportDate', 'data_type': date }
+      cluster_by: ['campaignId','keywordId','matchType'] 
+      unique_key: ['reportDate','campaignId','keywordId','matchType']
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - reportDate
+            - campaignId
+            - keywordId
+            - matchType
+    columns:
+      - name: reportDate
+        tests:
+          - dbt_expectations.expect_row_values_to_have_recent_data:
+              datepart: day
+              interval: 1
+          - not_null:
+              config:
+                severity: error
+
+      - name: campaignId
+        tests:  
+          - not_null:
+              config:
+                severity: error
+
+      - name: keywordId
+        tests:  
+          - not_null:
+              config:
+                severity: error
+
+      - name: matchType
+        tests:  
+          - not_null:
+              config:
+                severity: error
+     
+      - name: brand
+        tests:
+          - accepted_values:
+              values: ['Default']
+
+  - name: SBUnifiedPlacementKeywordsReport
+    description: Unified Keywords Report for Sponsored Brands
+    config: 
+      materialized: incremental
+      incremental_strategy: merge
+      partition_by: { 'field': 'reportDate', 'data_type': date }
+      cluster_by: ['campaignId','keywordId','matchType'] 
+      unique_key: ['reportDate','campaignId','adgroupid','keywordId','matchType']
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - reportDate
+            - campaignId
+            - adGroupId
+            - keywordId
+            - matchType
+    columns:
+      - name: reportDate
+        tests:
+          - dbt_expectations.expect_row_values_to_have_recent_data:
+              datepart: day
+              interval: 1
+          - not_null:
+              config:
+                severity: error
+
+      - name: campaignId
+        tests:  
+          - not_null:
+              config:
+                severity: error
+
+      - name: adGroupId
+        tests:  
+          - not_null:
+              config:
+                severity: error
+
+      - name: keywordId
+        tests:  
+          - not_null:
+              config:
+                severity: error
+
+      - name: matchType
+        tests:  
+          - not_null:
+              config:
+                severity: error
+     
+      - name: brand
+        tests:
+          - accepted_values:
+              values: ['Default']         
       
   - name: SBPortfolio
     description: A list of portfolios associated with the account
@@ -86,12 +380,13 @@ models:
       incremental_strategy: merge
       partition_by: { 'field': 'fetchDate', 'data_type': date }
       cluster_by: ['fetchDate', 'campaignId'] 
-      unique_key: ['fetchDate', 'campaignId']
+      unique_key: ['fetchDate', 'campaignId', 'bidAdjustmentPredicate']
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
             - fetchDate
             - campaignId
+            - bidAdjustmentPredicate
     columns:
       - name: fetchDate
         tests:
@@ -104,6 +399,12 @@ models:
 
       - name: campaignId
         tests:  
+          - not_null:
+              config:
+                severity: error
+
+      - name: bidAdjustmentPredicate
+        tests:
           - not_null:
               config:
                 severity: error
