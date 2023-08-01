@@ -8,7 +8,7 @@ models:
       incremental_strategy: merge
       partition_by: { 'field': 'reportDate', 'data_type': date }
       cluster_by: ['campaignId','adGroupId'] 
-      unique_key: ['reportDate','campaignId','adGroupId']
+      unique_key: ['brand','reportDate','campaignId','adGroupId']
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
@@ -50,7 +50,7 @@ models:
       incremental_strategy: merge
       cluster_by: ['campaignId','campaignStatus'] 
       partition_by: { 'field': 'reportDate', 'data_type': date }
-      unique_key: ['reportdate','campaignId','placement']
+      unique_key: ['brand','reportdate','campaignId','placement']
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
@@ -92,7 +92,7 @@ models:
       incremental_strategy: merge
       partition_by: { 'field': 'reportDate', 'data_type': date }
       cluster_by: ['campaignId','keywordId','matchType'] 
-      unique_key: ['reportDate','campaignId','keywordId','matchType','query']
+      unique_key: ['brand','reportDate','campaignId','keywordId','matchType','query']
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
@@ -339,7 +339,7 @@ models:
       incremental_strategy: merge
       partition_by: { 'field': 'fetchDate', 'data_type': date }
       cluster_by: ['profileId', 'portfolioId'] 
-      unique_key: ['fetchDate', 'profileId', 'portfolioId']
+      unique_key: ['brand','fetchDate', 'profileId', 'portfolioId']
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
@@ -422,7 +422,7 @@ models:
       incremental_strategy: merge
       partition_by: { 'field': 'reportDate', 'data_type': date }
       cluster_by: ['campaignId','adGroupId'] 
-      unique_key: ['reportDate','campaignId','adGroupId']
+      unique_key: ['brand','reportDate','campaignId','adGroupId']
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
@@ -506,7 +506,7 @@ models:
       incremental_strategy: merge
       cluster_by: ['campaignId','campaignStatus'] 
       partition_by: { 'field': 'reportDate', 'data_type': date }
-      unique_key: ['reportdate','campaignId','placement']
+      unique_key: ['brand','reportdate','campaignId','placement']
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
@@ -548,7 +548,7 @@ models:
       incremental_strategy: merge
       partition_by: { 'field': 'reportDate', 'data_type': date }
       cluster_by: ['campaignId','keywordId','matchType'] 
-      unique_key: ['reportDate','campaignId','keywordId','matchType','query']
+      unique_key: ['brand','reportDate','campaignId','keywordId','matchType','query']
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
@@ -604,7 +604,7 @@ models:
       incremental_strategy: merge
       partition_by: { 'field': 'reportDate', 'data_type': date }
       cluster_by: ['campaignId','keywordId','matchType'] 
-      unique_key: ['reportDate','campaignId','keywordId','matchType','query']
+      unique_key: ['brand','reportDate','campaignId','keywordId','matchType','query']
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
@@ -759,7 +759,7 @@ models:
       incremental_strategy: merge
       partition_by: { 'field': 'fetchDate', 'data_type': date }
       cluster_by: ['profileId', 'portfolioId'] 
-      unique_key: ['fetchDate', 'profileId', 'portfolioId']
+      unique_key: ['brand','fetchDate', 'profileId', 'portfolioId']
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
@@ -801,7 +801,7 @@ models:
       incremental_strategy: merge
       partition_by: { 'field': 'fetchDate', 'data_type': date }
       cluster_by: ['fetchDate', 'campaignId'] 
-      unique_key: ['fetchDate', 'campaignId']
+      unique_key: ['brand','fetchDate', 'campaignId']
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
@@ -836,7 +836,7 @@ models:
       incremental_strategy: merge
       partition_by: { 'field': 'reportDate', 'data_type': date }
       cluster_by: ['campaignId','targetId','targetingType'] 
-      unique_key: ['reportDate','campaignId','targetId','targetingType']
+      unique_key: ['brand','reportDate','campaignId','targetId','targetingType']
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
@@ -885,7 +885,7 @@ models:
       incremental_strategy: merge
       partition_by: { 'field': 'reportDate', 'data_type': date }
       cluster_by: ['CampaignId', 'adGroupID', 'asin', 'sku'] 
-      unique_key: ['reportDate','CampaignId', 'adGroupID', 'asin', 'sku']
+      unique_key: ['brand','reportDate','CampaignId', 'adGroupID', 'asin', 'sku']
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
@@ -941,7 +941,7 @@ models:
       incremental_strategy: merge
       partition_by: { 'field': 'fetchDate', 'data_type': date }
       cluster_by: ['profileId', 'portfolioId'] 
-      unique_key: ['fetchDate', 'profileId', 'portfolioId']
+      unique_key: ['brand','fetchDate', 'profileId', 'portfolioId']
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
@@ -983,7 +983,7 @@ models:
       incremental_strategy: merge
       partition_by: { 'field': 'fetchDate', 'data_type': date }
       cluster_by: ['fetchDate', 'campaignId'] 
-      unique_key: ['fetchDate', 'campaignId']
+      unique_key: ['brand','fetchDate', 'campaignId']
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
