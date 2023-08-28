@@ -77,7 +77,6 @@
         startDate,
         premiumBidAdjustment,
         {{extract_nested_value("bidding","strategy","string")}} as bidding_strategy,
-        {{extract_nested_value("bidding","adjustments","string")}} as bidding_adjustments,
         portfolioId,
         tags,
         endDate,

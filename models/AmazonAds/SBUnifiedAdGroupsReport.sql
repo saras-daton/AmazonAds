@@ -107,7 +107,7 @@
             {# /* -- this filter will only be applied on an incremental run */ #}
             where {{daton_batch_runtime()}}  >= {{max_loaded}}
             {% endif %}        
-        qualify row_number() over (partition by reportDate, campaignId, adGroupId order by {{daton_batch_runtime()}} desc) row_num = 1 
+        qualify row_number() over (partition by reportDate, campaignId, adGroupId order by {{daton_batch_runtime()}} desc)  = 1 
     {% endset %}
 
     {% do run_query(query) %}
