@@ -39,28 +39,24 @@ vars:
     }
       # Above are Example entries for raw table level input offset hours
 
-  SBAdGroupsReport: True
-  SBAdGroupsVideoReport: True
   SBCampaign: True
-  SBPlacementCampaignsReport: True
   SBPortfolio: True
-  SBSearchTermKeywordsReport: True
-  SBSearchTermKeywordsVideoReport: True
-  SBTargetReport: True
-  SBTargetVideoReport: True
-  SDProductTargetingReport: True
+  SBUnifiedAdGroupsReport: True
+  SBUnifiedCampaignsReport: True
+  SBUnifiedKeywordsReport: True
+  SBUnifiedPlacementCampaignsReport: True
+  SBUnifiedPlacementKeywordsReport: True
+  SBUnifiedSearchTermKeywordsReport: True
+  SBUnifiedTargetReport: True
   SDCampaign: True
   SDPortfolio: True
   SDProductAdsReport: True
-  SPSearchTermKeywordReport: True
+  SDProductTargetingReport: True
   SPCampaign: True
   SPPlacementCampaignsReport: True
   SPPortfolio: True
   SPProductAdsReport: True
-  SBUnifiedAdGroupsReport: True
-  SBUnifiedPlacementCampaignsReport: True
-  SBUnifiedSearchTermKeywordsReport: True
-  SBUnifiedTargetReport: True
+  SPSearchTermKeywordReport: True
   
 # These configurations specify where dbt should look for different types of files.
 # The `model-paths` config, for example, states that models in this project can be
@@ -81,6 +77,6 @@ clean-targets:         # directories to be removed by `dbt clean`
 models:
   AmazonAds:
     AmazonAds:
-      +schema: stg_amazonads
+      +schema: stg_amazonAds_agencies
 
 

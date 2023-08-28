@@ -1,14 +1,15 @@
 
 {% if var('SBUnifiedSearchTermKeywordsReport') %}
-
-{{ config( enabled = True ) }}
+    {{ config( enabled = True,
+    post_hook = "drop table {{this|replace('SBUnifiedSearchTermKeywordsReport', 'SBUnifiedSearchTermKeywordsReport_temp')}}"
+    ) }}
 {% else %}
-{{ config( enabled = False ) }}
+    {{ config( enabled = False ) }}
 {% endif %}
 
     {% if is_incremental() %}
     {%- set max_loaded_query -%}
-    SELECT coalesce(MAX(_daton_batch_runtime) - 2592000000,0) FROM {{ this }}
+    select coalesce(max(_daton_batch_runtime) - 2592000000,0) from {{ this }}
     {% endset %}
 
     {%- set max_loaded_results = run_query(max_loaded_query) -%}
@@ -49,59 +50,69 @@
             {% set store = var('default_storename') %}
         {% endif %}
 
-        {% if var('timezone_conversion_flag') and i.lower() in tables_lowercase_list %}
-            {% set hr = var('raw_table_timezone_offset_hours')[i] %}
+        {% if i==results_list[0] %}
+            {% set action1 = 'create or replace table' %}
+            {% set tbl = this ~ ' as ' %}
         {% else %}
-            {% set hr = 0 %}
+            {% set action1 = 'insert into ' %}
+            {% set tbl = this %}
         {% endif %}
 
-        SELECT * {{exclude()}} (row_num)
-        From (
-           select 
-            '{{brand}}' as brand,
-            '{{store}}' as store,
-            CAST(RequestTime as timestamp) RequestTime,
-            impressions,
-            clicks,
-            cost,
-            attributedConversions14d,
-            attributedSales14d,
-            profileId,
-            countryName,
-            accountName,
-            accountId,
+        {%- set query -%}
+        {{action1}}
+        {{tbl|replace('SBUnifiedSearchTermKeywordsReport', 'SBUnifiedSearchTermKeywordsReport_temp')}}
 
-	          reportDate,
+        select 
+        '{{brand}}' as brand,
+        '{{store}}' as store,
+        cast(RequestTime as timestamp) RequestTime,
+        profileId,
+        countryName,
+        accountName,
+        accountId,
+        reportDate,
+        coalesce(campaignId,'N/A') as campaignId, 
+        campaignStatus,
+        campaignBudget,
+        campaignBudgetType,
+        campaignName,
+        impressions,
+        clicks,
+        cost,
+        attributedSales14d,
+        attributedConversions14d,
+        keywordText,
+        keywordBid,
+        adGroupName,
+        adGroupId,
+        keywordStatus,
+        coalesce(query,'N/A') as query,
+        coalesce(keywordId,'N/A') as keywordId,
+        coalesce(matchType,'N/A') as matchType,
+        vctr,
+        video5SecondViewRate,
+        video5SecondViews,
+        videoFirstQuartileViews,
+        videoMidpointViews,
+        videoThirdQuartileViews,
+        videoUnmutes,
+        viewableImpressions,
+        vtr,
+        videoCompleteViews,
+        {{daton_user_id()}} as _daton_user_id,
+        {{daton_batch_runtime()}} as _daton_batch_runtime,
+        {{daton_batch_id()}} as _daton_batch_id,            
+        current_timestamp() as _last_updated,
+        '{{env_var("DBT_CLOUD_RUN_ID", "manual")}}' as _run_id
+        from {{i}}
+            {% if is_incremental() %}
+            {# /* -- this filter will only be applied on an incremental run */ #}
+            where {{daton_batch_runtime()}}  >= {{max_loaded}}
+            {% endif %} 
+        qualify row_number() over (partition by reportDate,campaignId,keywordId,matchType,query order by {{daton_batch_runtime()}} desc) = 1
+    {% endset %}
 
-            coalesce(query,'') as query,
-            coalesce(campaignId,'') as campaignId, 
-            campaignName,
-            adGroupId,
-            adGroupName,
-            campaignBudgetType,
-            campaignStatus,
-            coalesce(keywordId,'') as keywordId,
-            keywordStatus,
-            KeywordBid,
-            keywordText,
-            coalesce(matchType,'') as matchType,
-            campaignBudget,
-            CAST(null as int) units_sold,
+    {% do run_query(query) %}
 
-            {{daton_user_id()}} as _daton_user_id,
-
-            {{daton_batch_runtime()}} as _daton_batch_runtime,
-            {{daton_batch_id()}} as _daton_batch_id,            
-            current_timestamp() as _last_updated,
-            '{{env_var("DBT_CLOUD_RUN_ID", "manual")}}' as _run_id,
-            ROW_NUMBER() OVER (PARTITION BY reportDate,campaignId,keywordId,matchType,
-            query order by {{daton_batch_runtime()}} desc) row_num
-            from {{i}}
-                {% if is_incremental() %}
-                {# /* -- this filter will only be applied on an incremental run */ #}
-                WHERE {{daton_batch_runtime()}}  >= {{max_loaded}}
-                {% endif %} 
-        )
-        where row_num = 1 
-        {% if not loop.last %} union all {% endif %}
     {% endfor %}
+    select * from {{this|replace('SBUnifiedSearchTermKeywordsReport', 'SBUnifiedSearchTermKeywordsReport_temp')}}    
