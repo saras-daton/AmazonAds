@@ -1,17 +1,20 @@
 # Amazon Advertising Data Unification
 
-This dbt package is for Data Unification of Amazon Advertising ingested data by [Daton](https://sarasanalytics.com/daton/). [Daton](https://sarasanalytics.com/daton/) is the Unified Data Platform for Global Commerce with 100+ pre-built connectors and data sets designed for accelerating the eCommerce data and analytics journey by [Saras Analytics](https://sarasanalytics.com).
+## What is the purpose of this dbt package?
+This dbt package is for Data Unification of Amazon Advertising ingested data by Daton. Daton is the Unified Data Platform for Global Commerce with 100+ pre-built connectors and data sets designed for accelerating the eCommerce data and analytics journey by [Saras Analytics](https://sarasanalytics.com).
+
+## How do I use Amazon Ads dbt package?
 
 ### Supported Datawarehouses:
-- BigQuery
-- Snowflake
+- [BigQuery](https://sarasanalytics.com/blog/what-is-google-bigquery/)
+- [Snowflake](https://sarasanalytics.com/daton/snowflake/)
 
 #### Typical challenges with raw data are:
 - Array/Nested Array columns which makes queries for Data Analytics complex
 - Data duplication due to look back period while fetching report data from Amazon
 - Separate tables at marketplaces/Store, brand, account level for same kind of report/data feeds
 
-Data Unification simplifies Data Analytics by doing:
+#### Data Unification simplifies Data Analytics by doing:
 - Consolidation - Different marketplaces/Store/account & different brands would have similar raw Daton Ingested tables, which are consolidated into one table with column distinguishers brand & store
 - Deduplication - Based on primary keys, the data is De-duplicated and the latest records are only loaded into the consolidated stage tables
 - Incremental Load - Models are designed to include incremental load which when scheduled would update the tables regularly
@@ -20,19 +23,19 @@ Data Unification simplifies Data Analytics by doing:
 	  Prerequisite - Exchange Rates connector in Daton needs to be present - Refer [this](https://github.com/saras-daton/currency_exchange_rates)
 	- Time Zone Conversion (Optional) - Raw Tables data created at Marketplace/Store/Account level may have data in local timezone of the corresponding marketplace/store/account. DateTime values that are in local timezone are Standardized by converting to specified timezone using input offset hours.
 
-#### Prerequisite 
+#### Prerequisites for Amazon Advertising dbt package 
 Daton Integrations for  
-- Amazon Ads: Sponsored Brands, Sponsored Display, Sponsored Products 
+- [Amazon Ads](https://sarasanalytics.com/daton/amazon-ads/): Sponsored Brands, Sponsored Display, Sponsored Products 
 - Exchange Rates(Optional, if currency conversion is not required)
 
 *Note:* 
 *Please select 'Do Not Unnest' option while setting up Daton Integrataion*
 
-# Configuration 
+# Configuration for dbt package 
 
 ## Required Variables
 
-This package assumes that you have an existing dbt project with a BigQuery/Snowflake profile connected & tested. Source data is located using the following variables which must be set in your `dbt_project.yml` file.
+Amazon Advertising dbt package assumes that you have an existing dbt project with a BigQuery/Snowflake profile connected & tested. Source data is located using the following variables which must be set in your `dbt_project.yml` file.
 ```yaml
 vars:
     raw_database: "your_database"
@@ -41,7 +44,7 @@ vars:
 
 ## Setting Target Schema
 
-Models will be create unified tables under the schema (<target_schema>_stg_amazon). In case, you would like the models to be written to the target schema or a different custom schema, please add the following in the dbt_project.yml file.
+Models will create unified tables under the schema (<target_schema>_stg_amazon). In case, you would like the models to be written to the target schema or a different custom schema, please add the following in the dbt_project.yml file.
 
 ```yaml
 models:
@@ -94,7 +97,7 @@ SponsoredBrands_AdGroupsReport: False
 
 ## Models
 
-This package contains models from the Amazon Advertising API which includes reports on {{sales, margin, inventory, product}}. The primary outputs of this package are described below.
+This package contains models from the [Amazon Advertising API](https://sarasanalytics.com/daton/amazon-ads/) which includes reports on {{sales, margin, inventory, product}}. The primary outputs of Amazon Advertising dbt package are described below.
 
 | **Category**                 | **Model**  | **Description** |
 | ------------------------- | ---------------| ----------------------- |
@@ -525,6 +528,6 @@ models:
 
 
 ## Resources:
-- Have questions, feedback, or need [help](https://calendly.com/srinivas-janipalli/30min)? Schedule a call with our data experts or email us at info@sarasanalytics.com.
+- Have questions, feedback, or need [help](https://calendly.com/srinivas-janipalli/30min)? Schedule a call with our data experts or [contact us](https://sarasanalytics.com/contact).
 - Learn more about Daton [here](https://sarasanalytics.com/daton/).
 - Refer [this](https://youtu.be/6zDTbM6OUcs) to know more about how to create a dbt account & connect to {{Bigquery/Snowflake}}
