@@ -1,12 +1,14 @@
 {% if var('SBCampaign') %}
-{{ config( enabled = True ) }}
+    {{ config( enabled = True,
+    post_hook = "drop table {{this|replace('SBCampaign', 'SBCampaign_temp')}}"
+    ) }}
 {% else %}
-{{ config( enabled = False ) }}
+    {{ config( enabled = False ) }}
 {% endif %}
 
     {% if is_incremental() %}
     {%- set max_loaded_query -%}
-    SELECT coalesce(MAX(_daton_batch_runtime) - 2592000000,0) FROM {{ this }}
+    select coalesce(max(_daton_batch_runtime) - 2592000000,0) from {{ this }}
     {% endset %}
 
     {%- set max_loaded_results = run_query(max_loaded_query) -%}
@@ -45,67 +47,66 @@
             {% set store = var('default_storename') %}
         {% endif %}
 
-        SELECT * {{exclude()}} (row_num)
-            From (
-            select 
-            '{{brand}}' as brand,
-            '{{store}}' as store,
-            cast(RequestTime as timestamp) RequestTime,
-            profileId,
-            countryName,
-            accountName,
-            accountId,
-            CAST(fetchDate as Date) fetchDate,
-            campaignId,
-            name,
-            budget,
-            budgetType,
-            startDate,
-            endDate,
-            state,
-            servingStatus,
-            bidOptimization,
-            bidMultiplier,
-            portfolioId,
-            {% if target.type=='snowflake' %}
-            CREATIVE.VALUE:brandName :: VARCHAR as brandname,
-            CREATIVE.VALUE:brandLogoAssetID :: VARCHAR as brandLogoAssetID ,
-            CREATIVE.VALUE:brandLogoUrl :: VARCHAR as brandLogoUrl,
-            CREATIVE.VALUE:headline :: VARCHAR as headline,
-            CREATIVE.VALUE:asins :: VARCHAR as asins,
-            CREATIVE.VALUE:shouldOptimizeAsins :: VARCHAR as shouldOptimizeAsins,
-            LANDINGPAGE.VALUE:url :: VARCHAR as landingPageURL,
-            brandEntityId,
-            BIDADJUSTMENTS.VALUE:bidAdjustmentPredicate :: VARCHAR as bidAdjustmentPredicate,
-            BIDADJUSTMENTS.VALUE:bidAdjustmentPercent :: FLOAT as bidAdjustmentPercent,
-            {% else %}
-            CREATIVE.brandName,
-            CREATIVE.brandLogoAssetID,
-            CREATIVE.brandLogoUrl,
-            CREATIVE.headline,
-            CREATIVE.asins,
-            CREATIVE.shouldOptimizeAsins,
-            LANDINGPAGE.url,
-            brandEntityId,
-            BIDADJUSTMENTS.bidAdjustmentPredicate,
-            BIDADJUSTMENTS.bidAdjustmentPercent,
-            {% endif %}
-            adFormat,
-	        {{daton_user_id()}} as _daton_user_id,
-            {{daton_batch_runtime()}} as _daton_batch_runtime,
-            {{daton_batch_id()}} as _daton_batch_id,            
-            current_timestamp() as _last_updated,
-            '{{env_var("DBT_CLOUD_RUN_ID", "manual")}}' as _run_id,
-            DENSE_RANK() OVER (PARTITION BY campaignId, fetchDate, BIDADJUSTMENTS.bidAdjustmentPredicate order by {{daton_batch_runtime()}} desc) row_num
-            FROM {{i}}
-            {{unnesting("CREATIVE")}} 
-            {{unnesting("LANDINGPAGE")}} 
-            {{unnesting("BIDADJUSTMENTS")}} 
+        {% if i==results_list[0] %}
+            {% set action1 = 'create or replace table' %}
+            {% set tbl = this ~ ' as ' %}
+        {% else %}
+            {% set action1 = 'insert into ' %}
+            {% set tbl = this %}
+        {% endif %}
+
+        {%- set query -%}
+        {{action1}}
+        {{tbl|replace('SBCampaign', 'SBCampaign_temp')}}
+
+        select 
+        '{{brand}}' as brand,
+        '{{store}}' as store,
+        cast(RequestTime as timestamp) RequestTime,
+        profileId,
+        countryName,
+        accountName,
+        accountId,
+        cast(fetchDate as Date) fetchDate,
+        campaignId,
+        name,
+        budget,
+        budgetType,
+        startDate,
+        endDate,
+        state,
+        servingStatus,
+        bidOptimization,
+        bidMultiplier,
+        portfolioId,
+        {{extract_nested_value("creative","brandName","string")}} as creative_brandname,
+        {{extract_nested_value("creative","brandLogoAssetID","string")}} as creative_brandLogoAssetID,
+        {{extract_nested_value("creative","brandLogoUrl","string")}} as creative_brandLogoUrl,
+        {{extract_nested_value("creative","headline","string")}} as creative_headline,
+        {{extract_nested_value("creative","asins","string")}} as creative_asins,
+        {{extract_nested_value("creative","shouldOptimizeAsins","string")}} as creative_shouldOptimizeAsins,
+        {{extract_nested_value("landingpage","url","string")}} as landingPage_url,
+        brandEntityId,
+        {{extract_nested_value("bidAdjustments","bidAdjustmentPredicate","string")}} as bidAdjustments_bidAdjustmentPredicate,
+        {{extract_nested_value("bidAdjustments","bidAdjustmentPercent","numeric")}} as bidAdjustments_bidAdjustmentPercent,
+        adFormat,
+        {{daton_user_id()}} as _daton_user_id,
+        {{daton_batch_runtime()}} as _daton_batch_runtime,
+        {{daton_batch_id()}} as _daton_batch_id,
+        current_timestamp() as _last_updated,
+        '{{env_var("DBT_CLOUD_RUN_ID", "manual")}}' as _run_id
+        from {{i}}
+            {{unnesting("creative")}} 
+            {{unnesting("landingpage")}} 
+            {{unnesting("bidAdjustments")}} 
             {% if is_incremental() %}
             {# /* -- this filter will only be applied on an incremental run */ #}
-            WHERE {{daton_batch_runtime()}}  >= {{max_loaded}}
+            where {{daton_batch_runtime()}}  >= {{max_loaded}}
             {% endif %}
-            )
-            where row_num = 1
-            {% if not loop.last %} union all {% endif %}
-     {% endfor %}
+        qualify dense_rank() over (partition by campaignId, fetchDate, {{extract_nested_value("bidAdjustments","bidAdjustmentPredicate","string")}} order by {{daton_batch_runtime()}} desc) = 1
+    {% endset %}
+
+    {% do run_query(query) %}
+
+    {% endfor %}
+    select * from {{this|replace('SBCampaign', 'SBCampaign_temp')}}    

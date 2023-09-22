@@ -1,12 +1,14 @@
 {% if var('SBUnifiedCampaignsReport') %}
-{{ config( enabled = True ) }}
+    {{ config( enabled = True,
+    post_hook = "drop table {{this|replace('SBUnifiedCampaignsReport', 'SBUnifiedCampaignsReport_temp')}}"
+    ) }}
 {% else %}
-{{ config( enabled = False ) }}
+    {{ config( enabled = False ) }}
 {% endif %}
 
     {% if is_incremental() %}
     {%- set max_loaded_query -%}
-    SELECT coalesce(MAX(_daton_batch_runtime) - 2592000000,0) FROM {{ this }}
+    select coalesce(max(_daton_batch_runtime) - 2592000000,0) from {{ this }}
     {% endset %}
 
     {%- set max_loaded_results = run_query(max_loaded_query) -%}
@@ -47,68 +49,75 @@
             {% set store = var('default_storename') %}
         {% endif %}
 
-        {% if var('timezone_conversion_flag') and i.lower() in tables_lowercase_list %}
-            {% set hr = var('raw_table_timezone_offset_hours')[i] %}
+        {% if i==results_list[0] %}
+            {% set action1 = 'create or replace table' %}
+            {% set tbl = this ~ ' as ' %}
         {% else %}
-            {% set hr = 0 %}
+            {% set action1 = 'insert into ' %}
+            {% set tbl = this %}
         {% endif %}
 
-        SELECT * {{exclude()}} (row_num)
-        From (
-            select '{{brand}}' as brand,
-            '{{store}}' as store,
-            RequestTime,
-            profileId,
-            countryName,
-            accountName,
-            accountId,
-            reportDate,
-            campaignId,
-            campaignStatus,
-            currency,
-            campaignBudget,
-            campaignBudgetType,
-            campaignName,
-            impressions,
-            clicks,
-            cost,
-            unitsSold14d,
-            attributedSales14d,
-            attributedSales14dSameSKU,
-            attributedConversions14d,
-            attributedConversions14dSameSKU,
-            attributedDetailPageViewsClicks14d,
-            attributedOrderRateNewToBrand14d,
-            attributedOrdersNewToBrand14d,
-            attributedOrdersNewToBrandPercentage14d,
-            attributedSalesNewToBrand14d,
-            attributedSalesNewToBrandPercentage14d,
-            attributedUnitsOrderedNewToBrand14d,
-            attributedUnitsOrderedNewToBrandPercentage14d,
-            dpv14d,
-            vctr,
-            video5SecondViewRate,
-            video5SecondViews,
-            videoCompleteViews,
-            videoFirstQuartileViews,
-            videoMidpointViews,
-            videoThirdQuartileViews,
-            videoUnmutes,
-            viewableImpressions,
-            topOfSearchImpressionShare,
-            vtr,
-	        {{daton_user_id()}} as _daton_user_id,
-            {{daton_batch_runtime()}} as _daton_batch_runtime,
-            {{daton_batch_id()}} as _daton_batch_id,            
-            current_timestamp() as _last_updated,
-            '{{env_var("DBT_CLOUD_RUN_ID", "manual")}}' as _run_id,
-            ROW_NUMBER() OVER (PARTITION BY reportDate, campaignId order by {{daton_batch_runtime()}} desc) row_num
-            from {{i}} 
-                {% if is_incremental() %}
-                {# /* -- this filter will only be applied on an incremental run */ #}
-                WHERE {{daton_batch_runtime()}}  >= {{max_loaded}}
-                {% endif %}        
-        )
-        where row_num = 1 
-        {% if not loop.last %} union all {% endif %}
+        {%- set query -%}
+        {{action1}}
+        {{tbl|replace('SBUnifiedCampaignsReport', 'SBUnifiedCampaignsReport_temp')}}
+
+        select 
+        '{{brand}}' as brand,
+        '{{store}}' as store,
+        RequestTime,
+        profileId,
+        countryName,
+        accountName,
+        accountId,
+        reportDate,
+        campaignId,
+        campaignStatus,
+        currency,
+        campaignBudget,
+        campaignBudgetType,
+        campaignName,
+        impressions,
+        clicks,
+        cost,
+        unitsSold14d,
+        attributedSales14d,
+        attributedSales14dSameSKU,
+        attributedConversions14d,
+        attributedConversions14dSameSKU,
+        attributedDetailPageViewsClicks14d,
+        attributedOrderRateNewToBrand14d,
+        attributedOrdersNewToBrand14d,
+        attributedOrdersNewToBrandPercentage14d,
+        attributedSalesNewToBrand14d,
+        attributedSalesNewToBrandPercentage14d,
+        attributedUnitsOrderedNewToBrand14d,
+        attributedUnitsOrderedNewToBrandPercentage14d,
+        dpv14d,
+        vctr,
+        video5SecondViewRate,
+        video5SecondViews,
+        videoCompleteViews,
+        videoFirstQuartileViews,
+        videoMidpointViews,
+        videoThirdQuartileViews,
+        videoUnmutes,
+        viewableImpressions,
+        topOfSearchImpressionShare,
+        vtr,
+        {{daton_user_id()}} as _daton_user_id,
+        {{daton_batch_runtime()}} as _daton_batch_runtime,
+        {{daton_batch_id()}} as _daton_batch_id,            
+        current_timestamp() as _last_updated,
+        '{{env_var("DBT_CLOUD_RUN_ID", "manual")}}' as _run_id
+        from {{i}} 
+            {% if is_incremental() %}
+            {# /* -- this filter will only be applied on an incremental run */ #}
+            WHERE {{daton_batch_runtime()}}  >= {{max_loaded}}
+            {% endif %}        
+        qualify row_number() over (partition by reportDate, campaignId order by {{daton_batch_runtime()}} desc) = 1
+    {% endset %}
+
+    {% do run_query(query) %}
+
     {% endfor %}
+    select * from {{this|replace('SBUnifiedCampaignsReport', 'SBUnifiedCampaignsReport_temp')}}    
