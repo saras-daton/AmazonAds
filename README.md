@@ -5,7 +5,7 @@ This dbt package is for Data Unification of Amazon Advertising ingested data by 
 
 ## How do I use Amazon Ads dbt package?
 
-### Supported Datawarehouses:
+### Supported Data Warehouses:
 - [BigQuery](https://sarasanalytics.com/blog/what-is-google-bigquery/)
 - [Snowflake](https://sarasanalytics.com/daton/snowflake/)
 
@@ -527,7 +527,7 @@ models:
 
 
 
-## Resources:
+## What Amazon Advertising dbt resources are available?:
 - Have questions, feedback, or need [help](https://calendly.com/srinivas-janipalli/30min)? Schedule a call with our data experts or [contact us](https://sarasanalytics.com/contact).
 - Learn more about Daton [here](https://sarasanalytics.com/daton/).
 - Refer [this](https://youtu.be/6zDTbM6OUcs) to know more about how to create a dbt account & connect to {{Bigquery/Snowflake}}
