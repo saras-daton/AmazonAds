@@ -77,6 +77,5 @@ clean-targets:         # directories to be removed by `dbt clean`
 models:
   AmazonAds:
     AmazonAds:
-      +schema: stg_amazonAds_agencies
-
+      +schema: stg_amazonads
 
