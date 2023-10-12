@@ -8,20 +8,6 @@
 --depends_on: {{ ref('ExchangeRates') }}
 {% endif %}
 
-{% if is_incremental() %}
-{%- set max_loaded_query -%}
-select coalesce(max(_daton_batch_runtime) - {{ var('sp_productads_lookback') }},0) from {{ this }}
-{% endset %}
-
-{%- set max_loaded_results = run_query(max_loaded_query) -%}
-
-{%- if execute -%}
-{% set max_loaded = max_loaded_results.rows[0].values()[0] %}
-{% else %}
-{% set max_loaded = 0 %}
-{%- endif -%}
-{% endif %}
-
 {% set relations = dbt_utils.get_relations_by_pattern(
 schema_pattern=var('raw_schema'),
 table_pattern=var('sd_productads_tbl_ptrn'),
@@ -117,8 +103,8 @@ database=var('raw_database')) %}
             left join {{ref('ExchangeRates')}} c on date(a.RequestTime) = c.date and a.currency = c.to_currency_code
         {% endif %}
         {% if is_incremental() %}
-        {# /* -- this filter will only be applied on an incremental run */ #}
-        WHERE a.{{daton_batch_runtime()}}  >= {{max_loaded}}
+            {# /* -- this filter will only be applied on an incremental run */ #}
+            WHERE a.{{daton_batch_runtime()}}  >= (select coalesce(max(_daton_batch_runtime) - {{ var('sd_productads_lookback') }},0) from {{ this }})
         {% endif %}    
         qualify row_number() over (partition by reportDate,CampaignId, adGroupID,asin, sku order by a.{{daton_batch_runtime()}} desc) = 1 
 

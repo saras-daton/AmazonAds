@@ -61,56 +61,56 @@ vars:
 
   sb_campaign_tbl_ptrn: '%sponsoredbrands_campaign'
   sb_campaign_tbl_exclude_ptrn: ''
-  sp_campaign_lookback: 2592000000
+  sb_campaign_lookback: 2592000000
   
 
   sb_portfolio_tbl_ptrn: '%sponsoredbrands%portfolio'
   sb_portfolio_tbl_exclude_ptrn: ''
-  sp_portfolio_lookback: 2592000000
+  sb_portfolio_lookback: 2592000000
 
   sb_unifiedadgroups_tbl_ptrn: '%sponsoredbrands%unifiedadgroupsreport'
   sb_unifiedadgroups_tbl_exclude_ptrn: ''
-  sp_unifiedadgroups_lookback: 2592000000
+  sb_unifiedadgroups_lookback: 2592000000
 
   sb_unifiedcampaigns_tbl_ptrn: '%sponsoredbrands%unifiedcampaignsreport'
   sb_unifiedcampaigns_tbl_exclude_ptrn: ''
-  sp_unifiedcampaigns_lookback: 2592000000
+  sb_unifiedcampaigns_lookback: 2592000000
 
   sb_unifiedkeywords_tbl_ptrn: '%sponsoredbrands%unifiedkeywordsreport'
   sb_unifiedkeywords_tbl_exclude_ptrn: ''
-  sp_unifiedkeywords_lookback: 2592000000
+  sb_unifiedkeywords_lookback: 2592000000
 
   sb_unifiedplacementcampaigns_tbl_ptrn: '%sponsoredbrands%unifiedplacementcampaignsreport'
   sb_unifiedplacementcampaigns_tbl_exclude_ptrn: ''
-  sp_unifiedplacementkeywords_lookback: 2592000000
+  sb_unifiedplacementkeywords_lookback: 2592000000
 
   sb_unifiedplacementkeywords_tbl_ptrn: '%sponsoredbrands%unifiedplacementkeywordsreport'
   sb_unifiedplacementkeywords_tbl_exclude_ptrn: ''
-  sp_unifiedplacementkeywords_lookback: 2592000000
+  sb_unifiedplacementkeywords_lookback: 2592000000
 
   sb_unifiedsearchtermkeywords_tbl_ptrn: '%sponsoredbrands%unifiedsearchtermkeywordsreport'
   sb_unifiedsearchtermkeywords_tbl_exclude_ptrn: ''
-  sp_unifiedsearchtermkeywords_lookback: 2592000000
+  sb_unifiedsearchtermkeywords_lookback: 2592000000
 
   sb_unifiedtarget_tbl_ptrn: '%sponsoredbrands%unifiedtargetreport'
   sb_unifiedtarget_tbl_exclude_ptrn: ''
-  sp_unifiedtarget_lookback: 2592000000
+  sb_unifiedtarget_lookback: 2592000000
 
   sd_campaign_tbl_ptrn: '%sponsoreddisplay%campaign'
   sd_campaign_tbl_exclude_ptrn: ''
-  sp_campaign_lookback: 2592000000
+  sd_campaign_lookback: 2592000000
 
   sd_portfolio_tbl_ptrn: '%sponsoreddisplay%portfolio'
   sd_portfolio_tbl_exclude_ptrn: ''
-  sp_portfolio_lookback: 2592000000
+  sd_portfolio_lookback: 2592000000
 
   sd_productads_tbl_ptrn: '%sponsoreddisplay%productadsreport'
   sd_productads_tbl_exclude_ptrn: ''
-  sp_productads_lookback: 2592000000
+  sd_productads_lookback: 2592000000
 
   sd_producttargeting_tbl_ptrn: '%sponsoreddisplay%producttargetingreport'
   sd_producttargeting_tbl_exclude_ptrn: ''
-  sp_producttargeting_lookback: 2592000000
+  sd_producttargeting_lookback: 2592000000
 
   sp_campaign_tbl_ptrn: '%sponsoredproducts%campaign'
   sp_campaign_tbl_exclude_ptrn: ''
