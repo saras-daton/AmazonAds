@@ -8,9 +8,9 @@ config-version: 2
 require-dbt-version: [">=1.0.0", "<2.0.0"]
 
 vars:
-  raw_database: "Amazon" #equivalent to project_id in BigQuery
+  raw_database: "edm-saras" #equivalent to project_id in BigQuery
     # Example Database name
-  raw_schema: "Daton" #equivalent to dataset in BigQuery
+  raw_schema: "EDM_Daton" #equivalent to dataset in BigQuery
     # Example Schema name
 
   get_brandname_from_tablename_flag: True
@@ -58,6 +58,80 @@ vars:
   SPProductAdsReport: True
   SPSearchTermKeywordReport: True
   
+
+  sb_campaign_tbl_ptrn: '%sponsoredbrands_campaign'
+  sb_campaign_tbl_exclude_ptrn: ''
+  sp_campaign_lookback: 2592000000
+  
+
+  sb_portfolio_tbl_ptrn: '%sponsoredbrands%portfolio'
+  sb_portfolio_tbl_exclude_ptrn: ''
+  sp_portfolio_lookback: 2592000000
+
+  sb_unifiedadgroups_tbl_ptrn: '%sponsoredbrands%unifiedadgroupsreport'
+  sb_unifiedadgroups_tbl_exclude_ptrn: ''
+  sp_unifiedadgroups_lookback: 2592000000
+
+  sb_unifiedcampaigns_tbl_ptrn: '%sponsoredbrands%unifiedcampaignsreport'
+  sb_unifiedcampaigns_tbl_exclude_ptrn: ''
+  sp_unifiedcampaigns_lookback: 2592000000
+
+  sb_unifiedkeywords_tbl_ptrn: '%sponsoredbrands%unifiedkeywordsreport'
+  sb_unifiedkeywords_tbl_exclude_ptrn: ''
+  sp_unifiedkeywords_lookback: 2592000000
+
+  sb_unifiedplacementcampaigns_tbl_ptrn: '%sponsoredbrands%unifiedplacementcampaignsreport'
+  sb_unifiedplacementcampaigns_tbl_exclude_ptrn: ''
+  sp_unifiedplacementkeywords_lookback: 2592000000
+
+  sb_unifiedplacementkeywords_tbl_ptrn: '%sponsoredbrands%unifiedplacementkeywordsreport'
+  sb_unifiedplacementkeywords_tbl_exclude_ptrn: ''
+  sp_unifiedplacementkeywords_lookback: 2592000000
+
+  sb_unifiedsearchtermkeywords_tbl_ptrn: '%sponsoredbrands%unifiedsearchtermkeywordsreport'
+  sb_unifiedsearchtermkeywords_tbl_exclude_ptrn: ''
+  sp_unifiedsearchtermkeywords_lookback: 2592000000
+
+  sb_unifiedtarget_tbl_ptrn: '%sponsoredbrands%unifiedtargetreport'
+  sb_unifiedtarget_tbl_exclude_ptrn: ''
+  sp_unifiedtarget_lookback: 2592000000
+
+  sd_campaign_tbl_ptrn: '%sponsoreddisplay%campaign'
+  sd_campaign_tbl_exclude_ptrn: ''
+  sp_campaign_lookback: 2592000000
+
+  sd_portfolio_tbl_ptrn: '%sponsoreddisplay%portfolio'
+  sd_portfolio_tbl_exclude_ptrn: ''
+  sp_portfolio_lookback: 2592000000
+
+  sd_productads_tbl_ptrn: '%sponsoreddisplay%productadsreport'
+  sd_productads_tbl_exclude_ptrn: ''
+  sp_productads_lookback: 2592000000
+
+  sd_producttargeting_tbl_ptrn: '%sponsoreddisplay%producttargetingreport'
+  sd_producttargeting_tbl_exclude_ptrn: ''
+  sp_producttargeting_lookback: 2592000000
+
+  sp_campaign_tbl_ptrn: '%sponsoredproducts%campaign'
+  sp_campaign_tbl_exclude_ptrn: ''
+  sp_campaign_lookback: 2592000000
+
+  sp_placementcampaigns_tbl_ptrn: '%sponsoredproducts%placementcampaignsreport'
+  sp_placementcampaigns_tbl_exclude_ptrn: ''
+  sp_placementcampaigns_lookback: 2592000000
+
+  sp_portfolio_tbl_ptrn: '%sponsoredproducts%portfolio'
+  sp_portfolio_tbl_exclude_ptrn: ''
+  sp_portfolio_lookback: 2592000000
+
+  sp_productads_tbl_ptrn: '%sponsoredproducts%productadsreport'
+  sp_productads_tbl_exclude_ptrn: ''
+  sp_productads_lookback: 2592000000
+
+  sp_searchtermkeyword_tbl_ptrn: '%sponsoredproducts_searchtermkeywordreport'
+  sp_searchtermkeyword_tbl_exclude_ptrn: ''
+  sp_searchtermkeyword_lookback: 2592000000
+
 # These configurations specify where dbt should look for different types of files.
 # The `model-paths` config, for example, states that models in this project can be
 # found in the "models/" directory. You probably won't need to change these!

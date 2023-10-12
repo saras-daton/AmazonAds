@@ -1,7 +1,5 @@
 {% if var('SDProductTargetingReport') %}
-    {{ config( enabled = True,
-    post_hook = "drop table {{this|replace('SDProductTargetingReport', 'SDProductTargetingReport_temp')}}"
-    ) }}
+    {{ config( enabled = True ) }}
 {% else %}
     {{ config( enabled = False ) }}
 {% endif %}
@@ -12,7 +10,7 @@
 
 {% if is_incremental() %}
 {%- set max_loaded_query -%}
-select coalesce(max(_daton_batch_runtime) - 2592000000,0) from {{ this }}
+select coalesce(max(_daton_batch_runtime) - {{ var('sp_producttargeting_lookback') }},0) from {{ this }}
 {% endset %}
 
 {%- set max_loaded_results = run_query(max_loaded_query) -%}
@@ -24,56 +22,28 @@ select coalesce(max(_daton_batch_runtime) - 2592000000,0) from {{ this }}
 {%- endif -%}
 {% endif %}
 
-{% set table_name_query %}
-{{set_table_name('%sponsoreddisplay_producttargetingreport')}}    
-{% endset %}  
+{% set relations = dbt_utils.get_relations_by_pattern(
+schema_pattern=var('raw_schema'),
+table_pattern=var('sd_producttargeting_tbl_ptrn'),
+exclude=var('sd_producttargeting_tbl_exclude_ptrn'),
+database=var('raw_database')) %}
 
-
-{% set results = run_query(table_name_query) %}
-{% if execute %}
-    {# Return the first column #}
-    {% set results_list = results.columns[0].values() %}
-    {% set tables_lowercase_list = results.columns[1].values() %}
-{% else %}
-    {% set results_list = [] %}
-    {% set tables_lowercase_list = [] %}
-{% endif %}
-
-
-{% for i in results_list %}
+{% for i in relations %}
     {% if var('get_brandname_from_tablename_flag') %}
-        {% set brand =i.split('.')[2].split('_')[var('brandname_position_in_tablename')] %}
+        {% set brand =replace(i,'`','').split('.')[2].split('_')[var('brandname_position_in_tablename')] %}
     {% else %}
         {% set brand = var('default_brandname') %}
     {% endif %}
 
     {% if var('get_storename_from_tablename_flag') %}
-        {% set store =i.split('.')[2].split('_')[var('storename_position_in_tablename')] %}
+        {% set store =replace(i,'`','').split('.')[2].split('_')[var('storename_position_in_tablename')] %}
     {% else %}
         {% set store = var('default_storename') %}
     {% endif %}
 
-    {% if var('timezone_conversion_flag') and i.lower() in tables_lowercase_list %}
-        {% set hr = var('raw_table_timezone_offset_hours')[i] %}
-    {% else %}
-        {% set hr = 0 %}
-    {% endif %}
-
-    {% if i==results_list[0] %}
-        {% set action1 = 'create or replace table' %}
-        {% set tbl = this ~ ' as ' %}
-    {% else %}
-        {% set action1 = 'insert into ' %}
-        {% set tbl = this %}
-    {% endif %}
-
-    {%- set query -%}
-    {{action1}}
-    {{tbl|replace('SDProductTargetingReport', 'SDProductTargetingReport_temp')}}
-
     select 
-    '{{brand}}' as brand,
-    '{{store}}' as store,
+    '{{brand|replace("`","")}}' as brand,
+    '{{store|replace("`","")}}' as store,
     cast(RequestTime as timestamp) RequestTime,
     tactic,
     profileId,
@@ -148,9 +118,6 @@ select coalesce(max(_daton_batch_runtime) - 2592000000,0) from {{ this }}
     where a.{{daton_batch_runtime()}}  >= {{max_loaded}}
     {% endif %} 
     qualify row_number() over (partition by reportDate,campaignId,targetId,targetingType order by a.{{daton_batch_runtime()}} desc) = 1 
-    {% endset %}
 
-    {% do run_query(query) %}
-
+{% if not loop.last %} union all {% endif %}
 {% endfor %}
-select * from {{this|replace('SDProductTargetingReport', 'SDProductTargetingReport_temp')}}    
