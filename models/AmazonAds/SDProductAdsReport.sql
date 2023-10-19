@@ -36,8 +36,7 @@ database=var('raw_database')) %}
     select 
     '{{brand|replace("`","")}}' as brand,
     '{{store|replace("`","")}}' as store,
-    cast({{dbt.dateadd(datepart="hour", interval=hr, from_date_or_timestamp="cast(RequestTime as timestamp)") }} as {{ dbt.type_timestamp() }}) as RequestTime,
-    tactic,
+    {{timezone_conversion('RequestTime')}} as RequestTime,
     profileId,        
     countryName,
     accountName,
