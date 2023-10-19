@@ -3,7 +3,7 @@
     {% if target.type =='snowflake' %}
         cast(CONVERT_TIMEZONE('{{var("to_timezone")}}', {{col_name}}::timestamp_ntz) as {{ dbt.type_timestamp() }})
     {% else %}
-        DATETIME_ADD(var1, INTERVAL {{var2}} var3 )
+        DATETIME(cast({{col_name}} as timestamp), '{{var("to_timezone")}}')
     {% endif %}
 
 {% endmacro %}
