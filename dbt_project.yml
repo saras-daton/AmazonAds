@@ -31,16 +31,7 @@ vars:
   currency_conversion_flag: False
   timezone_conversion_flag: False
   to_timezone: 'Europe/Dublin'
-  
-  raw_table_timezone_offset_hours: {
-    "Amazon.Ads.SPONSOREDBRANDS_ADGROUPSREPORT":-4,
-    "Amazon.Ads.SPONSOREDBRANDS_PLACEMENTCAMPAIGNSREPORT":-4,
-    "Amazon.Ads.SPONSOREDBRANDS_SEARCHTERMKEYWORDSREPORT":-4,
-    "Amazon.Ads.SPONSOREDPRODUCTS_PLACEMENTCAMPAIGNSREPORT":-4,
-    "Amazon.Ads.SPONSOREDPRODUCTS_PRODUCTADSREPORT":-4
-    }
-      # Above are Example entries for raw table level input offset hours
-      # https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+  # https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 
   SBCampaign: True
   SBPortfolio: True
