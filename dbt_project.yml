@@ -8,31 +8,25 @@ config-version: 2
 require-dbt-version: [">=1.0.0", "<2.0.0"]
 
 vars:
-  raw_database: "EDM" #equivalent to project_id in BigQuery
-    # Example Database name
-  raw_schema: "EDM" #equivalent to dataset in BigQuery
-    # Example Schema name
+  raw_database: "edm-saras" #equivalent to project_id in BigQuery, given value is an example only
+  raw_schema: "EDM_Daton" #equivalent to dataset in BigQuery, given value is an example only
 
   get_brandname_from_tablename_flag: True
-  brandname_position_in_tablename: 0
-    # Example- Daton Integration Name: Nike_US_SponsoredBrands --> Position 0, separated by '_'
-  default_brandname: "" 
-    # Example- default_brandname: "Nike" --> for Single Brand users, with no Brandname in Daton Integration Name
+  brandname_position_in_tablename: 0 # Example- Daton Integration Name: Nike_US_SponsoredBrands --> Position 0, separated by '_'
+  default_brandname: "" # Example- default_brandname: "Nike" --> for Single Brand users, with no Brandname in Daton Integration Name
 
   get_storename_from_tablename_flag: True 
-  storename_position_in_tablename: 1
-    # Example- Daton Integration Name: Nike_US_SponsoredBrands --> Position 1, separated by '_'
-  default_storename: "" 
-    # Example- default_storename: "US" --> for Single Store users, with no Storename in Daton Integration Name
+  storename_position_in_tablename: 1 # Example- Daton Integration Name: Nike_US_SponsoredBrands --> Position 1, separated by '_'
+  default_storename: "" # Example- default_storename: "US" --> for Single Store users, with no Storename in Daton Integration Name
 
   # Variables used for dbt-tests
   'dbt_date:time_zone': 'America/Los_Angeles'
 
-  currency_conversion_flag: False
-  timezone_conversion_flag: False
-  to_timezone: 'Europe/Dublin'
-  # https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+  currency_conversion_flag: True
+  timezone_conversion_flag: True
+  to_timezone: 'Europe/Dublin' # https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 
+  # Params to enable/disable models
   SBCampaign: True
   SBPortfolio: True
   SBUnifiedAdGroupsReport: True
@@ -52,12 +46,11 @@ vars:
   SPProductAdsReport: True
   SPSearchTermKeywordReport: True
   
-
+  # Params to raw table search pattern and lookback period
   sb_campaign_tbl_ptrn: '%sponsoredbrands_campaign'
   sb_campaign_tbl_exclude_ptrn: ''
   sb_campaign_lookback: 2592000000
   
-
   sb_portfolio_tbl_ptrn: '%sb%portfolio'
   sb_portfolio_tbl_exclude_ptrn: ''
   sb_portfolio_lookback: 2592000000

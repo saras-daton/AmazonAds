@@ -27,12 +27,6 @@ database=var('raw_database')) %}
         {% set store = var('default_storename') %}
     {% endif %}
 
-    {% if var('timezone_conversion_flag') and i.lower() in tables_lowercase_list %}
-        {% set hr = var('raw_table_timezone_offset_hours')[i] %}
-    {% else %}
-        {% set hr = 0 %}
-    {% endif %}
-
     select 
     '{{brand|replace("`","")}}' as brand,
     '{{store|replace("`","")}}' as store,
