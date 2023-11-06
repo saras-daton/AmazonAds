@@ -67,7 +67,7 @@ vars:
   sb_campaign_lookback: 2592000000
   
 
-  sb_portfolio_tbl_ptrn: '%sponsoredbrands%portfolio'
+  sb_portfolio_tbl_ptrn: '%sb%portfolio'
   sb_portfolio_tbl_exclude_ptrn: ''
   sb_portfolio_lookback: 2592000000
 
