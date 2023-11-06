@@ -22,8 +22,8 @@ vars:
   # Variables used for dbt-tests
   'dbt_date:time_zone': 'America/Los_Angeles'
 
-  currency_conversion_flag: True
-  timezone_conversion_flag: True
+  currency_conversion_flag: False
+  timezone_conversion_flag: False
   to_timezone: 'Europe/Dublin' # https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 
   # Params to enable/disable models
