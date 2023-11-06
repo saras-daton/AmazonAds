@@ -36,8 +36,12 @@ database=var('raw_database')) %}
     select 
     '{{brand|replace("`","")}}' as brand,
     '{{store|replace("`","")}}' as store,
+<<<<<<< HEAD
     {{timezone_conversion('RequestTime')}} as RequestTime,
     tactic,
+=======
+    RequestTime,
+>>>>>>> 480e1997ab3aad3806a18e7888560fc6b63082c6
     profileId,        
     countryName,
     accountName,
