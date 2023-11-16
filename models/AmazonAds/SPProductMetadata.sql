@@ -4,6 +4,9 @@
     {{ config( enabled = False ) }}
 {% endif %}
 
+{% if var('currency_conversion_flag') %}
+-- depends_on: {{ref('ExchangeRates')}}
+{% endif %}
 
 {% set relations = dbt_utils.get_relations_by_pattern(
 schema_pattern=var('raw_schema'),
