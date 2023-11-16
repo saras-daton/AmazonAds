@@ -75,7 +75,7 @@ database=var('raw_database')) %}
     {{unnesting("priceToPay")}}
     
         {% if var('currency_conversion_flag') %} 
-            left join {{ref('ExchangeRates')}} c on date(a.RequestTime) = c.date and a.currency = c.to_currency_code
+            left join {{ref('ExchangeRates')}} c on date(a.RequestTime) = c.date and {{extract_nested_value("priceToPay","currency","string")}} = c.to_currency_code
         {% endif %}
         {% if is_incremental() %}
             {# /* -- this filter will only be applied on an incremental run */ #}
