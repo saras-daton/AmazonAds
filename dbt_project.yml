@@ -45,6 +45,9 @@ vars:
   SPPortfolio: True
   SPProductAdsReport: True
   SPSearchTermKeywordReport: True
+  SBProductMetadata: True
+  SDProductMetadata: True
+  SPProductMetadata: True
   
   # Params to raw table search pattern and lookback period
   sb_campaign_tbl_ptrn: '%sponsoredbrands_campaign'
@@ -118,6 +121,18 @@ vars:
   sp_searchtermkeyword_tbl_ptrn: '%sponsoredproducts_searchtermkeywordreport'
   sp_searchtermkeyword_tbl_exclude_ptrn: ''
   sp_searchtermkeyword_lookback: 2592000000
+
+  sb_productmetadata_tbl_ptrn: '%sponsoredbrands%productmetadata'
+  sb_productmetadata_tbl_exclude_ptrn: ''
+  sb_productmetadata_lookback: 2592000000
+
+  sd_productmetadata_tbl_ptrn: '%sponsoreddisplay%productmetadata'
+  sd_productmetadata_tbl_exclude_ptrn: ''
+  sd_productmetadata_lookback: 2592000000
+
+  sp_productmetadata_tbl_ptrn: '%sponsoredproducts%productmetadata'
+  sp_productmetadata_tbl_exclude_ptrn: ''
+  sp_productmetadata_lookback: 2592000000
 
 # These configurations specify where dbt should look for different types of files.
 # The `model-paths` config, for example, states that models in this project can be

@@ -835,3 +835,30 @@ models:
           - accepted_values:
               values: ['Default']
    
+  - name: SBProductMetadata
+    description: A list of campaigns associated with the account
+    config:
+      materialized: incremental
+      incremental_strategy: merge
+      partition_by: { 'field': 'fetchDate', 'data_type': date }
+      cluster_by: ['asin', 'sku'] 
+      unique_key: ['profileId','countryName','accountName','accountId','fetchDate','asin','sku']
+   
+  - name: SPProductMetadata
+    description: A list of campaigns associated with the account
+    config:
+      materialized: incremental
+      incremental_strategy: merge
+      partition_by: { 'field': 'fetchDate', 'data_type': date }
+      cluster_by: ['asin', 'sku'] 
+      unique_key: ['profileId','countryName','accountName','accountId','fetchDate','asin','sku']
+
+   
+  - name: SDProductMetadata
+    description: A list of campaigns associated with the account
+    config:
+      materialized: incremental
+      incremental_strategy: merge
+      partition_by: { 'field': 'fetchDate', 'data_type': date }
+      cluster_by: ['asin', 'sku'] 
+      unique_key: ['profileId','countryName','accountName','accountId','fetchDate','asin','sku']
