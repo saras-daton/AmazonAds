@@ -1,0 +1,158 @@
+
+# Name your project! Project names should contain only lowercase characters
+# and underscores. A good package name should reflect your organization's
+# name or the intended use of these models
+name: 'AmazonAds'
+version: '1.0.0'
+config-version: 2
+require-dbt-version: [">=1.0.0", "<2.0.0"]
+profile : edm_data_transformation
+
+vars:
+  raw_database: "edm-saras" #equivalent to project_id in BigQuery, given value is an example only
+  raw_schema: "EDM_Daton" #equivalent to dataset in BigQuery, given value is an example only
+
+  get_brandname_from_tablename_flag: True
+  brandname_position_in_tablename: 0 # Example- Daton Integration Name: Nike_US_SponsoredBrands --> Position 0, separated by '_'
+  default_brandname: "" # Example- default_brandname: "Nike" --> for Single Brand users, with no Brandname in Daton Integration Name
+
+  get_storename_from_tablename_flag: True 
+  storename_position_in_tablename: 1 # Example- Daton Integration Name: Nike_US_SponsoredBrands --> Position 1, separated by '_'
+  default_storename: "" # Example- default_storename: "US" --> for Single Store users, with no Storename in Daton Integration Name
+
+  # Variables used for dbt-tests
+  'dbt_date:time_zone': 'America/Los_Angeles'
+
+  currency_conversion_flag: True
+  timezone_conversion_flag: True
+  to_timezone: 'America/Los_Angeles'
+
+  # Params to enable/disable models
+  SBCampaign: True
+  SBPortfolio: True
+  SBUnifiedAdGroupsReport: True
+  SBUnifiedCampaignsReport: True
+  SBUnifiedKeywordsReport: True
+  SBUnifiedPlacementCampaignsReport: True
+  SBUnifiedPlacementKeywordsReport: True
+  SBUnifiedSearchTermKeywordsReport: True
+  SBUnifiedTargetReport: True
+  SDCampaign: True
+  SDPortfolio: True
+  SDProductAdsReport: True
+  SDProductTargetingReport: True
+  SPCampaign: True
+  SPPlacementCampaignsReport: True
+  SPPortfolio: True
+  SPProductAdsReport: True
+  SPSearchTermKeywordReport: True
+  SBProductMetadata: True
+  SDProductMetadata: True
+  SPProductMetadata: True
+  
+  # Params to raw table search pattern and lookback period
+  sb_campaign_tbl_ptrn: '%sponsoredbrands_campaign'
+  sb_campaign_tbl_exclude_ptrn: ''
+  sb_campaign_lookback: 17280000
+  
+  sb_portfolio_tbl_ptrn: '%sb%portfolio'
+  sb_portfolio_tbl_exclude_ptrn: ''
+  sb_portfolio_lookback: 17280000
+
+  sb_unifiedadgroups_tbl_ptrn: '%sponsoredbrands%unifiedadgroupsreport'
+  sb_unifiedadgroups_tbl_exclude_ptrn: ''
+  sb_unifiedadgroups_lookback: 17280000
+
+  sb_unifiedcampaigns_tbl_ptrn: '%sponsoredbrands%unifiedcampaignsreport'
+  sb_unifiedcampaigns_tbl_exclude_ptrn: ''
+  sb_unifiedcampaigns_lookback: 17280000
+
+  sb_unifiedkeywords_tbl_ptrn: '%sponsoredbrands%unifiedkeywordsreport'
+  sb_unifiedkeywords_tbl_exclude_ptrn: ''
+  sb_unifiedkeywords_lookback: 17280000
+
+  sb_unifiedplacementcampaigns_tbl_ptrn: '%sponsoredbrands%unifiedplacementcampaignsreport'
+  sb_unifiedplacementcampaigns_tbl_exclude_ptrn: ''
+  sb_unifiedplacementkeywords_lookback: 17280000
+
+  sb_unifiedplacementkeywords_tbl_ptrn: '%sponsoredbrands%unifiedplacementkeywordsreport'
+  sb_unifiedplacementkeywords_tbl_exclude_ptrn: ''
+  sb_unifiedplacementkeywords_lookback: 17280000
+
+  sb_unifiedsearchtermkeywords_tbl_ptrn: '%sponsoredbrands%unifiedsearchtermkeywordsreport'
+  sb_unifiedsearchtermkeywords_tbl_exclude_ptrn: ''
+  sb_unifiedsearchtermkeywords_lookback: 17280000
+
+  sb_unifiedtarget_tbl_ptrn: '%sponsoredbrands%unifiedtargetreport'
+  sb_unifiedtarget_tbl_exclude_ptrn: ''
+  sb_unifiedtarget_lookback: 17280000
+
+  sd_campaign_tbl_ptrn: '%sponsoreddisplay%campaign'
+  sd_campaign_tbl_exclude_ptrn: ''
+  sd_campaign_lookback: 17280000
+
+  sd_portfolio_tbl_ptrn: '%sponsoreddisplay%portfolio'
+  sd_portfolio_tbl_exclude_ptrn: ''
+  sd_portfolio_lookback: 17280000
+
+  sd_productads_tbl_ptrn: '%sponsoreddisplay%productadsreport'
+  sd_productads_tbl_exclude_ptrn: ''
+  sd_productads_lookback: 17280000
+
+  sd_producttargeting_tbl_ptrn: '%sponsoreddisplay%producttargetingreport'
+  sd_producttargeting_tbl_exclude_ptrn: ''
+  sd_producttargeting_lookback: 17280000
+
+  sp_campaign_tbl_ptrn: '%sponsoredproducts%campaign'
+  sp_campaign_tbl_exclude_ptrn: ''
+  sp_campaign_lookback: 17280000
+
+  sp_placementcampaigns_tbl_ptrn: '%sponsoredproducts%placementcampaignsreport'
+  sp_placementcampaigns_tbl_exclude_ptrn: ''
+  sp_placementcampaigns_lookback: 17280000
+
+  sp_portfolio_tbl_ptrn: '%sponsoredproducts%portfolio'
+  sp_portfolio_tbl_exclude_ptrn: ''
+  sp_portfolio_lookback: 17280000
+
+  sp_productads_tbl_ptrn: '%sponsoredproducts%productadsreport'
+  sp_productads_tbl_exclude_ptrn: ''
+  sp_productads_lookback: 17280000
+
+  sp_searchtermkeyword_tbl_ptrn: '%sponsoredproducts_searchtermkeywordreport'
+  sp_searchtermkeyword_tbl_exclude_ptrn: ''
+  sp_searchtermkeyword_lookback: 17280000
+
+  sb_productmetadata_tbl_ptrn: '%sponsoredbrands%productmetadata'
+  sb_productmetadata_tbl_exclude_ptrn: ''
+  sb_productmetadata_lookback: 17280000
+
+  sd_productmetadata_tbl_ptrn: '%sponsoreddisplay%productmetadata'
+  sd_productmetadata_tbl_exclude_ptrn: ''
+  sd_productmetadata_lookback: 17280000
+
+  sp_productmetadata_tbl_ptrn: '%sponsoredproducts%productmetadata'
+  sp_productmetadata_tbl_exclude_ptrn: ''
+  sp_productmetadata_lookback: 17280000
+
+# These configurations specify where dbt should look for different types of files.
+# The `model-paths` config, for example, states that models in this project can be
+# found in the "models/" directory. You probably won't need to change these!
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+target-path: "target"  # directory which will store compiled SQL files
+clean-targets:         # directories to be removed by `dbt clean`
+  - "target"
+  - "dbt_packages"
+
+
+models:
+  AmazonAds:
+    AmazonAds:
+      +schema: stg_amazonads
+

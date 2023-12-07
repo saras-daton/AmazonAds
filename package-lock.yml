@@ -1,0 +1,10 @@
+packages:
+- package: Saras-Daton/currency_exchange_rates
+  version: 1.0.2
+- package: dbt-labs/dbt_utils
+  version: 1.1.1
+- package: calogica/dbt_expectations
+  version: 0.8.5
+- package: calogica/dbt_date
+  version: 0.7.2
+sha1_hash: 010c36c1443e26397ecc81bada7371b8b8473abb
